@@ -186,7 +186,7 @@ public class MainScreen extends GDMapActivity {
 		}, 1000);
 
 
-		//PREPARAÇAO DO PINAMENTO
+		//PREPARAï¿½AO DO PINAMENTO
 		drawable = getResources().getDrawable(R.drawable.ic_pin);
 
 		itemizedOverlay = new SimpleItemizedOverlay(drawable, this.map);
@@ -241,8 +241,8 @@ public class MainScreen extends GDMapActivity {
 
 
 			// Balloon
-			OverlayItem overlayItem = new OverlayItem(point, poi.getName(),
-					"NÂº checkins: " + poi.getCheckinsCount());
+			OverlayItemPOI overlayItem = new OverlayItemPOI(point, poi.getName(),
+					"NÂº checkins: " + poi.getCheckinsCount(), poi);
 
 			//TODO escolher o icone de acordo com as categorias
 			//overlayItem.setMarker(marker);
@@ -425,11 +425,11 @@ public class MainScreen extends GDMapActivity {
 		switch(dia){
 			case 0: print = "Domingo";break;
 			case 1: print = "Segunda Feira";break;
-			case 2: print = "Terça Feira";break;
+			case 2: print = "Terï¿½a Feira";break;
 			case 3: print = "Quarta Feira";break;
 			case 4: print = "Quinta Feira";break;
 			case 5: print = "Sexta";break;
-			case 6: print = "Sábado";break;
+			case 6: print = "Sï¿½bado";break;
 			default:break;
 		}
 		
@@ -585,7 +585,7 @@ public class MainScreen extends GDMapActivity {
 				if(map.getOverlays().contains(itemizedOverlay)) {
 					System.out.println("VAI REMOVER PINS!!!");
 					int pos = map.getOverlays().indexOf(itemizedOverlay);
-					System.out.println("A POSIÇAO DO ITEMIZED OVERLAY É: " + pos);
+					System.out.println("A POSIï¿½AO DO ITEMIZED OVERLAY ï¿½: " + pos);
 					map.getOverlays().remove(pos);
 					itemizedOverlay.removeOverlay();
 
