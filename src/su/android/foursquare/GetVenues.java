@@ -38,33 +38,18 @@ public class GetVenues {
 		foursquareApi = new FoursquareApi(client_id, client_secret, callback_url);
 	}
 
-	public void getAllVenues() throws FoursquareApiException {
-		ArrayList<String> locations = this.getLocations();
-
-		for(String ll : locations) {
-			this.getVenues(ll);
-		}
-		
-		//TODO guardar venues no mongo -> ID, nome, stats
-		for(CompactVenue poi : venues.values()) {
-			
-		}
-	}
-
 	public void getVenues(String ll) throws FoursquareApiException {		
-		
-		
+
 		Result<VenuesSearchResult> result = foursquareApi.venuesSearch(ll, null, null, null, null, 500, "checkin", null, null, null, null);
 
-		
-		
 		if (result.getMeta().getCode() == 200) {		
+
 			// if query was ok we can finally we do something with the data
 			for (CompactVenue venue : result.getResult().getVenues()) {
 				System.out.println(venue.getName());
 				
 				for(int i=0; i<venue.getCategories().length; i++) {
-					System.out.println("Cat: "+venue.getCategories()[0].getIcon());
+					System.out.println("Cat: "+venue.getCategories()[0].getName());
 				}
 
 				venues.put(venue.getId(), venue);
