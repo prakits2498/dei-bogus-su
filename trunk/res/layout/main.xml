@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <SeekBar
+    <!-- <SeekBar
         android:id="@+id/seekbarDay"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -36,13 +36,13 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold" /> -->
 
     <su.android.client.CustomMapView
         android:id="@+id/mvMain"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="0ZeXen_TNCs9m_sTIxYuWK0ZMc4BeNV0UmgsAIA"
+        android:apiKey="0d9wW3Vy-7SIVcJ-2INtPB3plsEqm3hokupKSDA"
         android:clickable="true" />
     
     <!-- BB KEY -->
