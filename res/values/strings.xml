@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="hello">Hello World, MainScreen!</string>
-    <string name="app_name">Su-android</string>
-    <string name="search_hint">Search Points Of Interest</string>
-    <string name="search_app_name">Search</string>
-
-</resources>
