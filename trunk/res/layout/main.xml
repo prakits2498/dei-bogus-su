@@ -44,6 +44,12 @@
         android:layout_height="fill_parent"
         android:apiKey="0d9wW3Vy-7SIVcJ-2INtPB3plsEqm3hokupKSDA"
         android:clickable="true" />
+    
+    <!-- BB KEY -->
+	<!-- android:apiKey="0ZeXen_TNCs9m_sTIxYuWK0ZMc4BeNV0UmgsAIA" -->
+	
+	<!-- DURVAS KEY -->
+	<!-- android:apiKey="0d9wW3Vy-7SIVcJ-2INtPB3plsEqm3hokupKSDA" -->
 
     <TextView
         android:layout_width="fill_parent"

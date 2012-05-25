@@ -18,30 +18,28 @@ package su.android.mapviewutil;
 import java.util.ArrayList;
 
 import su.android.client.InfoTabActivity;
+import su.android.client.OverlayItemPOI;
 import su.android.model.POI;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.widget.Toast;
 
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
-public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
+public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItemPOI> {
 
-	private ArrayList<OverlayItem> m_overlays = new ArrayList<OverlayItem>();
+	private ArrayList<OverlayItemPOI> m_overlays = new ArrayList<OverlayItemPOI>();
 	private Context c;
-	private POI poi;
 	
-	public SimpleItemizedOverlay(Drawable defaultMarker, MapView mapView, POI poi) {
+	public SimpleItemizedOverlay(Drawable defaultMarker, MapView mapView) {
 		super(boundCenter(defaultMarker), mapView);
 		c = mapView.getContext();
-		this.poi = poi;
 	}
 
-	public void addOverlay(OverlayItem overlay) {
+	public void addOverlay(OverlayItemPOI overlay) {
 	    m_overlays.add(overlay);
 	    populate();
 	}
@@ -52,7 +50,7 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 	}
 
 	@Override
-	protected OverlayItem createItem(int i) {
+	protected OverlayItemPOI createItem(int i) {
 		return m_overlays.get(i);
 	}
 
@@ -62,7 +60,9 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 	}
 
 	@Override
-	protected boolean onBalloonTap(int index, OverlayItem item) {
+	protected boolean onBalloonTap(int index, OverlayItemPOI item) {
+		POI poi = item.getPoi();
+		
 		Toast.makeText(c, "onBalloonTap for poi " + poi.getName(),
 				Toast.LENGTH_LONG).show();
 		
