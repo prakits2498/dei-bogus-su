@@ -7,5 +7,6 @@
     <string name="search_app_name">Search</string>
     <string name="poi_name">POI Name Default</string>
     <string name="poi_address">POI Address Example</string>
+    <string name="procuraCategoria">Categoria</string>
 
 </resources>
