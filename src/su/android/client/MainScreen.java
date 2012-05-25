@@ -50,7 +50,6 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 public class MainScreen extends GDMapActivity {
 	/** Called when the activity is first created. */
@@ -83,7 +82,6 @@ public class MainScreen extends GDMapActivity {
 	ServerConnection conn;
 
 	private int oldZoomLevel = -1;
-	private int markersLastIndex = -1;
 
 	List<POI> poiList = null;
 	SimpleItemizedOverlay itemizedOverlay;
@@ -425,11 +423,11 @@ public class MainScreen extends GDMapActivity {
 		switch(dia){
 			case 0: print = "Domingo";break;
 			case 1: print = "Segunda Feira";break;
-			case 2: print = "Ter�a Feira";break;
+			case 2: print = "Terça Feira";break;
 			case 3: print = "Quarta Feira";break;
 			case 4: print = "Quinta Feira";break;
 			case 5: print = "Sexta";break;
-			case 6: print = "S�bado";break;
+			case 6: print = "Sábado";break;
 			default:break;
 		}
 		
@@ -569,31 +567,21 @@ public class MainScreen extends GDMapActivity {
 		public boolean onTouchEvent(MotionEvent e, MapView m) {
 
 			if (map.getZoomLevel() > 15) {
-				System.out.println("ZOOM: " + map.getZoomLevel()
-						+ " old zoom: " + oldZoomLevel);
 				if (oldZoomLevel != map.getZoomLevel()) {
 
 					if(!map.getOverlays().contains(itemizedOverlay)) {
-						System.out.println("DESENHA PINS!");
 						pins();
 					}
 				}
 			} else {
-				System.out.println("old zoom: " + oldZoomLevel);
-				//if (oldZoomLevel > 15) {
-
 				if(map.getOverlays().contains(itemizedOverlay)) {
-					System.out.println("VAI REMOVER PINS!!!");
 					int pos = map.getOverlays().indexOf(itemizedOverlay);
-					System.out.println("A POSI�AO DO ITEMIZED OVERLAY �: " + pos);
 					map.getOverlays().remove(pos);
 					itemizedOverlay.removeOverlay();
 
 					map.invalidate();
 
 				}
-
-				//}
 			}
 
 			oldZoomLevel = map.getZoomLevel();
