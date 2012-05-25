@@ -451,7 +451,12 @@ public class MainScreen extends GDMapActivity {
 					Toast.LENGTH_SHORT).show();
 
 			if (position == 0) {
-
+				//TODO pesquisa por categoria
+				System.out.println("PESQUISA POR CATEGORIA");
+			}
+			else if(position == 1){
+				//TODO pesquisa por afluencia??
+				System.out.println("PESQUISA POR AFLUENCIA??");
 			}
 		}
 	};
@@ -459,7 +464,9 @@ public class MainScreen extends GDMapActivity {
 	private void prepareQuickActionGrid() {
 		mGrid = new QuickActionGrid(this);
 		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.gd_compose));
+				R.drawable.gd_action_bar_compose, R.string.procuraCategoria));
+		mGrid.addQuickAction(new MyQuickAction(this,
+				R.drawable.gd_action_bar_compose, R.string.percentagemCheckins));
 		/*
 		 * mGrid.addQuickAction(new MyQuickAction(this,
 		 * R.drawable.gd_action_bar_export, R.string.gd_export));
