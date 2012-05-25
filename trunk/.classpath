@@ -4,9 +4,14 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="C:/Users/Slycooper/workspace2/su-android/libs/android-support-v4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Slycooper/workspace2/su-android/libs/google-gson-stream-2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Slycooper/workspace2/su-android/libs/gson-1.5.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Slycooper/workspace2/su-android/libs/ksoap2-android-assembly-2.4-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="/home/thethis/workspace/su-android/libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="/home/thethis/workspace/su-android/libs/google-gson-stream-2.1.jar"/>
+	<classpathentry kind="lib" path="/home/thethis/workspace/su-android/libs/gson-1.5.jar"/>
+	<classpathentry kind="lib" path="/home/thethis/workspace/su-android/libs/ksoap2-android-assembly-2.4-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="/home/thethis/workspace/su-android/libs/foursquare-api-1.0.0.jar" sourcepath="/home/thethis/workspace/su-android/libs/foursquare-api-1.0.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/home/thethis/workspace/su-android/libs/foursquare-api-1.0.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
