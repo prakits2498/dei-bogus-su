@@ -20,8 +20,10 @@ import su.android.markerclusterer.MarkerBitmap;
 import su.android.model.AppContext;
 import su.android.model.POI;
 import su.android.server.connection.ServerConnection;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -36,6 +38,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -64,11 +67,11 @@ public class MainScreen extends GDMapActivity {
 	Drawable drawable2;
 	private QuickActionWidget mGrid;
 
-	TextView readingDay;
+	/*TextView readingDay;
 	TextView readingHour;
 	SeekBar seekBarDay;
 	SeekBar seekBarHour;
-	boolean browse=false;
+	boolean browse=false;*/
 
 	// marker icons
 	private List<MarkerBitmap> markerIconBmps_ = new ArrayList<MarkerBitmap>();
@@ -111,7 +114,7 @@ public class MainScreen extends GDMapActivity {
 
 
 		//SEEKBAR
-		readingDay = (TextView) findViewById(R.id.readingDay);
+		/*readingDay = (TextView) findViewById(R.id.readingDay);
 		readingHour = (TextView) findViewById(R.id.readingHour);
 
 		seekBarDay = (SeekBar)findViewById(R.id.seekbarDay);
@@ -122,9 +125,7 @@ public class MainScreen extends GDMapActivity {
 		seekBarHour.setMax(23);
 		seekBarHour.setOnSeekBarChangeListener(new MySeekBarListener(readingHour));
 
-
-
-		BrowsingOff();
+		BrowsingOff();*/
 
 
 		float screenDensity = this.getResources().getDisplayMetrics().density;
@@ -294,16 +295,16 @@ public class MainScreen extends GDMapActivity {
 				+ currentLatitude + " longitude " + currentLongitude;
 		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT)
 		.show();
-		
+
 		//sliders
-		System.out.println(weekDayIndex);
+		/*System.out.println(weekDayIndex);
 		seekBarDay.setProgress(weekDayIndex);
 		readingDay.setText(GetDayString(weekDayIndex));
 		seekBarHour.setProgress(hour);
-		readingHour.setText(GetHourString(hour));
-		
+		readingHour.setText(GetHourString(hour));*/
+
 		return appContext;
-		
+
 	}
 
 	public void cluster() {
@@ -325,7 +326,7 @@ public class MainScreen extends GDMapActivity {
 		// zoom in/out to see how icons change.
 	}
 
-	public void BrowsingOn(){
+	/*public void BrowsingOn(){
 		seekBarDay.setVisibility(View.VISIBLE);
 		seekBarHour.setVisibility(View.VISIBLE);
 		readingDay.setVisibility(View.VISIBLE);
@@ -337,22 +338,95 @@ public class MainScreen extends GDMapActivity {
 		seekBarHour.setVisibility(View.GONE);
 		readingDay.setVisibility(View.GONE);
 		readingHour.setVisibility(View.GONE);
-	}
+	}*/
 
 	@Override
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 		switch (item.getItemId()) {
 		case R.id.action_bar_pois: {
-			if(!browse){
+			/*if(!browse){
 				BrowsingOn();
 				System.out.println("BROWSE ON BITCHEEEEEEEEEEEEEEEEEEEES");
-				browse = true;
-			}
+				browse = true;*/
+			final String [] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday"};
+
+
+			LayoutInflater inflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+			View layout = inflater.inflate(R.layout.dialog_day_hour, null);
+
+			final TextView dayValue = (TextView) layout.findViewById(R.id.dayLabelValue);
+			final TextView hourValue = (TextView) layout.findViewById(R.id.hourLabelValue);
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this)
+			.setView(layout);
+			builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// chamar metodo
+					Log.d("Apply Button", "Day: "+dayValue.getText()+" Hour:"+hourValue.getText());
+
+
+				}
+			});
+			AlertDialog alertDialog = builder.create();
+			alertDialog.setTitle("Browse Mode");
+			alertDialog.show();
+
+			// Seek Day Bar
+			//    final TextView dayValue = (TextView) layout.findViewById(R.id.dayLabelValue);
+			dayValue.setText(days[0]);
+			SeekBar sb = (SeekBar)layout.findViewById(R.id.dayBar);
+
+			sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+					//Do something here with new value
+					Log.d("Seek Day bar", "Value "+progress);
+					dayValue.setText(days[progress]);
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+
+			// Seek Hour Value
+			//	    final TextView hourValue = (TextView) layout.findViewById(R.id.hourLabelValue);
+			hourValue.setText("0");
+			SeekBar sbHour = (SeekBar)layout.findViewById(R.id.hourBar);
+			sbHour.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+					//Do something here with new value
+					hourValue.setText(String.valueOf(progress));
+
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+			/*}
 			else{
 				BrowsingOff();
 				browse = false;
 				System.out.println("BROWSE OFF BITCHEEEEEEEEEEEEEEEEEEEES");
-			}
+			}*/
 			return true;
 		}
 		case R.id.action_bar_search:
@@ -417,53 +491,53 @@ public class MainScreen extends GDMapActivity {
 		}
 
 	}
-	
-	public String GetDayString(int dia){
+
+	/*public String GetDayString(int dia){
 		String print=null;
 		switch(dia){
-			case 0: print = "Domingo";break;
-			case 1: print = "Segunda Feira";break;
-			case 2: print = "Terça Feira";break;
-			case 3: print = "Quarta Feira";break;
-			case 4: print = "Quinta Feira";break;
-			case 5: print = "Sexta";break;
-			case 6: print = "Sábado";break;
-			default:break;
+		case 0: print = "Domingo";break;
+		case 1: print = "Segunda Feira";break;
+		case 2: print = "Terça Feira";break;
+		case 3: print = "Quarta Feira";break;
+		case 4: print = "Quinta Feira";break;
+		case 5: print = "Sexta";break;
+		case 6: print = "Sábado";break;
+		default:break;
 		}
-		
+
 		return print;
 	}
-	
+
 	public String GetHourString(int hora){
 		String print=null;
 		switch(hora){
-			case 0: print = "00:00";break;
-			case 1: print = "01:00";break;
-			case 2: print = "02:00";break;
-			case 3: print = "03:00";break;
-			case 4: print = "04:00";break;
-			case 5: print = "05:00";break;
-			case 6: print = "06:00";break;
-			case 7: print = "07:00";break;
-			case 8: print = "08:00";break;
-			case 9: print = "09:00";break;
-			case 10: print = "10:00";break;
-			case 11: print = "11:00";break;
-			case 12: print = "12:00";break;
-			case 13: print = "13:00";break;
-			case 14: print = "14:00";break;
-			case 15: print = "15:00";break;
-			case 16: print = "16:00";break;
-			case 17: print = "17:00";break;
-			case 18: print = "18:00";break;
-			case 19: print = "19:00";break;
-			case 20: print = "20:00";break;
-			case 21: print = "21:00";break;
-			case 22: print = "22:00";break;
-			case 23: print = "23:00";break;
-			default:break;
+		case 0: print = "00:00";break;
+		case 1: print = "01:00";break;
+		case 2: print = "02:00";break;
+		case 3: print = "03:00";break;
+		case 4: print = "04:00";break;
+		case 5: print = "05:00";break;
+		case 6: print = "06:00";break;
+		case 7: print = "07:00";break;
+		case 8: print = "08:00";break;
+		case 9: print = "09:00";break;
+		case 10: print = "10:00";break;
+		case 11: print = "11:00";break;
+		case 12: print = "12:00";break;
+		case 13: print = "13:00";break;
+		case 14: print = "14:00";break;
+		case 15: print = "15:00";break;
+		case 16: print = "16:00";break;
+		case 17: print = "17:00";break;
+		case 18: print = "18:00";break;
+		case 19: print = "19:00";break;
+		case 20: print = "20:00";break;
+		case 21: print = "21:00";break;
+		case 22: print = "22:00";break;
+		case 23: print = "23:00";break;
+		default:break;
 		}
-		
+
 		return print;
 	}
 
@@ -500,7 +574,7 @@ public class MainScreen extends GDMapActivity {
 			legenda.setText(print);
 		}
 
-	}
+	}*/
 
 	/* Class My Location Listener */
 	public class MyLocationListener implements LocationListener {
@@ -598,6 +672,12 @@ public class MainScreen extends GDMapActivity {
 			if (e.getAction() == MotionEvent.ACTION_UP) {
 				stop = e.getEventTime();
 			}
+
+			//if (stop - start > 1500) { // 1.5 seconds
+
+			//AQUI DENTRO ERA ONDE ESTAVA ORIGINALMENTE OS SLIDEBARS DO ALVARO
+
+			//}
 
 			return false;
 		}
