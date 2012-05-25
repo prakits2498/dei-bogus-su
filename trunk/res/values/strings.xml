@@ -5,5 +5,7 @@
     <string name="app_name">Su-android</string>
     <string name="search_hint">Search Points Of Interest</string>
     <string name="search_app_name">Search</string>
+    <string name="poi_name">POI Name Default</string>
+    <string name="poi_address">POI Address Example</string>
 
 </resources>
