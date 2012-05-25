@@ -57,10 +57,11 @@
 					android:paddingBottom="8dp">
 
 					<TextView
+					    android:id="@id/poiname"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:gravity="center_horizontal"
-						android:text="@string/hello"
+						android:text="@string/poi_name"
 						android:textColor="@android:color/white" />
 
 					<TextView
@@ -68,14 +69,12 @@
 						android:layout_height="wrap_content"
 						android:layout_marginTop="5dp"
 						android:focusable="true"
-						android:clickable="true"
 						android:gravity="center_horizontal"
 						android:paddingRight="20dp"
 						android:paddingLeft="20dp"
-						android:text="@string/app_name"
+						android:text="@string/poi_address"
 						android:textColor="@color/link"
-						android:textStyle="bold"
-						android:onClick="onAppUrlClicked" />
+						android:textStyle="bold" />
 
 				</LinearLayout>
 
