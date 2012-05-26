@@ -47,6 +47,53 @@ public class ServerConnection
 		gson = new Gson();
 	}
 	
+	public List<POI> getPOIRecommendations(double lat, double lng, String dayOfWeek, int hour, double maxDistance, int limit)
+	{
+		POIList poiList = null;
+		String method = "getPOIRecommendations";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		RecommendationRequest req = new RecommendationRequest();
+		req.setLat(lat);
+		req.setLng(lng);
+		req.setMaxDistance(maxDistance);
+		req.setLimit(limit);
+		req.setDayOfWeek(dayOfWeek);
+		req.setHour(hour);
+		String request = gson.toJson(req);
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(request);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			poiList = (POIList)gson.fromJson(result, POIList.class);
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+		if(poiList != null)
+		{
+			for(POI poi: poiList.getPoiList())
+			{
+				Log.i("POI", poi.toString());
+			}
+			return poiList.getPoiList();
+		}
+		else
+		{
+			return new ArrayList<POI>();
+		}
+	}
+	
 	public List<POI> getPOIRecommendations(double lat, double lng, double maxDistance, int limit)
 	{
 		POIList poiList = null;
@@ -159,6 +206,45 @@ public class ServerConnection
 			poiDetails.setPromotionList(promotions);
 			
 			return poiDetails;
+		}
+	}
+	
+	public List<POI> searchPOIS(String query)
+	{
+		POIList poiList = null;
+		String method = "searchPOIS";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);		
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(query);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			poiList = (POIList)gson.fromJson(result, POIList.class);
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+		if(poiList != null)
+		{
+			for(POI poi: poiList.getPoiList())
+			{
+				Log.i("POI", poi.toString());
+			}
+			return poiList.getPoiList();
+		}
+		else
+		{
+			return new ArrayList<POI>();
 		}
 	}
 	
