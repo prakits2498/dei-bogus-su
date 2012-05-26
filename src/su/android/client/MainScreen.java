@@ -87,6 +87,7 @@ public class MainScreen extends GDMapActivity {
 	private int oldZoomLevel = -1;
 
 	List<POI> poiList = null;
+	
 	SimpleItemizedOverlay itemizedOverlay;
 
 	public MainScreen() {
@@ -179,6 +180,7 @@ public class MainScreen extends GDMapActivity {
 			public void run() {
 
 				teste();
+				pins();
 				progressDialog.dismiss();
 			}
 
@@ -199,7 +201,7 @@ public class MainScreen extends GDMapActivity {
 	public void loadInitialPOIs() {
 		AppContext appCtxt = setupContext();
 		poiList = conn.getPOIRecommendations(appCtxt.getLat(),
-				appCtxt.getLng(), 0.5, 100);
+				appCtxt.getLng(), 0.5, 500);
 
 	}
 
@@ -250,7 +252,7 @@ public class MainScreen extends GDMapActivity {
 
 		}
 
-		overlayList.add(itemizedOverlay);
+		//overlayList.add(itemizedOverlay);
 	}
 
 	public void teste() {
@@ -365,6 +367,7 @@ public class MainScreen extends GDMapActivity {
 				public void onClick(DialogInterface dialog, int which) {
 					// chamar metodo
 					Log.d("Apply Button", "Day: "+dayValue.getText()+" Hour:"+hourValue.getText());
+					//conn.
 
 
 				}
@@ -651,14 +654,15 @@ public class MainScreen extends GDMapActivity {
 				if (oldZoomLevel != map.getZoomLevel()) {
 
 					if(!map.getOverlays().contains(itemizedOverlay)) {
-						pins();
+						//pins();
+						map.getOverlays().add(itemizedOverlay);
 					}
 				}
 			} else {
 				if(map.getOverlays().contains(itemizedOverlay)) {
 					int pos = map.getOverlays().indexOf(itemizedOverlay);
 					map.getOverlays().remove(pos);
-					itemizedOverlay.removeOverlay();
+					//itemizedOverlay.removeOverlay();
 
 					map.invalidate();
 
