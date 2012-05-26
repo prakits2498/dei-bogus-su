@@ -38,15 +38,14 @@ public class SearchableActivity extends ListActivity
 	@Override
 	protected void onListItemClick(final ListView l, View v, final int position, long id) {
 		final ProgressDialog dialog = ProgressDialog.show(SearchableActivity.this, "", "Loading.");
-		final String item = (String) getListAdapter().getItem(position);	
+		final POI item = (POI) getListAdapter().getItem(position);	
 		Handler handler = new Handler(); 
 	    handler.postDelayed(new Runnable() { 
 	         public void run() { 
 	        	 dialog.dismiss();
 	        	 Intent myIntent = new Intent(SearchableActivity.this, InfoTabActivity.class);
-	        	 POI poi = (POI) l.getItemAtPosition(position);
-	     		 myIntent.putExtra("poiID", poi.getId());
-	     		 myIntent.putExtra("poiName", poi.getName());
+	     		 myIntent.putExtra("poiID", item.getId());
+	     		 myIntent.putExtra("poiName", item.getName());
 	     		 startActivity(myIntent);
 	         } 
 	    }, 2000); 		
