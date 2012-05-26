@@ -6,6 +6,8 @@ public class RecommendationRequest
 	private double lng;
 	private double maxDistance;
 	private int limit;
+	private int hour;
+	private String dayOfWeek;
 	
 	public double getLat() {
 		return lat;
@@ -31,7 +33,17 @@ public class RecommendationRequest
 	public void setLimit(int limit) {
 		this.limit = limit;
 	}
-	
-	
+	public int getHour() {
+		return hour;
+	}
+	public void setHour(int hour) {
+		this.hour = hour;
+	}
+	public String getDayOfWeek() {
+		return dayOfWeek;
+	}
+	public void setDayOfWeek(String dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
+	}	
 		
 }

@@ -1,7 +1,13 @@
 package su.android.client;
 
+import java.util.List;
+
+import su.android.model.POI;
+import su.android.server.connection.ServerConnection;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,20 +21,18 @@ public class SearchableActivity extends ListActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-//	    setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+//	       super.onCreate(savedInstanceState);
 	    // Get the intent, verify the action and get the query
-//	    Intent intent = getIntent();
-//	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//	      String query = intent.getStringExtra(SearchManager.QUERY);
-//	      
-////	      doMySearch(query);
-//	    }
-	    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-				"Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-				"Linux", "OS/2" };
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, values);
-		setListAdapter(adapter);
+	    Intent intent = getIntent();
+	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) 
+	    {
+	    	String query = intent.getStringExtra(SearchManager.QUERY);
+	    	ServerConnection conn = new ServerConnection();
+		    List<POI> list = conn.searchPOIS(query);
+		    ArrayAdapter<POI> adapter = new ArrayAdapter<POI>(this,
+					android.R.layout.simple_list_item_1, list);
+			setListAdapter(adapter);
+	    }
 	}
 	
 	@Override
