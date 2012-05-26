@@ -16,11 +16,21 @@
 package su.android.client;
 
 import greendroid.app.GDActivity;
+import su.android.model.POIDetails;
+import su.android.model.Promotions;
+import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 public class AboutActivity extends GDActivity {
+	
+	private ServerConnection conn;
+	private POIDetails poiDetails;
+	private Promotions promotion;
+	
+	public AboutActivity() {
+		conn = ServerConnection.getInstance();
+	}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +38,28 @@ public class AboutActivity extends GDActivity {
 
         setActionBarContentView(R.layout.about);
         
-        final TextView aboutText = (TextView) findViewById(R.id.about);
-        aboutText.setMovementMethod(LinkMovementMethod.getInstance());
+        loadPOIDetails();
+        
+        if(poiDetails != null) {
+        	final TextView aboutText = (TextView) findViewById(R.id.about);
+        	aboutText.setText(promotion.getDescription());
+        	//aboutText.setMovementMethod(LinkMovementMethod.getInstance());
+        }
     }
+    
+    private void loadPOIDetails() {
+		Bundle b = new Bundle();
+		b = getIntent().getExtras();
+
+		String poiID = b.getString("poiID");
+
+		poiDetails = conn.getPOIDetails(poiID);
+		
+		if(poiDetails != null) {
+			//TODO isto só está a ir buscar uma promotion, ver se o indice zero é a mais recente
+			promotion = poiDetails.getPromotionList().get(0); 
+		}
+		
+	}
     
 }
