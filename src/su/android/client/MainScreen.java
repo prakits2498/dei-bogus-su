@@ -201,7 +201,7 @@ public class MainScreen extends GDMapActivity {
 	public void loadInitialPOIs() {
 		AppContext appCtxt = setupContext();
 		poiList = conn.getPOIRecommendations(appCtxt.getLat(),
-				appCtxt.getLng(), 0.5, 500);
+				appCtxt.getLng(), 0.5, 100);
 
 	}
 
@@ -311,6 +311,7 @@ public class MainScreen extends GDMapActivity {
 
 	public void cluster() {
 		Log.i("Cluster", "Running");
+		clusterer.removeCluster();
 		// create clusterer instance
 		// add geoitems for clustering
 		for (int i = 0; i < poiList.size(); i++) {
@@ -350,7 +351,7 @@ public class MainScreen extends GDMapActivity {
 				BrowsingOn();
 				System.out.println("BROWSE ON BITCHEEEEEEEEEEEEEEEEEEEES");
 				browse = true;*/
-			final String [] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday"};
+			final String [] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 
 			LayoutInflater inflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
@@ -361,15 +362,18 @@ public class MainScreen extends GDMapActivity {
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this)
 			.setView(layout);
+			final SeekBar sb = (SeekBar)layout.findViewById(R.id.dayBar);
+			final SeekBar sbHour = (SeekBar)layout.findViewById(R.id.hourBar);
 			builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
 
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// chamar metodo
-					Log.d("Apply Button", "Day: "+dayValue.getText()+" Hour:"+hourValue.getText());
-					//conn.
-
-
+				public void onClick(DialogInterface dialog, int which) 
+				{
+					String day = getDayOfWeek(sb.getProgress());
+					int hour = sbHour.getProgress();
+					AppContext appCtxt = MainScreen.this.setupContext();
+					poiList = conn.getPOIRecommendations(appCtxt.getLat(), appCtxt.getLng(), day, hour, 0.5, 100);		
+					cluster();
 				}
 			});
 			AlertDialog alertDialog = builder.create();
@@ -379,7 +383,7 @@ public class MainScreen extends GDMapActivity {
 			// Seek Day Bar
 			//    final TextView dayValue = (TextView) layout.findViewById(R.id.dayLabelValue);
 			dayValue.setText(days[0]);
-			SeekBar sb = (SeekBar)layout.findViewById(R.id.dayBar);
+			
 
 			sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
@@ -404,7 +408,7 @@ public class MainScreen extends GDMapActivity {
 			// Seek Hour Value
 			//	    final TextView hourValue = (TextView) layout.findViewById(R.id.hourLabelValue);
 			hourValue.setText("0");
-			SeekBar sbHour = (SeekBar)layout.findViewById(R.id.hourBar);
+			
 			sbHour.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
 					//Do something here with new value
