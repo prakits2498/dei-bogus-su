@@ -15,6 +15,7 @@ import su.android.model.POI;
 import su.android.model.POIDetails;
 import su.android.model.POIList;
 import su.android.model.Products;
+import su.android.model.Promotions;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -149,6 +150,13 @@ public class ServerConnection
 			products.add(p2);
 			
 			poiDetails.setProductList(products);
+			
+			List<Promotions> promotions = new ArrayList<Promotions>();
+			Promotions promo = new Promotions();
+			promo.setDescription("Finos a 0.50€ a partir das 2h!!!");
+			promotions.add(promo);
+			
+			poiDetails.setPromotionList(promotions);
 			
 			return poiDetails;
 		}

@@ -23,6 +23,8 @@ public class InfoTabActivity extends GDTabActivity {
         
         final String aboutText =  getString(R.string.app_name);
         final Intent aboutIntent = new Intent(this, AboutActivity.class);
+        aboutIntent.putExtra("poiID", poiID);
+        aboutIntent.putExtra("poiName", poiName);
         aboutIntent.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
         addTab(aboutText, aboutText, aboutIntent);
 
