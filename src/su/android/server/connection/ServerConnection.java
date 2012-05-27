@@ -71,6 +71,7 @@ public class ServerConnection
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
 			poiList = (POIList)gson.fromJson(result, POIList.class);
+			Log.i("SERVER REQUEST(RECOMMENDATION)", "[POIS: "+poiList.getPoiList().size()+"]");
 		} 
 		catch (IOException e) 
 		{
@@ -82,10 +83,6 @@ public class ServerConnection
 		}
 		if(poiList != null)
 		{
-			for(POI poi: poiList.getPoiList())
-			{
-				Log.i("POI", poi.toString());
-			}
 			return poiList.getPoiList();
 		}
 		else
@@ -116,6 +113,7 @@ public class ServerConnection
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
 			poiList = (POIList)gson.fromJson(result, POIList.class);
+			Log.i("SERVER REQUEST(RECOMMENDATION)", "[POIS: "+poiList.getPoiList().size()+"]");
 		} 
 		catch (IOException e) 
 		{
@@ -126,11 +124,7 @@ public class ServerConnection
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
 		if(poiList != null)
-		{
-			for(POI poi: poiList.getPoiList())
-			{
-				Log.i("POI", poi.toString());
-			}
+		{			
 			return poiList.getPoiList();
 		}
 		else
@@ -225,6 +219,7 @@ public class ServerConnection
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
 			poiList = (POIList)gson.fromJson(result, POIList.class);
+			Log.i("SERVER REQUEST(SEARCH)", "[POIS: "+poiList.getPoiList().size()+"]");
 		} 
 		catch (IOException e) 
 		{

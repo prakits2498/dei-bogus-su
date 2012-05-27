@@ -137,35 +137,33 @@ public class ClusterMarker extends Overlay {
 	@Override
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 
-		if (mapView.getZoomLevel() < 16) {
-			// cluster_.onNotifyDrawFromMarker();
-			Projection proj = mapView.getProjection();
-			Point p = proj.toPixels(center_, null);
-			GeoBounds bounds = new GeoBounds(proj.fromPixels(0, 0),
-					proj.fromPixels(mapView.getWidth(), mapView.getHeight()));
-			if (!bounds.isInBounds(center_))
-				return;
-			MarkerBitmap mkrBmp = markerIconBmps_.get(markerTypes);
-			Bitmap bmp = isSelected_ ? mkrBmp.getBitmapSelect() : mkrBmp
-					.getBitmapNormal();
-			Point grid = mkrBmp.getGrid();
-			Point gridReal = new Point((int) (grid.x * screenDensity_ + 0.5f),
-					(int) (grid.y * screenDensity_ + 0.5f));
-			canvas.drawBitmap(bmp, p.x - gridReal.x, p.y - gridReal.y, paint_);
-			// Draw a circle
-			// Paint circle = new Paint(Paint.ANTI_ALIAS_FLAG);
-			// the circle to mark the spot
-			// circle.setColor(Color.parseColor("#88ff0000"));
-			// circle.setAlpha(35); // trasparenza
-			// // int radius = metersToRadius(1000, mapView,
-			// // (double) center_.getLatitudeE6() / 1000000);
-			// canvas.drawCircle(p.x, p.y, 56, circle);
-			// End of circle
-			String caption = String.valueOf(nCheckins);
-			int x = p.x;
-			int y = p.y - txtHeightOffset_;
-			canvas.drawText(caption, x, y, paint_);
-		}
+		// cluster_.onNotifyDrawFromMarker();
+		Projection proj = mapView.getProjection();
+		Point p = proj.toPixels(center_, null);
+		GeoBounds bounds = new GeoBounds(proj.fromPixels(0, 0),
+				proj.fromPixels(mapView.getWidth(), mapView.getHeight()));
+		if (!bounds.isInBounds(center_))
+			return;
+		MarkerBitmap mkrBmp = markerIconBmps_.get(markerTypes);
+		Bitmap bmp = isSelected_ ? mkrBmp.getBitmapSelect() : mkrBmp
+				.getBitmapNormal();
+		Point grid = mkrBmp.getGrid();
+		Point gridReal = new Point((int) (grid.x * screenDensity_ + 0.5f),
+				(int) (grid.y * screenDensity_ + 0.5f));
+		canvas.drawBitmap(bmp, p.x - gridReal.x, p.y - gridReal.y, paint_);
+		// Draw a circle
+		// Paint circle = new Paint(Paint.ANTI_ALIAS_FLAG);
+		// the circle to mark the spot
+		// circle.setColor(Color.parseColor("#88ff0000"));
+		// circle.setAlpha(35); // trasparenza
+		// // int radius = metersToRadius(1000, mapView,
+		// // (double) center_.getLatitudeE6() / 1000000);
+		// canvas.drawCircle(p.x, p.y, 56, circle);
+		// End of circle
+		String caption = String.valueOf(nCheckins);
+		int x = p.x;
+		int y = p.y - txtHeightOffset_;
+		canvas.drawText(caption, x, y, paint_);
 	}
 
 	private int metersToRadius(float meters, MapView map, double latitude) {
