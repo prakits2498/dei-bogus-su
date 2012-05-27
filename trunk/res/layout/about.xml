@@ -17,33 +17,76 @@
 */
 -->
 
-<ScrollView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:padding="8dp"
-	android:background="@android:color/white">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:padding="8dp" >
 
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical">
+    <AbsoluteLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/poiInfoAbsoluteLayoutID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white" >
 
-		<ImageView
-		    android:id="@+id/poiPhoto"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:scaleType="centerInside"
-			android:src="@drawable/ic_map_64" />
+        <ImageView
+            android:id="@+id/poi_photoID"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_x="20dp"
+            android:layout_y="5dp"
+            android:padding="10dp"
+            android:src="@drawable/image_default" />
 
-		<TextView
-			android:id="@+id/about"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="5dp"
-			android:textColor="@android:color/black"
-			android:text="@string/hello" />
+        <ImageView
+            android:id="@+id/widget60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="186dp"
+            android:layout_y="11dp"
+            android:src="@drawable/afluencia_icon" />
 
-	</LinearLayout>
+        <TextView
+            android:id="@+id/afluenciaID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="230dp"
+            android:layout_y="55dp"
+            android:text="100"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget62"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_x="195dp"
+            android:layout_y="110dp"
+            android:text="Afluência"
+            android:textColor="@color/myDarkGray"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/widget63"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="95dp"
+            android:layout_y="160dp"
+            android:text="Promoção"
+            android:textColor="@color/myTurquesa"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/poi_promotionID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_x="0dp"
+            android:layout_y="199dp"
+            android:text="TextView"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+    </AbsoluteLayout>
 
 </ScrollView>

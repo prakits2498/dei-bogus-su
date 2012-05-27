@@ -17,93 +17,94 @@
 */
 -->
 
-<greendroid.widget.ActionBarHost
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@id/gd_action_bar_host"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical">
+<greendroid.widget.ActionBarHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/gd_action_bar_host"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-	<greendroid.widget.ActionBar
-		android:id="@id/gd_action_bar"
-		android:layout_height="@dimen/gd_action_bar_height"
-		android:layout_width="fill_parent"
-		android:background="?attr/gdActionBarBackground" />
+    <greendroid.widget.ActionBar
+        android:id="@id/gd_action_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/gd_action_bar_height"
+        android:background="?attr/gdActionBarBackground" />
 
-	<FrameLayout
-		android:id="@id/gd_action_bar_content_view"
-		android:layout_height="0dp"
-		android:layout_width="fill_parent"
-		android:layout_weight="1">
+    <FrameLayout
+        android:id="@id/gd_action_bar_content_view"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:layout_weight="1" >
 
-		<TabHost
-			android:id="@android:id/tabhost"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:paddingTop="5dp">
+        <TabHost
+            android:id="@android:id/tabhost"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"
+            android:paddingTop="5dp" >
 
-			<LinearLayout
-				android:orientation="vertical"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/white"
+                android:orientation="vertical" >
 
-				<LinearLayout
-				    android:layout_width="match_parent"
-				    android:layout_height="wrap_content"
-				    android:gravity="left"
-				    android:orientation="vertical"
-				    android:paddingBottom="8dp"
-				    android:paddingLeft="20dp"
-				    android:paddingRight="20dp"
-				    android:paddingTop="8dp" >
+                <AbsoluteLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/poiInfoAbsoluteLayoutID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white" >
 
-					<TextView
-					    android:id="@id/poiname"
-					    android:layout_width="284dp"
-					    android:layout_height="wrap_content"
-					    android:gravity="center_horizontal"
-					    android:text="@string/poi_name"
-					    android:textColor="@android:color/white" />
+                    <ImageView
+                        android:id="@+id/poiCatIconID"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:paddingBottom="5dp"
+                        android:layout_marginTop="0dp"
+						android:layout_marginBottom="0dp"
+                        android:layout_x="10dp"
+                        android:layout_y="2dp"
+                        android:src="@drawable/arts_entertainment_64" />
 
-				    <ImageView
-				        android:id="@+id/poiIconCategory"
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"
-				        android:src="@drawable/illustration" />
+                    <TextView
+                        android:id="@+id/poiNameID"
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:layout_x="85dp"
+                        android:layout_y="2dp"
+                        android:text="TextView"
+                        android:textColor="@color/myDarkGray"
+                        android:textSize="16sp"
+                        android:singleLine="false"
+                        android:textStyle="bold" />
 
-				    <TextView
-				        android:id="@+id/poiAddressID"
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"
-				        android:layout_marginTop="5dp"
-				        android:focusable="true"
-				        android:gravity="center_horizontal|right"
-				        android:paddingLeft="20dp"
-				        android:paddingRight="20dp"
-				        android:text="@string/poi_address"
-				        android:textColor="@android:color/primary_text_light"
-				        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/poiAddressID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_x="85dp"
+                        android:layout_y="40dp"
+                        android:text="TextView"
+                        android:textColor="@color/myDarkGray"
+                        android:textSize="16sp" />
+                </AbsoluteLayout>
 
-				</LinearLayout>
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-2dp"
+                    android:layout_marginRight="-2dp"
+                    android:background="@null" />
 
-				<TabWidget
-					android:id="@android:id/tabs"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginLeft="-2dp"
-					android:layout_marginRight="-2dp"
-					android:background="@null" />
-
-				<FrameLayout
-					android:id="@android:id/tabcontent"
-					android:layout_width="fill_parent"
-					android:layout_height="0dip"
-					android:layout_weight="1" />
-
-			</LinearLayout>
-
-		</TabHost>
-
-	</FrameLayout>
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </TabHost>
+    </FrameLayout>
 
 </greendroid.widget.ActionBarHost>
