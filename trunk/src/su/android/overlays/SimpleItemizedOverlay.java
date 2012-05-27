@@ -41,6 +41,8 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItemPOI
 		setShowClose(false);
 		setShowDisclosure(true);
 		setSnapToCenter(false);
+		
+		this.mainScreen = mainScreen;
 	}
 
 	public void addOverlay(OverlayItemPOI overlay) {
@@ -80,7 +82,7 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItemPOI
 			if(!poi.getPhotos().isEmpty())
 				myIntent.putExtra("poiPhoto01", poi.getPhotos().get(0));
 
-		mainScreen.getApplicationContext().startActivity(myIntent);
+		mainScreen.startActivity(myIntent);
 
 		return true;
 	}
