@@ -50,11 +50,11 @@ public class AboutActivity extends GDActivity {
         loadPOIDetails();
         
         if(poiDetails != null) {
-        	final TextView aboutText = (TextView) findViewById(R.id.about);
+        	final TextView aboutText = (TextView) findViewById(R.id.poi_promotionID);
         	aboutText.setText(promotion.getDescription());
         	//aboutText.setMovementMethod(LinkMovementMethod.getInstance());
         	
-        	ImageView imageV = (ImageView) findViewById(R.id.poiPhoto);
+        	ImageView imageV = (ImageView) findViewById(R.id.poi_photoID);
     		ImageLoader imageLoader = new ImageLoader(imageV.getContext());
     		imageLoader.DisplayImage(poiExtras.get("poiPhoto01"), imageV);
         }
