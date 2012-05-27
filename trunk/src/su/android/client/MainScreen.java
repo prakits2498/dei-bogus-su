@@ -268,7 +268,7 @@ public class MainScreen extends GDMapActivity {
 
 	private String getDayOfWeek(int index) {
 		String[] days = { "Sunday", "Monday", "Tuesday", "Wednesday",
-				"Thursday", "Friday", "Saturday", "Sunday" };
+				"Thursday", "Friday", "Saturday" };
 		return days[index];
 	}
 
@@ -366,6 +366,14 @@ public class MainScreen extends GDMapActivity {
 			.setView(layout);
 			final SeekBar sb = (SeekBar)layout.findViewById(R.id.dayBar);
 			final SeekBar sbHour = (SeekBar)layout.findViewById(R.id.hourBar);
+			Time today = new Time(Time.getCurrentTimezone());
+			today.setToNow();
+			int weekDayIndex = today.weekDay;
+			int hour = today.hour;
+			sb.setProgress(weekDayIndex);
+			dayValue.setText(days[weekDayIndex]);
+			sbHour.setProgress(hour);
+			hourValue.setText(hour+"H");
 			builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
 
 				@Override
@@ -382,9 +390,6 @@ public class MainScreen extends GDMapActivity {
 			alertDialog.setTitle("Browse Mode");
 			alertDialog.show();
 
-			// Seek Day Bar
-			//    final TextView dayValue = (TextView) layout.findViewById(R.id.dayLabelValue);
-			dayValue.setText(days[0]);
 			
 
 			sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -407,10 +412,6 @@ public class MainScreen extends GDMapActivity {
 				}
 			});
 
-			// Seek Hour Value
-			//	    final TextView hourValue = (TextView) layout.findViewById(R.id.hourLabelValue);
-			hourValue.setText("0");
-			
 			sbHour.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
 					//Do something here with new value
@@ -439,18 +440,17 @@ public class MainScreen extends GDMapActivity {
 			return true;
 		}
 		case R.id.action_bar_search: {
-			// TODO pesquisa por keyword
-			return true;
+			onSearchRequested(); return true;
 		}
 		
 		case R.id.action_bar_category: {
-			onShowGrid(item.getItemView());
+			onShowGrid(item.getItemView()); return true;
 		}
 
 		default:
 			return super.onHandleActionBarItemClick(item, position);
 		}
-
+		
 	}
 
 	public void onShowGrid(View v) {
