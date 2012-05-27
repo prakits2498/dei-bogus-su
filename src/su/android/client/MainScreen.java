@@ -113,22 +113,6 @@ public class MainScreen extends GDMapActivity {
 		map = (CustomMapView) findViewById(R.id.mvMain);
 		map.setBuiltInZoomControls(true);
 
-
-		//SEEKBAR
-		/*readingDay = (TextView) findViewById(R.id.readingDay);
-		readingHour = (TextView) findViewById(R.id.readingHour);
-
-		seekBarDay = (SeekBar)findViewById(R.id.seekbarDay);
-		seekBarDay.setMax(6);
-		seekBarDay.setOnSeekBarChangeListener(new MySeekBarListener(readingDay));
-
-		seekBarHour = (SeekBar)findViewById(R.id.seekbarHour);
-		seekBarHour.setMax(23);
-		seekBarHour.setOnSeekBarChangeListener(new MySeekBarListener(readingHour));
-
-		BrowsingOff();*/
-
-
 		float screenDensity = this.getResources().getDisplayMetrics().density;
 		clusterer = new GeoClusterer(map, markerIconBmps_, screenDensity);
 		map.setClusterAlgorithm(clusterer);
@@ -140,7 +124,6 @@ public class MainScreen extends GDMapActivity {
 
 		Touchy t = new Touchy();
 		overlayList.add(t);
-		System.out.println("NUMERO DE OVERLAYS DEPOIS DO TOUCHY:" + map.getOverlays().size());
 
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -148,6 +131,9 @@ public class MainScreen extends GDMapActivity {
 
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				1000, 0, mlocListener);
+
+
+
 		// prepare for marker icons.
 		// small icon for maximum 10 items
 		markerIconBmps_.add(new MarkerBitmap(BitmapFactory.decodeResource(
@@ -164,14 +150,17 @@ public class MainScreen extends GDMapActivity {
 				// src_nrm.width/src_nrm.height) ??
 				16, 100));
 
+
+
 		controller = map.getController();
 		controller.setZoom(13);
+
+
 
 		final ProgressDialog progressDialog = ProgressDialog.show(
 				MainScreen.this, "", "Loading POIs...");
 
 		loadInitialPOIs();
-
 
 		Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
@@ -198,8 +187,10 @@ public class MainScreen extends GDMapActivity {
 
 	public void loadInitialPOIs() {
 		AppContext appCtxt = setupContext();
+		System.out.println("NUMERO DE OVERLAYS DEPOIS DO TOUCHY:");
 		poiList = conn.getPOIRecommendations(appCtxt.getLat(),
 				appCtxt.getLng(), 0.5, 100);
+		System.out.println("NUMERO DE OVERLAYS DEPOIS DO TOUCHY:");
 	}
 
 	/**
@@ -248,16 +239,11 @@ public class MainScreen extends GDMapActivity {
 	public void updatePinsCategory(String categoria){
 		itemizedOverlay.removeOverlay();
 
-		for (int i=0; i< poiList.size(); i++){
+		if(categoria.equals(getApplicationContext().getResources().getString(R.string.all))){
+			for (int i=0; i< poiList.size(); i++){
 
-			POI poi = poiList.get(i);
-			
-			System.out.println(categoria);
-			System.out.println(poi.getCategory());
-			
-			
-			if(poi.getCategory().equalsIgnoreCase(categoria)){
-				
+				POI poi = poiList.get(i);
+
 				double lat = poi.getLocationArray()[0];
 				double lng = poi.getLocationArray()[1];
 				GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
@@ -266,8 +252,31 @@ public class MainScreen extends GDMapActivity {
 						"Nº checkins: " + poi.getCheckinsCount(), poi);
 				//TODO escolher o icone de acordo com as categorias
 				//overlayItem.setMarker(marker);
-				itemizedOverlay.addOverlay(overlayItem);			
+				itemizedOverlay.addOverlay(overlayItem);
 			}
+		}
+		else{
+
+			for (int i=0; i< poiList.size(); i++){
+
+				POI poi = poiList.get(i);
+
+				System.out.println("CATEGORIA QUE CHEGOU PARA COMPARE: " + categoria);
+				System.out.println("CATEGORIA DO POI" + poi.getCategory());
+
+				if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(categoria)){
+
+					double lat = poi.getLocationArray()[0];
+					double lng = poi.getLocationArray()[1];
+					GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
+					// Balloon
+					OverlayItemPOI overlayItem = new OverlayItemPOI(point, poi.getName(),
+							"Nº checkins: " + poi.getCheckinsCount(), poi);
+					//TODO escolher o icone de acordo com as categorias
+					//overlayItem.setMarker(marker);
+					itemizedOverlay.addOverlay(overlayItem);			
+				}
+			}	
 
 		}
 	}
@@ -294,11 +303,11 @@ public class MainScreen extends GDMapActivity {
 		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
 
 		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
-		double currentLatitude = currentLocation.getLatitude();
-		double currentLongitude = currentLocation.getLongitude();
+		//		double currentLatitude = currentLocation.getLatitude();
+		//		double currentLongitude = currentLocation.getLongitude();
 
-		//		double currentLatitude = 40.2072;
-		//		double currentLongitude = -8.426428;
+		double currentLatitude = 40.2072;
+		double currentLongitude = -8.426428;
 
 		Time today = new Time(Time.getCurrentTimezone());
 		today.setToNow();
@@ -313,13 +322,6 @@ public class MainScreen extends GDMapActivity {
 				+ currentLatitude + " longitude " + currentLongitude;
 		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT)
 		.show();
-
-		//sliders
-		/*System.out.println(weekDayIndex);
-		seekBarDay.setProgress(weekDayIndex);
-		readingDay.setText(GetDayString(weekDayIndex));
-		seekBarHour.setProgress(hour);
-		readingHour.setText(GetHourString(hour));*/
 
 		return appContext;
 
@@ -450,41 +452,38 @@ public class MainScreen extends GDMapActivity {
 
 	private OnQuickActionClickListener mActionListener = new OnQuickActionClickListener() {
 		public void onQuickActionClicked(QuickActionWidget widget, int position) {
-			Toast.makeText(MainScreen.this, "Item " + position + " clicked",
-					Toast.LENGTH_SHORT).show();
+			/*Toast.makeText(MainScreen.this, "Item " + position + " clicked",
+					Toast.LENGTH_SHORT).show();*/
 
 			switch(position){
-				case 0: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat1));break;
-				case 1: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat2));break; 
-				case 2: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat3));break; 
-				case 3: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat4));break; 
-				case 4: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat5));break; 
-				case 5: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat6));break; 
-				case 6: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat7));break; 
-				case 7: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat8));break; 
-				default:break;
+						case 0: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat1));break;
+						case 1: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat2));break; 
+						case 2: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat3));break; 
+						case 3: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat4));break; 
+						case 4: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat5));break; 
+						case 5: updatePinsCategory(getApplicationContext().getResources().getString(R.string.mainCat6));break; 
+						case 6: updatePinsCategory(getApplicationContext().getResources().getString(R.string.all));break; 
+						default:break;
 			}
 		}
 	};
 
 	private void prepareQuickActionGrid() {
 		mGrid = new QuickActionGrid(this);
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat1));
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat2));
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat3));
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat4));
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat5));
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat6));
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat7));
-		mGrid.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_compose, R.string.mainCat8));
+				mGrid.addQuickAction(new MyQuickAction(this,
+						R.drawable.gd_action_bar_compose, R.string.mainCat1));
+				mGrid.addQuickAction(new MyQuickAction(this,
+						R.drawable.gd_action_bar_compose, R.string.mainCat2));
+				mGrid.addQuickAction(new MyQuickAction(this,
+						R.drawable.gd_action_bar_compose, R.string.mainCat3));
+				mGrid.addQuickAction(new MyQuickAction(this,
+						R.drawable.gd_action_bar_compose, R.string.mainCat4));
+				mGrid.addQuickAction(new MyQuickAction(this,
+						R.drawable.gd_action_bar_compose, R.string.mainCat5));
+				mGrid.addQuickAction(new MyQuickAction(this,
+						R.drawable.gd_action_bar_compose, R.string.mainCat6));
+				mGrid.addQuickAction(new MyQuickAction(this,
+						R.drawable.gd_action_bar_compose, R.string.all));
 
 		mGrid.setOnQuickActionClickListener(mActionListener);
 	}
