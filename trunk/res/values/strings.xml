@@ -9,5 +9,13 @@
     <string name="poi_address">POI Address Example</string>
     <string name="procuraCategoria">Categoria</string>
     <string name="percentagemCheckins">Afluência</string>
+    <string name="mainCat1">Arts&amp;Entertainment</string>
+    <string name="mainCat2">College&amp;Education</string>
+    <string name="mainCat3">Food</string>
+    <string name="mainCat4">Home/Work/Other</string>
+    <string name="mainCat5">Nightlife Sports</string>
+    <string name="mainCat6">Great Outdoors</string>
+    <string name="mainCat7">Shops</string>
+    <string name="mainCat8">Travel Spots</string>
 
 </resources>
