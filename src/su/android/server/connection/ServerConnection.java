@@ -159,7 +159,7 @@ public class ServerConnection
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
 		
-		if(poiDetails != null)
+		if(poiDetails.getPromotionList() != null && poiDetails.getProductList() != null)
 		{
 			return poiDetails;
 		}
