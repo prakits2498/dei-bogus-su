@@ -15,11 +15,16 @@
  */
 package su.android.client;
 
+import java.util.HashMap;
+
+import com.fedorvlasov.lazylist.ImageLoader;
+
 import greendroid.app.GDActivity;
 import su.android.model.POIDetails;
 import su.android.model.Promotions;
 import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class AboutActivity extends GDActivity {
@@ -27,6 +32,8 @@ public class AboutActivity extends GDActivity {
 	private ServerConnection conn;
 	private POIDetails poiDetails;
 	private Promotions promotion;
+	
+	private HashMap<String, String> poiExtras = new HashMap<String, String>();
 	
 	public AboutActivity() {
 		conn = ServerConnection.getInstance();
@@ -38,28 +45,44 @@ public class AboutActivity extends GDActivity {
 
         setActionBarContentView(R.layout.about);
         
+        getExtrasPOI();
+
         loadPOIDetails();
         
         if(poiDetails != null) {
         	final TextView aboutText = (TextView) findViewById(R.id.about);
         	aboutText.setText(promotion.getDescription());
         	//aboutText.setMovementMethod(LinkMovementMethod.getInstance());
+        	
+        	ImageView imageV = (ImageView) findViewById(R.id.poiPhoto);
+    		ImageLoader imageLoader = new ImageLoader(imageV.getContext());
+    		imageLoader.DisplayImage(poiExtras.get("poiPhoto01"), imageV);
         }
     }
     
     private void loadPOIDetails() {
-		Bundle b = new Bundle();
-		b = getIntent().getExtras();
-
-		String poiID = b.getString("poiID");
-
-		poiDetails = conn.getPOIDetails(poiID);
+		poiDetails = conn.getPOIDetails(poiExtras.get("poiID"));
 		
 		if(poiDetails != null) {
 			//TODO isto só está a ir buscar uma promotion, ver se o indice zero é a mais recente
 			promotion = poiDetails.getPromotionList().get(0); 
+			
+			
 		}
 		
 	}
+    
+    private void getExtrasPOI() {
+    	Bundle b = new Bundle();
+        b = getIntent().getExtras();
+        
+        poiExtras.put("poiID", b.getString("poiID"));
+        poiExtras.put("poiName", b.getString("poiName"));
+        poiExtras.put("poiAddress", b.getString("poiAddress"));
+        poiExtras.put("poiCategory", b.getString("poiCategory"));
+        poiExtras.put("poiSubCategory", b.getString("poiSubCategory"));
+        poiExtras.put("poiCatIcon", b.getString("poiCatIcon"));
+        poiExtras.put("poiPhoto01", b.getString("poiPhoto01"));
+    }
     
 }
