@@ -29,4 +29,6 @@
 	<item type="id" name="image_id" />
 	<item name="poiname" type="id"/>
 	<item type="id" name="product_name"/>
+	<item name="action_bar_category" type="id"/>
+	<item name="action_bar_slider" type="id"/>
 </resources>
