@@ -194,17 +194,12 @@ public class MainScreen extends GDMapActivity {
 		itemizedOverlay.setShowClose(false);
 		itemizedOverlay.setShowDisclosure(true);
 		itemizedOverlay.setSnapToCenter(false);
-		
-		
-
-
 	}
 
 	public void loadInitialPOIs() {
 		AppContext appCtxt = setupContext();
 		poiList = conn.getPOIRecommendations(appCtxt.getLat(),
 				appCtxt.getLng(), 0.5, 100);
-
 	}
 
 	/**
@@ -236,22 +231,15 @@ public class MainScreen extends GDMapActivity {
 
 		for (int i = 0; i < poiList.size(); i++) {
 			POI poi = poiList.get(i);
-
 			double lat = poi.getLocationArray()[0];
 			double lng = poi.getLocationArray()[1];
-
 			GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
-
-
 			// Balloon
 			OverlayItemPOI overlayItem = new OverlayItemPOI(point, poi.getName(),
 					"Nº checkins: " + poi.getCheckinsCount(), poi);
-
 			//TODO escolher o icone de acordo com as categorias
 			//overlayItem.setMarker(marker);
-
 			itemizedOverlay.addOverlay(overlayItem);
-
 		}
 
 		//overlayList.add(itemizedOverlay);
@@ -276,15 +264,14 @@ public class MainScreen extends GDMapActivity {
 		AppContext appContext = new AppContext();
 		Criteria hdCrit = new Criteria();
 		hdCrit.setAccuracy(Criteria.ACCURACY_FINE);
-		// String mlocProvider = locationManager.getBestProvider(hdCrit, true);
+		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
 
-		// Location currentLocation = locationManager
-		// .getLastKnownLocation(mlocProvider);
-		// double currentLatitude = currentLocation.getLatitude();
-		// double currentLongitude = currentLocation.getLongitude();
+		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
+		double currentLatitude = currentLocation.getLatitude();
+		double currentLongitude = currentLocation.getLongitude();
 
-		double currentLatitude = 40.2072;
-		double currentLongitude = -8.426428;
+//		double currentLatitude = 40.2072;
+//		double currentLongitude = -8.426428;
 
 		Time today = new Time(Time.getCurrentTimezone());
 		today.setToNow();
@@ -331,128 +318,105 @@ public class MainScreen extends GDMapActivity {
 		// zoom in/out to see how icons change.
 	}
 
-	/*public void BrowsingOn(){
-		seekBarDay.setVisibility(View.VISIBLE);
-		seekBarHour.setVisibility(View.VISIBLE);
-		readingDay.setVisibility(View.VISIBLE);
-		readingHour.setVisibility(View.VISIBLE);
-	}
-
-	public void BrowsingOff(){
-		seekBarDay.setVisibility(View.GONE);
-		seekBarHour.setVisibility(View.GONE);
-		readingDay.setVisibility(View.GONE);
-		readingHour.setVisibility(View.GONE);
-	}*/
-
 	@Override
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
-		switch (item.getItemId()) {
-		case R.id.action_bar_slider: {
-			/*if(!browse){
-				BrowsingOn();
-				System.out.println("BROWSE ON BITCHEEEEEEEEEEEEEEEEEEEES");
-				browse = true;*/
-			final String [] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-
-			LayoutInflater inflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
-			View layout = inflater.inflate(R.layout.dialog_day_hour, null);
-
-			final TextView dayValue = (TextView) layout.findViewById(R.id.dayLabelValue);
-			final TextView hourValue = (TextView) layout.findViewById(R.id.hourLabelValue);
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this)
-			.setView(layout);
-			final SeekBar sb = (SeekBar)layout.findViewById(R.id.dayBar);
-			final SeekBar sbHour = (SeekBar)layout.findViewById(R.id.hourBar);
-			Time today = new Time(Time.getCurrentTimezone());
-			today.setToNow();
-			int weekDayIndex = today.weekDay;
-			int hour = today.hour;
-			sb.setProgress(weekDayIndex);
-			dayValue.setText(days[weekDayIndex]);
-			sbHour.setProgress(hour);
-			hourValue.setText(hour+"H");
-			builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
-				{
-					String day = getDayOfWeek(sb.getProgress());
-					int hour = sbHour.getProgress();
-					AppContext appCtxt = MainScreen.this.setupContext();
-					poiList = conn.getPOIRecommendations(appCtxt.getLat(), appCtxt.getLng(), day, hour, 0.5, 100);		
-					cluster();
-				}
-			});
-			AlertDialog alertDialog = builder.create();
-			alertDialog.setTitle("Browse Mode");
-			alertDialog.show();
-
-			
-
-			sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
-					//Do something here with new value
-					Log.d("Seek Day bar", "Value "+progress);
-					dayValue.setText(days[progress]);
-				}
-
-				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void onStopTrackingTouch(SeekBar seekBar) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-
-			sbHour.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
-					//Do something here with new value
-					hourValue.setText(String.valueOf(progress));
-
-				}
-
-				@Override
-				public void onStartTrackingTouch(SeekBar seekBar) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void onStopTrackingTouch(SeekBar seekBar) {
-					// TODO Auto-generated method stub
-
-				}
-			});
-			/*}
-			else{
-				BrowsingOff();
-				browse = false;
-				System.out.println("BROWSE OFF BITCHEEEEEEEEEEEEEEEEEEEES");
-			}*/
-			return true;
-		}
-		case R.id.action_bar_search: {
-			onSearchRequested(); return true;
-		}
-		
-		case R.id.action_bar_category: {
-			onShowGrid(item.getItemView()); return true;
-		}
-
-		default:
-			return super.onHandleActionBarItemClick(item, position);
+		switch (item.getItemId()) 
+		{
+			case R.id.action_bar_slider: 
+				createBrowseDialog();
+				return true;		
+			case R.id.action_bar_search:
+				onSearchRequested(); 
+				return true;		
+			case R.id.action_bar_category: 
+				onShowGrid(item.getItemView()); 
+				return true;		
+			default:
+				return super.onHandleActionBarItemClick(item, position);
 		}
 		
 	}
 
+	private void createBrowseDialog()
+	{
+		final String [] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+
+		LayoutInflater inflater = (LayoutInflater) getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.dialog_day_hour, null);
+
+		final TextView dayValue = (TextView) layout.findViewById(R.id.dayLabelValue);
+		final TextView hourValue = (TextView) layout.findViewById(R.id.hourLabelValue);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainScreen.this)
+		.setView(layout);
+		final SeekBar sb = (SeekBar)layout.findViewById(R.id.dayBar);
+		final SeekBar sbHour = (SeekBar)layout.findViewById(R.id.hourBar);
+		Time today = new Time(Time.getCurrentTimezone());
+		today.setToNow();
+		int weekDayIndex = today.weekDay;
+		int hour = today.hour;
+		sb.setProgress(weekDayIndex);
+		dayValue.setText(days[weekDayIndex]);
+		sbHour.setProgress(hour);
+		hourValue.setText(hour+"H");
+		builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				String day = getDayOfWeek(sb.getProgress());
+				int hour = sbHour.getProgress();
+				AppContext appCtxt = MainScreen.this.setupContext();
+				poiList = conn.getPOIRecommendations(appCtxt.getLat(), appCtxt.getLng(), day, hour, 0.5, 100);		
+				cluster();
+			}
+		});
+		AlertDialog alertDialog = builder.create();
+		alertDialog.setTitle("Browse Mode");
+		alertDialog.show();
+
+		sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+				//Do something here with new value
+				Log.d("Seek Day bar", "Value "+progress);
+				dayValue.setText(days[progress]);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		sbHour.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+				//Do something here with new value
+				hourValue.setText(String.valueOf(progress));
+
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+	
 	public void onShowGrid(View v) {
 		mGrid.show(v);
 	}
@@ -508,90 +472,6 @@ public class MainScreen extends GDMapActivity {
 		}
 
 	}
-
-	/*public String GetDayString(int dia){
-		String print=null;
-		switch(dia){
-		case 0: print = "Domingo";break;
-		case 1: print = "Segunda Feira";break;
-		case 2: print = "Terça Feira";break;
-		case 3: print = "Quarta Feira";break;
-		case 4: print = "Quinta Feira";break;
-		case 5: print = "Sexta";break;
-		case 6: print = "Sábado";break;
-		default:break;
-		}
-
-		return print;
-	}
-
-	public String GetHourString(int hora){
-		String print=null;
-		switch(hora){
-		case 0: print = "00:00";break;
-		case 1: print = "01:00";break;
-		case 2: print = "02:00";break;
-		case 3: print = "03:00";break;
-		case 4: print = "04:00";break;
-		case 5: print = "05:00";break;
-		case 6: print = "06:00";break;
-		case 7: print = "07:00";break;
-		case 8: print = "08:00";break;
-		case 9: print = "09:00";break;
-		case 10: print = "10:00";break;
-		case 11: print = "11:00";break;
-		case 12: print = "12:00";break;
-		case 13: print = "13:00";break;
-		case 14: print = "14:00";break;
-		case 15: print = "15:00";break;
-		case 16: print = "16:00";break;
-		case 17: print = "17:00";break;
-		case 18: print = "18:00";break;
-		case 19: print = "19:00";break;
-		case 20: print = "20:00";break;
-		case 21: print = "21:00";break;
-		case 22: print = "22:00";break;
-		case 23: print = "23:00";break;
-		default:break;
-		}
-
-		return print;
-	}
-
-	public class MySeekBarListener implements OnSeekBarChangeListener {
-
-		TextView legenda;
-
-		public MySeekBarListener(TextView legend){
-			this.legenda = legend;
-		}
-
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
-			//if(seekBar.getId() == )
-			String print=null;
-
-			if(seekBar.getMax() == 6){
-				print = GetDayString(seekBar.getProgress());
-			}
-			else{
-				print = GetHourString(seekBar.getProgress());
-			}
-			//Log.i("DEBUG",Integer.toString(seekBar.getId()));	
-			legenda.setText(print);
-		}
-
-	}*/
 
 	/* Class My Location Listener */
 	public class MyLocationListener implements LocationListener {
