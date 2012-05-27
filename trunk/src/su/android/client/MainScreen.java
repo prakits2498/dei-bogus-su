@@ -101,8 +101,8 @@ public class MainScreen extends GDMapActivity {
 
 		prepareQuickActionGrid();
 
-		addActionBarItem(Type.Locate, R.id.action_bar_pois);
-
+		addActionBarItem(Type.Eye, R.id.action_bar_slider); //TODO icon calendario com um relogio
+		addActionBarItem(Type.Compass, R.id.action_bar_category);
 		addActionBarItem(
 				getActionBar().newActionBarItem(NormalActionBarItem.class)
 				.setDrawable(
@@ -194,6 +194,8 @@ public class MainScreen extends GDMapActivity {
 		itemizedOverlay.setShowClose(false);
 		itemizedOverlay.setShowDisclosure(true);
 		itemizedOverlay.setSnapToCenter(false);
+		
+		
 
 
 	}
@@ -346,7 +348,7 @@ public class MainScreen extends GDMapActivity {
 	@Override
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 		switch (item.getItemId()) {
-		case R.id.action_bar_pois: {
+		case R.id.action_bar_slider: {
 			/*if(!browse){
 				BrowsingOn();
 				System.out.println("BROWSE ON BITCHEEEEEEEEEEEEEEEEEEEES");
@@ -436,11 +438,14 @@ public class MainScreen extends GDMapActivity {
 			}*/
 			return true;
 		}
-		case R.id.action_bar_search:
-			// startActivity(new Intent(this, InfoTabActivity.class));
-			// startActivity(new Intent(this, MapPinMapActivity.class));
-			onShowGrid(item.getItemView());
+		case R.id.action_bar_search: {
+			// TODO pesquisa por keyword
 			return true;
+		}
+		
+		case R.id.action_bar_category: {
+			onShowGrid(item.getItemView());
+		}
 
 		default:
 			return super.onHandleActionBarItemClick(item, position);
@@ -459,11 +464,9 @@ public class MainScreen extends GDMapActivity {
 
 			if (position == 0) {
 				//TODO pesquisa por categoria
-				System.out.println("PESQUISA POR CATEGORIA");
 			}
 			else if(position == 1){
-				//TODO pesquisa por afluencia??
-				System.out.println("PESQUISA POR AFLUENCIA??");
+				//TODO pesquisa por categoria
 			}
 		}
 	};
