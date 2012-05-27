@@ -1,4 +1,4 @@
-package su.android.client;
+package su.android.overlays;
 
 import su.android.model.POI;
 
