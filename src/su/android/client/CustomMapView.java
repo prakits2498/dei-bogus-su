@@ -1,12 +1,15 @@
 package su.android.client;
 
+import su.android.mapviewutil.SimpleItemizedOverlay;
 import su.android.markerclusterer.GeoClusterer;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 
 public class CustomMapView extends MapView {
 
@@ -34,6 +37,14 @@ public class CustomMapView extends MapView {
 		if (ev.getAction()==MotionEvent.ACTION_UP) 
 		{
 			clusterer.onNotifyDrawFromCluster();
+		}
+		for(Overlay overlay: this.getOverlays())
+		{
+			if(overlay instanceof SimpleItemizedOverlay)
+			{
+				((SimpleItemizedOverlay)overlay).hideAllBalloons();
+				Log.i("Ballons", "Hide!!");
+			}
 		}
 		return super.onTouchEvent(ev);
 	}
