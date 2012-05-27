@@ -23,15 +23,15 @@ public class InfoTabActivity extends GDTabActivity {
 
         getExtrasPOI();
 
-        final String aboutText =  getString(R.string.app_name);
+        final String aboutText =  getString(R.string.poi_details);
         Intent aboutIntent = new Intent(this, AboutActivity.class);
         
         aboutIntent = putExtraPOIDetails(aboutIntent);
         
         aboutIntent.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
-        addTab(aboutText, aboutText, aboutIntent);
+        addTab(aboutText, aboutText, aboutIntent); //O style do titulo da tab esta em gd_styles.xml em TabIndicator
 
-        final String productsText =  getString(R.string.app_name);
+        final String productsText = getString(R.string.poi_products);
         Intent productsIntent = new Intent(this, ProductsActivity.class);
         
         productsIntent = putExtraPOIDetails(productsIntent);
@@ -39,18 +39,21 @@ public class InfoTabActivity extends GDTabActivity {
         productsIntent.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
         addTab(productsText, productsText, productsIntent);
         
-        TextView poiNameTv = (TextView) findViewById(R.id.poiname);
+        TextView poiNameTv = (TextView) findViewById(R.id.poiNameID);
         poiNameTv.setText(poiExtras.get("poiName"));
         
         TextView poiAddressTv = (TextView) findViewById(R.id.poiAddressID);
         poiAddressTv.setText(poiExtras.get("poiAddress"));
         
-        ImageView imageV = (ImageView) findViewById(R.id.poiIconCategory);
+        ImageView imageV = (ImageView) findViewById(R.id.poiCatIconID);
 		ImageLoader imageLoader = new ImageLoader(imageV.getContext());
 		imageLoader.DisplayImage(poiExtras.get("poiCatIcon"), imageV);
 		
+		//System.out.println(poiExtras.get("poiCatIcon"));
+		
     }
     
+    //Extras vindos do SimpleItemizedOverlay
     private void getExtrasPOI() {
     	Bundle b = new Bundle();
         b = getIntent().getExtras();
