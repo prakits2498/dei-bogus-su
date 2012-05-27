@@ -29,8 +29,6 @@ public class ProductsActivity extends GDActivity {
 	private PageIndicator mPageIndicatorPrev;
 	private PageIndicator mPageIndicatorOther;
 
-	private String poiName;
-
 	ServerConnection conn;
 
 	public POIDetails poiDetails;
@@ -79,7 +77,6 @@ public class ProductsActivity extends GDActivity {
 		b = getIntent().getExtras();
 
 		String poiID = b.getString("poiID");
-		poiName = b.getString("poiName");
 
 		poiDetails = conn.getPOIDetails(poiID);
 

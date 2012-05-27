@@ -67,8 +67,19 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItemPOI
 				Toast.LENGTH_LONG).show();
 		
 		Intent myIntent = new Intent(c, InfoTabActivity.class);
+		
 		myIntent.putExtra("poiID", poi.getId());
 		myIntent.putExtra("poiName", poi.getName());
+		myIntent.putExtra("poiAddress", poi.getAddress());
+		myIntent.putExtra("poiCategory", poi.getCategory());
+		myIntent.putExtra("poiSubCategory", poi.getSubCategory());
+		myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon());
+		
+		if(poi.getPhotos() != null)
+			if(!poi.getPhotos().isEmpty())
+				myIntent.putExtra("poiPhoto01", poi.getPhotos().get(0));
+
+		
 		c.startActivity(myIntent);
 
 		return true;
