@@ -87,7 +87,7 @@ public class MainScreen extends GDMapActivity {
 	private int oldZoomLevel = -1;
 
 	List<POI> poiList = null;
-	
+
 	SimpleItemizedOverlay itemizedOverlay;
 
 	public MainScreen() {
@@ -245,6 +245,29 @@ public class MainScreen extends GDMapActivity {
 		//overlayList.add(itemizedOverlay);
 	}
 
+	public void updatePinsCategory(String categoria){
+		itemizedOverlay.removeOverlay();
+
+		for (int i=0; i< poiList.size(); i++){
+
+			POI poi = poiList.get(i);
+
+			if(poi.getCategory().equalsIgnoreCase(categoria)){
+				
+				double lat = poi.getLocationArray()[0];
+				double lng = poi.getLocationArray()[1];
+				GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
+				// Balloon
+				OverlayItemPOI overlayItem = new OverlayItemPOI(point, poi.getName(),
+						"Nº checkins: " + poi.getCheckinsCount(), poi);
+				//TODO escolher o icone de acordo com as categorias
+				//overlayItem.setMarker(marker);
+				itemizedOverlay.addOverlay(overlayItem);			
+			}
+
+		}
+	}
+
 	public void teste() {
 		AppContext appContext = setupContext();
 		GeoPoint point = new GeoPoint((int) (appContext.getLat() * 1E6),
@@ -270,8 +293,8 @@ public class MainScreen extends GDMapActivity {
 		double currentLatitude = currentLocation.getLatitude();
 		double currentLongitude = currentLocation.getLongitude();
 
-//		double currentLatitude = 40.2072;
-//		double currentLongitude = -8.426428;
+		//		double currentLatitude = 40.2072;
+		//		double currentLongitude = -8.426428;
 
 		Time today = new Time(Time.getCurrentTimezone());
 		today.setToNow();
@@ -322,19 +345,19 @@ public class MainScreen extends GDMapActivity {
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 		switch (item.getItemId()) 
 		{
-			case R.id.action_bar_slider: 
-				createBrowseDialog();
-				return true;		
-			case R.id.action_bar_search:
-				onSearchRequested(); 
-				return true;		
-			case R.id.action_bar_category: 
-				onShowGrid(item.getItemView()); 
-				return true;		
-			default:
-				return super.onHandleActionBarItemClick(item, position);
+		case R.id.action_bar_slider: 
+			createBrowseDialog();
+			return true;		
+		case R.id.action_bar_search:
+			onSearchRequested(); 
+			return true;		
+		case R.id.action_bar_category: 
+			onShowGrid(item.getItemView()); 
+			return true;		
+		default:
+			return super.onHandleActionBarItemClick(item, position);
 		}
-		
+
 	}
 
 	private void createBrowseDialog()
@@ -416,7 +439,7 @@ public class MainScreen extends GDMapActivity {
 			}
 		});
 	}
-	
+
 	public void onShowGrid(View v) {
 		mGrid.show(v);
 	}
