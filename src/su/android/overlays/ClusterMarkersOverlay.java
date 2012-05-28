@@ -196,7 +196,7 @@ public class ClusterMarkersOverlay extends Overlay{
 			Point ppt = pro.toPixels(selectedCluster.getCenter(), null);
 			mapView.getController().setZoom(16);
 			mapView.getController().zoomInFixing(ppt.x, ppt.y);
-			((CustomMapView)mapView).poiMarkersMode();
+			((CustomMapView)mapView).poiMarkersClusterMode();
 		}
 		return true;
 	}
@@ -279,5 +279,10 @@ public class ClusterMarkersOverlay extends Overlay{
 		Projection proj = mainScreen.getMap().getProjection();
 		GeoBounds bounds = new GeoBounds(proj.fromPixels(0,0),proj.fromPixels(mainScreen.getMap().getWidth(),mainScreen.getMap().getHeight()));
 		return bounds;
+	}
+	
+	public List<POI> getPoiList()
+	{
+		return this.poiList;
 	}
 }
