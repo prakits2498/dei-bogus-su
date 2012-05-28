@@ -4,50 +4,88 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.05" >
-
-        <TextView
-            android:id="@+id/productNameID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="52dp"
-            android:layout_marginTop="53dp"
-            android:layout_centerHorizontal="true"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/productDescriptionID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/productPriceID"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/productPriceID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/productImageID"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+    <AbsoluteLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/productAbsoluteLayoutID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white" >
 
         <ImageView
-            android:id="@+id/productImageID"
+            android:id="@+id/product_photoID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/productNameID"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
-            android:src="@drawable/illustration" />
+            android:layout_x="18dp"
+            android:layout_y="18dp"
+            android:padding="10dp"
+            android:src="@drawable/image_default" />
 
-    </RelativeLayout>
+        
+
+        <TextView
+            android:id="@+id/product_nome_text_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="158dp"
+            android:layout_y="36dp"
+            android:text="Nome"
+            android:textColor="@color/myTurquesa"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/product_nome_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="158dp"
+            android:layout_y="65dp"
+            android:text="TextView"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+        
+        
+        <TextView
+            android:id="@+id/product_price_text_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="150dp"
+            android:text="Preço"
+            android:textColor="@color/myTurquesa"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/product_price_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="80dp"
+            android:layout_y="150dp"
+            android:text="€"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/product_descr_text_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="185dp"
+            android:text="Descrição"
+            android:textColor="@color/myTurquesa"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/product_descr_ID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="210dp"
+            android:text="TextView"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+    </AbsoluteLayout>
 
 </LinearLayout>
