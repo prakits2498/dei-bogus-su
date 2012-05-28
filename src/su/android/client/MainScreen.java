@@ -132,8 +132,8 @@ public class MainScreen extends GDMapActivity
 						currentContext.getLng(), 
 						currentContext.getDayOfWeek(), 
 						currentContext.getHourOfDay(), 
-						0.5, 
-						50);
+						1, 
+						150);
 				onNotifyClusterOverlay(poiList);
 				onNotifyItemsOverlay(poiList);
 				progressDialog.dismiss();

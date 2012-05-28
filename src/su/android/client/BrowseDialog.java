@@ -34,7 +34,7 @@ public class BrowseDialog {
 		dayBar.setProgress(ctxt .getDayOfWeekIndex());		
 		dayText.setText(ctxt.getDayOfWeek());
 		hourBar.setProgress(ctxt.getHourOfDay());
-		hourText.setText(ctxt.getHourOfDay()+"H");
+		hourText.setText(ctxt.getMoment());
 		
 
 		builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
@@ -67,7 +67,7 @@ public class BrowseDialog {
 
 		hourBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
-				hourText.setText(String.valueOf(progress)+"H");
+				hourText.setText(AppContext.moment[progress]);
 			}
 
 			@Override
