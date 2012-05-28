@@ -74,7 +74,7 @@ public class CustomMapView extends MapView {
 				
 				if (getZoomLevel() > 17)
 				{
-					poiMarkersMode();
+					poiMarkersZoomMode();
 				}
 				else
 				{
@@ -93,7 +93,22 @@ public class CustomMapView extends MapView {
 		});
 	}
 	
-	public void poiMarkersMode()
+	public void poiMarkersZoomMode()
+	{
+		if(clusterOverlay.isActivated())
+		{
+			clusterOverlay.deactivate();
+			Log.i("ZoomLevel", "Remove ClusterOverlay");
+		}
+		if(!getOverlays().contains(itemsOverlay))
+		{			
+			itemsOverlay.onHandlePoiList(clusterOverlay.getPoiList());
+			getOverlays().add(itemsOverlay);
+			Log.i("ZoomLevel", "Add ItemsOverlay");
+		}
+	}
+	
+	public void poiMarkersClusterMode()
 	{
 		if(clusterOverlay.isActivated())
 		{
