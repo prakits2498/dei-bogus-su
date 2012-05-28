@@ -159,12 +159,9 @@ public class ServerConnection
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
 		
-		if(poiDetails.getPromotionList() != null && poiDetails.getProductList() != null)
-		{
+		if(poiDetails != null) {
 			return poiDetails;
-		}
-		else
-		{
+		} else {
 			poiDetails = new POIDetails();
 			
 			List<Products> products = new ArrayList<Products>();
@@ -194,7 +191,7 @@ public class ServerConnection
 			
 			List<Promotions> promotions = new ArrayList<Promotions>();
 			Promotions promo = new Promotions();
-			promo.setDescription("Finos a 0.50€ a partir das 2h!!!");
+			promo.setDescription("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
 			promotions.add(promo);
 			
 			poiDetails.setPromotionList(promotions);
