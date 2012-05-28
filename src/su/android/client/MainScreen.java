@@ -72,8 +72,9 @@ public class MainScreen extends GDMapActivity
 		 */
 		map = (CustomMapView) findViewById(R.id.mvMain);
 		map.setBuiltInZoomControls(true);
-		map.getController().setZoom(14);
+		map.getController().setZoom(13);
 		map.addZoomListenter();
+		map.setSatellite(true);
 		compass = new MyLocationOverlay(MainScreen.this, map);
 		map.getOverlays().add(compass);		
 //		LocationListener mlocListener = new MyLocationListener();
