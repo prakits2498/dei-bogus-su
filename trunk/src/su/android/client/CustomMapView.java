@@ -61,7 +61,7 @@ public class CustomMapView extends MapView {
 				}
 				else
 				{
-					  if(getZoomLevel() > 14)
+					  if(getZoomLevel() > 13)
 					  {
 						  getZoomButtonsController().setZoomOutEnabled(true);
 						  getController().zoomOut();						 
@@ -72,7 +72,7 @@ public class CustomMapView extends MapView {
 					  }
 				}			
 				
-				if (getZoomLevel() > 16)
+				if (getZoomLevel() > 17)
 				{
 					poiMarkersMode();
 				}
