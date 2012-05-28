@@ -21,19 +21,19 @@ public class CategoryGridView
 		this.mainScreen= mainScreen;
 		gridView = new QuickActionGrid(mainScreen);		
 		gridView.addQuickAction(new MyQuickAction(mainScreen,
-				R.drawable.gd_action_bar_compose, R.string.mainCat1));
+				R.drawable.arts_entertainment_44, R.string.mainCat1));
 		gridView.addQuickAction(new MyQuickAction(mainScreen,
-				R.drawable.gd_action_bar_compose, R.string.mainCat2));
+				R.drawable.food_44, R.string.mainCat2));
 		gridView.addQuickAction(new MyQuickAction(mainScreen,
-				R.drawable.gd_action_bar_compose, R.string.mainCat3));
+				R.drawable.cafe_44, R.string.mainCat3));
 		gridView.addQuickAction(new MyQuickAction(mainScreen,
-				R.drawable.gd_action_bar_compose, R.string.mainCat4));
+				R.drawable.nightlife_44, R.string.mainCat4));
 		gridView.addQuickAction(new MyQuickAction(mainScreen,
-				R.drawable.gd_action_bar_compose, R.string.mainCat5));
+				R.drawable.shops_44, R.string.mainCat5));
 		gridView.addQuickAction(new MyQuickAction(mainScreen,
-				R.drawable.gd_action_bar_compose, R.string.mainCat6));
+				R.drawable.parks_outdoors_44, R.string.mainCat6));
 		gridView.addQuickAction(new MyQuickAction(mainScreen,
-				R.drawable.gd_action_bar_compose, R.string.all));
+				R.drawable.all_cat_44, R.string.all));
 
 		gridView.setOnQuickActionClickListener(new OnQuickActionClickListener() {
 			public void onQuickActionClicked(QuickActionWidget widget, int position) 
@@ -51,6 +51,7 @@ public class CategoryGridView
 					default: category = mainScreen.getApplicationContext().getResources().getString(R.string.all); break;
 				}
 				mainScreen.onNotifyItemsOverlay(category);
+				mainScreen.onNotifyClusterOverlay(category);
 			}
 		});
 	}
@@ -72,7 +73,6 @@ public class CategoryGridView
 
 		private static Drawable buildDrawable(Context ctx, int drawableId) {
 			Drawable d = ctx.getResources().getDrawable(drawableId);
-			d.setColorFilter(BLACK_CF);
 			return d;
 		}
 
