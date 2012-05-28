@@ -1,31 +1,27 @@
 package su.android.client;
 
-import su.android.overlays.ClusterOverlay;
-import su.android.overlays.SimpleItemizedOverlay;
+import java.util.List;
+
+import su.android.overlays.ClusterMarkersOverlay;
+import su.android.overlays.PoiMarkersOverlay;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.ZoomButtonsController.OnZoomListener;
 
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 
 public class CustomMapView extends MapView {
 
 	private int oldZoomLevel = -1;
-	private SimpleItemizedOverlay itemsOverlay = null;
-	private ClusterOverlay clusterOverlay = null;
-	private State state = State.CLUSTER;
-	
-	private static enum State 
-	{
-		CLUSTER,
-		PINS,
-	};
+	private PoiMarkersOverlay itemsOverlay = null;
+	private ClusterMarkersOverlay clusterOverlay = null;
 	
 	public CustomMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public CustomMapView(android.content.Context context, android.util.AttributeSet attrs, int defStyle) 
@@ -38,79 +34,107 @@ public class CustomMapView extends MapView {
 		super(context, apiKey);
 	}
 	
-	public void setPrimaryOverlays(ClusterOverlay clusterOverlay, SimpleItemizedOverlay itemsOverlay)
+	public void addZoomListenter()
+	{
+		this.getZoomButtonsController().setOnZoomListener(new OnZoomListener(){
+
+			@Override
+			public void onVisibilityChanged(boolean visible) 
+			{
+				// If the zoom widget is visible or not
+			}
+
+			@Override
+			public void onZoom(boolean zoomIn) 
+			{					
+				if(zoomIn)
+				{
+					  if(getZoomLevel() < 18)
+					  {
+						  getZoomButtonsController().setZoomInEnabled(true);
+						  getController().zoomIn();						
+					  }
+					  else
+					  {
+						  getZoomButtonsController().setZoomInEnabled(false);
+					  }
+				}
+				else
+				{
+					  if(getZoomLevel() > 14)
+					  {
+						  getZoomButtonsController().setZoomOutEnabled(true);
+						  getController().zoomOut();						 
+					  }
+					  else
+					  {
+						  getZoomButtonsController().setZoomOutEnabled(false);
+					  }
+				}			
+				
+				if (getZoomLevel() > 16)
+				{
+					if(clusterOverlay.isActivated())
+					{
+						clusterOverlay.deactivate();
+						Log.i("ZoomLevel", "Remove ClusterOverlay");
+					}
+					if(!getOverlays().contains(itemsOverlay))
+					{
+						getOverlays().add(itemsOverlay);
+						Log.i("ZoomLevel", "Add ItemsOverlay");
+					}
+				}
+				else
+				{
+					if(getOverlays().contains(itemsOverlay))
+					{
+						getOverlays().remove(itemsOverlay);
+						Log.i("ZoomLevel", "Remove ItemsOverlay");
+					}
+					if(!clusterOverlay.isActivated())
+					{
+						clusterOverlay.activate();
+						Log.i("ZoomLevel", "Add ClusterOverlay");
+					}
+				}				 
+				oldZoomLevel = getZoomLevel(); 
+				
+				if(clusterOverlay.isActivated())
+				{
+					clusterOverlay.onViewChange();
+					Log.i("onTouchEvent", "RefreshCluster");
+				}
+				
+			}
+			
+		});
+	}
+	
+	public void setPrimaryOverlays(ClusterMarkersOverlay clusterOverlay, PoiMarkersOverlay itemsOverlay)
 	{
 		this.clusterOverlay = clusterOverlay;
+		this.getOverlays().add(clusterOverlay);
 		this.itemsOverlay = itemsOverlay;
-		if(state == State.CLUSTER)
-		{
-			Log.i("Primary Overlay", "Activate ClusterOverlay");
-			this.getOverlays().add(clusterOverlay);
-		}
-		else
-		{
-			Log.i("Primary Overlay", "Activate ItemsOverlay");
-			this.getOverlays().add(itemsOverlay);
-		}
+		Log.i("Primary Overlay", "Activate ClusterOverlay");
 	}
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) 
 	{
+		super.onTouchEvent(ev);
 		if (ev.getAction()==MotionEvent.ACTION_UP)
 		{
-			if(state == State.CLUSTER)
+			if(clusterOverlay.isActivated())
 			{
-				clusterOverlay.notifyCluster();
+				clusterOverlay.onViewChange();
 				Log.i("onTouchEvent", "RefreshCluster");
 			}
 		}
-		if(state == State.PINS)
-		{
-			itemsOverlay.hideAllBalloons();
-			Log.i("onTouchEvent", "Clear Ballons");
-		}
-		return super.onTouchEvent(ev);
+		
+		itemsOverlay.hideAllBalloons();
+		return true;
 	}
-	
-	@Override
-	public void dispatchDraw(Canvas canvas) 
-	{		  
-		  if (getZoomLevel() != oldZoomLevel) 
-		  {			  
-			  if (getZoomLevel() > 15) 
-			  {
-				if(this.getOverlays().contains(clusterOverlay))
-				{
-					this.getOverlays().remove(clusterOverlay);
-					Log.i("ZoomLevel", "Remove ClusterOverlay");
-				}
-				if(!this.getOverlays().contains(itemsOverlay))
-				{
-					this.getOverlays().add(itemsOverlay);
-					Log.i("ZoomLevel", "Add ItemsOverlay");
-				}
-				state = State.PINS;
-				Log.i("ZoomLevel", "PINS");
-			  }
-			  else
-			  {
-				  if(this.getOverlays().contains(itemsOverlay))
-				  {
-					  this.getOverlays().remove(itemsOverlay);
-					  Log.i("ZoomLevel", "Remove ItemsOverlay");
-				  }
-				  if(!this.getOverlays().contains(clusterOverlay))
-				  {
-					  this.getOverlays().add(clusterOverlay);
-					  Log.i("ZoomLevel", "Add ClusterOverlay");
-				  }
-				  state = State.CLUSTER;	
-				  Log.i("ZoomLevel", "CLUSTER");
-			  }				 
-			  oldZoomLevel = getZoomLevel();
-		  }
-		  super.dispatchDraw(canvas);
-	}
+
 	
 }

@@ -3,15 +3,14 @@ package su.android.client;
 import greendroid.app.GDMapActivity;
 import greendroid.graphics.drawable.ActionBarDrawable;
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.NormalActionBarItem;
 
 import java.util.List;
 
 import su.android.model.AppContext;
 import su.android.model.POI;
-import su.android.overlays.ClusterOverlay;
-import su.android.overlays.SimpleItemizedOverlay;
+import su.android.overlays.ClusterMarkersOverlay;
+import su.android.overlays.PoiMarkersOverlay;
 import su.android.server.connection.ServerConnection;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,6 +21,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ZoomButtonsController.OnZoomListener;
+import android.widget.ZoomControls;
 
 import com.google.android.maps.MyLocationOverlay;
 
@@ -31,8 +34,8 @@ public class MainScreen extends GDMapActivity
 	//	Server connection
 	private ServerConnection conn;
 	//	Overlays
-	private SimpleItemizedOverlay itemizedOverlay;
-	private ClusterOverlay clusterOverlay;
+	private PoiMarkersOverlay itemizedOverlay;
+	private ClusterMarkersOverlay clusterOverlay;
 	private MyLocationOverlay compass;
 	//	Map Viewer
 	private CustomMapView map;
@@ -69,7 +72,8 @@ public class MainScreen extends GDMapActivity
 		 */
 		map = (CustomMapView) findViewById(R.id.mvMain);
 		map.setBuiltInZoomControls(true);
-		map.getController().setZoom(13);	
+		map.getController().setZoom(14);
+		map.addZoomListenter();
 		compass = new MyLocationOverlay(MainScreen.this, map);
 		map.getOverlays().add(compass);		
 //		LocationListener mlocListener = new MyLocationListener();
@@ -84,8 +88,8 @@ public class MainScreen extends GDMapActivity
 		/**
 		 * Overlays Initialization
 		 */
-		itemizedOverlay = new SimpleItemizedOverlay(this);
-		clusterOverlay = new ClusterOverlay(this);
+		itemizedOverlay = new PoiMarkersOverlay(this);
+		clusterOverlay = new ClusterMarkersOverlay(this);
 		//	Set the primary overlays in the map
 		map.setPrimaryOverlays(clusterOverlay, itemizedOverlay);
 		/**
@@ -142,17 +146,17 @@ public class MainScreen extends GDMapActivity
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 		switch (item.getItemId()) 
 		{
-		case R.id.action_bar_slider: 
-			this.browseDialog.onActivateDialog();
-			return true;		
-		case R.id.action_bar_search:
-			onSearchRequested(); 
-			return true;		
-		case R.id.action_bar_category: 
-			this.categoryGridView.onActivateCategory(item.getItemView()); 
-			return true;		
-		default:
-			return super.onHandleActionBarItemClick(item, position);
+			case R.id.action_bar_slider: 
+				this.browseDialog.onActivateDialog();
+				return true;		
+			case R.id.action_bar_search:
+				onSearchRequested(); 
+				return true;		
+			case R.id.action_bar_category: 
+				this.categoryGridView.onActivateCategory(item.getItemView()); 
+				return true;		
+			default:
+				return super.onHandleActionBarItemClick(item, position);
 		}
 
 	}
@@ -185,6 +189,11 @@ public class MainScreen extends GDMapActivity
 	public boolean onNotifyItemsOverlay(String category)
 	{
 		return this.itemizedOverlay.onNotifyFilter(category);
+	}
+	
+	public boolean onNotifyClusterOverlay(String category)
+	{
+		return this.clusterOverlay.onNotifyFilter(category);
 	}
 	
 	public boolean onNotifyClusterOverlay(List<POI> poiList)

@@ -43,14 +43,39 @@ public class SearchableActivity extends GDListActivity
 			List<Item> items = new ArrayList<Item>();
 			for(POI poi: pois)
 			{
-				//		    	 items.add(new SeparatorItem());
-				if(poi.getPhotos().size() > 0)
+				String mainCat1 = getResources().getString(R.string.mainCat1);
+				String mainCat2 = getResources().getString(R.string.mainCat2);
+				String mainCat3 = getResources().getString(R.string.mainCat3);
+				String mainCat4 = getResources().getString(R.string.mainCat4);
+				String mainCat5 = getResources().getString(R.string.mainCat5);
+				String mainCat6 = getResources().getString(R.string.mainCat6);
+				if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat1))
 				{
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(), R.drawable.gd_map_pin_base, poi.getPhotos().get(0)));		    		 
+					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_arts_entertainment));
+				}
+				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat2))
+				{
+					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_food));
+				}
+				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat3))
+				{
+					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_coffee));
+				}
+				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat4))
+				{	
+					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_nightlife));
+				}
+				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat5))
+				{
+					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_shops));
+				}
+				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat6))
+				{
+					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_outdoors));
 				}
 				else
 				{
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.gd_map_pin_base));
+					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_default));
 				}
 			}
 			final ItemAdapter adapter = new ItemAdapter(this, items);
