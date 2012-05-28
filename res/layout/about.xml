@@ -58,7 +58,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/widget62"
+            android:id="@+id/afluencia_text_ID"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_x="195dp"
@@ -68,7 +68,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/widget63"
+            android:id="@+id/promotion_text_ID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_x="95dp"
