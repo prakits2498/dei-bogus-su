@@ -31,7 +31,7 @@
     <SeekBar
         android:id="@+id/hourBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:max="23"/>
+        android:layout_height="wrap_content" android:max="4"/>
     
      <TextView
         android:id="@+id/hourLabelValue"
