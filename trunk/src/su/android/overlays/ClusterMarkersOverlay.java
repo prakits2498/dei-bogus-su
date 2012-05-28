@@ -114,15 +114,7 @@ public class ClusterMarkersOverlay extends Overlay{
 						//Draw a circle
 						 Paint circle = new Paint(Paint.ANTI_ALIAS_FLAG);
 						 //the circle to mark the spot
-						 int perc = 0;
-						 if(clusterer.getTotalCheckins() == 0)
-						 {
-							 perc = 0;
-						 }
-						 else
-						 {
-							 perc = (100*cluster.getTotalCheckins())/clusterer.getTotalCheckins();
-						 }
+						 double perc = cluster.getAffluence();						 
 						 if(perc < 11)
 						 {
 							 circle.setColor(Color.parseColor("#CCE0FF"));
@@ -161,12 +153,19 @@ public class ClusterMarkersOverlay extends Overlay{
 						int txtHeightOffset = (int) ((metrics.bottom + metrics.ascent) / 2.0f);
 						int x = p.x;
 						int y = p.y - txtHeightOffset;
-						canvas.drawText(cluster.getItems().size()+"/"+cluster.getTotalCheckins()+"/"+perc, x, y, paint);
+						canvas.drawText(roundDoubleToDecimals(cluster.getAffluence(), 2)+"%", x, y, paint);
 					}
 				}
 			}
 		}
 	}
+	
+	public double roundDoubleToDecimals(double value, int decimals)
+    {
+        double temp = (double) ((value * Math.pow(10, decimals)));
+        temp = Math.round(temp);
+        return (temp / Math.pow(10, decimals));
+    }
 	
 	@Override
 	public boolean onTap(GeoPoint p, MapView mapView)
@@ -183,7 +182,6 @@ public class ClusterMarkersOverlay extends Overlay{
 					&& pos.x <= ptCenter.x + GridSizePx
 					&& pos.y >= ptCenter.y - GridSizePx
 					&& pos.y <= ptCenter.y + GridSizePx) {
-				Log.i("ClusterMarker", "TAPPED!");
 				selectedCluster = cluster;
 				break;
 			}

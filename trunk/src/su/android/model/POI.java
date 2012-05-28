@@ -26,7 +26,7 @@ public class POI {
 	private String location;
 	private int checkinsCount;
 	private int usersCount;
-	private int affluence;
+	private double affluence;
 	
 	private String address;
 	private String category;
@@ -136,12 +136,12 @@ public class POI {
 		return photos;
 	}
 	
-	public void setAffluence(int affluence)
+	public void setAffluence(double affluence)
 	{
 		this.affluence = affluence;
 	}
 	
-	public int getAffluence()
+	public double getAffluence()
 	{
 		return affluence;
 	}

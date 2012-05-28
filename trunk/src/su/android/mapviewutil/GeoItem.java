@@ -35,26 +35,26 @@ public class GeoItem implements Parcelable {
 	/** selection state flag. true if selected.*/
 	protected boolean isSelected_;
 	/** number of checkins. */
-	protected int checkins;
+	protected double affluence;
 	
 	/**
 	 * @param id item id.
 	 * @param latitudeE6 latitude of the item in microdegrees (degrees * 1E6).
 	 * @param longitudeE6 longitude of the item in microdegrees (degrees * 1E6).
 	 */
-	public GeoItem(long id, int latitudeE6, int longitudeE6, int checkins ) {
+	public GeoItem(long id, int latitudeE6, int longitudeE6, double affluence ) {
 		id_ = id;
 		location_ = new GeoPoint(latitudeE6, longitudeE6);
 		isSelected_ = false;
-		this.checkins = checkins;
+		this.affluence = affluence;
 	}
 
-	public int getCheckins() {
-		return checkins;
+	public double getAffluence() {
+		return affluence;
 	}
 
-	public void setCheckins(int checkins) {
-		this.checkins = checkins;
+	public void setAffluence(double affluence) {
+		this.affluence = affluence;
 	}
 
 	/**

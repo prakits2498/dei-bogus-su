@@ -72,6 +72,7 @@ public class AboutActivity extends GDActivity {
         Typeface fontBold = Typeface.createFromAsset(getAssets(),"fonts/Helvetica Neue Bold.ttf");
         
         TextView afluenciaTv = (TextView) findViewById(R.id.afluencia_text_ID);
+        afluenciaTv.setText(poiExtras.get("poiAffluence")+"%");
         afluenciaTv.setTypeface(fontBold);
     }
     
