@@ -41,15 +41,16 @@ public class CategoryGridView
 				String category;
 				switch(position)
 				{
-					case 0: category = mainScreen.getApplicationContext().getResources().getString(R.string.mainCat1);break;
-					case 1: category = mainScreen.getApplicationContext().getResources().getString(R.string.mainCat2);break; 
-					case 2: category = mainScreen.getApplicationContext().getResources().getString(R.string.mainCat3);break; 
-					case 3: category = mainScreen.getApplicationContext().getResources().getString(R.string.mainCat4);break; 
-					case 4: category = mainScreen.getApplicationContext().getResources().getString(R.string.mainCat5);break; 
-					case 5: category = mainScreen.getApplicationContext().getResources().getString(R.string.mainCat6);break; 
-					case 6: category = mainScreen.getApplicationContext().getResources().getString(R.string.all);break; 
-					default: category = mainScreen.getApplicationContext().getResources().getString(R.string.all); break;
+					case 0: category = mainScreen.getResources().getString(R.string.mainCat1);break;
+					case 1: category = mainScreen.getResources().getString(R.string.mainCat2);break; 
+					case 2: category = mainScreen.getResources().getString(R.string.mainCat3);break; 
+					case 3: category = mainScreen.getResources().getString(R.string.mainCat4);break; 
+					case 4: category = mainScreen.getResources().getString(R.string.mainCat5);break; 
+					case 5: category = mainScreen.getResources().getString(R.string.mainCat6);break; 
+					case 6: category = mainScreen.getResources().getString(R.string.all);break; 
+					default: category = mainScreen.getResources().getString(R.string.all); break;
 				}
+				mainScreen.getCurrentAppContext().setCategory(category);
 				mainScreen.onNotifyItemsOverlay(category);
 				mainScreen.onNotifyClusterOverlay(category);
 			}

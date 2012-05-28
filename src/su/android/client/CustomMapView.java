@@ -74,29 +74,11 @@ public class CustomMapView extends MapView {
 				
 				if (getZoomLevel() > 16)
 				{
-					if(clusterOverlay.isActivated())
-					{
-						clusterOverlay.deactivate();
-						Log.i("ZoomLevel", "Remove ClusterOverlay");
-					}
-					if(!getOverlays().contains(itemsOverlay))
-					{
-						getOverlays().add(itemsOverlay);
-						Log.i("ZoomLevel", "Add ItemsOverlay");
-					}
+					poiMarkersMode();
 				}
 				else
 				{
-					if(getOverlays().contains(itemsOverlay))
-					{
-						getOverlays().remove(itemsOverlay);
-						Log.i("ZoomLevel", "Remove ItemsOverlay");
-					}
-					if(!clusterOverlay.isActivated())
-					{
-						clusterOverlay.activate();
-						Log.i("ZoomLevel", "Add ClusterOverlay");
-					}
+					clusterMarkersMode();
 				}				 
 				oldZoomLevel = getZoomLevel(); 
 				
@@ -109,6 +91,34 @@ public class CustomMapView extends MapView {
 			}
 			
 		});
+	}
+	
+	public void poiMarkersMode()
+	{
+		if(clusterOverlay.isActivated())
+		{
+			clusterOverlay.deactivate();
+			Log.i("ZoomLevel", "Remove ClusterOverlay");
+		}
+		if(!getOverlays().contains(itemsOverlay))
+		{
+			getOverlays().add(itemsOverlay);
+			Log.i("ZoomLevel", "Add ItemsOverlay");
+		}
+	}
+	
+	public void clusterMarkersMode()
+	{
+		if(getOverlays().contains(itemsOverlay))
+		{
+			getOverlays().remove(itemsOverlay);
+			Log.i("ZoomLevel", "Remove ItemsOverlay");
+		}
+		if(!clusterOverlay.isActivated())
+		{
+			clusterOverlay.activate();
+			Log.i("ZoomLevel", "Add ClusterOverlay");
+		}
 	}
 	
 	public void setPrimaryOverlays(ClusterMarkersOverlay clusterOverlay, PoiMarkersOverlay itemsOverlay)

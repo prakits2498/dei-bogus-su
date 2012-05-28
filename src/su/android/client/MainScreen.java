@@ -113,6 +113,28 @@ public class MainScreen extends GDMapActivity
 		today.setToNow();
 		int weekDayIndex = today.weekDay;
 		int hour = today.hour;
+		if(hour == 23 || (hour >= 0 && hour < 7))
+		{
+			hour = 4;
+		}
+		else if(hour > 6 && hour < 12)
+		{
+			hour = 0;
+		}
+		else if(hour >= 12 && hour < 15)
+		{
+			hour = 1;
+		}
+		else if(hour >= 15 && hour < 20)
+		{
+			hour = 2;
+		}
+		else if(hour >= 20 && hour < 23)
+		{
+			hour = 3;
+		}
+		String category = getResources().getString(R.string.all);
+		this.currentContext.setCategory(category);
 		this.currentContext.setDayOfWeekIndex(weekDayIndex);
 		this.currentContext.setHourOfDay(hour);
 		this.currentContext.setLat(currentLatitude);

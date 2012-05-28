@@ -17,12 +17,13 @@
 package su.android.markerclusterer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import su.android.mapviewutil.GeoBounds;
 import su.android.mapviewutil.GeoItem;
+import su.android.model.POI;
 import android.graphics.Point;
-import android.os.Handler;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -38,7 +39,7 @@ import com.google.android.maps.Projection;
 public class ClusteringAlgorithm {
 	
 	/** grid size for clustering(dip). */
-	public final static int GRIDSIZE = 56;
+	public final static int GRIDSIZE = 70;//56;
 
 	/** screen density for multi-resolution
 	 *	get from contenxt.getResources().getDisplayMetrics().density;  */
@@ -62,9 +63,10 @@ public class ClusteringAlgorithm {
 	protected GeoBounds savedBounds_;
 	/** flag for detecting map moves. true if map is moving or zooming. */
 	protected boolean isMoving_;
-	/** handler to initiate moveend/zoomend event and reset view. */
-	protected Handler handler_;
+	//Total checkins;
+	protected int totalCheckins;
 	
+	private HashMap<GeoCluster, List<POI>> poiCluster;
 	/**
 	 * @param mapView MapView object.
 	 * @param markerIconBmps MarkerBitmap objects for icons.
@@ -74,15 +76,45 @@ public class ClusteringAlgorithm {
 		mapView_ = mapView;
 		markerIconBmps_ = markerIconBmps;
 		screenDensity_ = screenDensity;
-		handler_ = new Handler();
 		isMoving_ = false;
+		totalCheckins = 0;
+		poiCluster = new HashMap<GeoCluster, List<POI>>();
 	}
 
-	public void addItem(GeoItem item) {
+	public void addItems(List<POI> poiList)
+	{
+		for(int i = 0; i < poiList.size(); i++)
+		{
+			POI poi = poiList.get(i);
+			double lat = poi.getLocationArray()[0];
+			double lng = poi.getLocationArray()[1];		
+			GeoItem item = new GeoItem(i, (int) (lat * 1E6),
+					(int) (lng * 1E6), poi.getCheckinsCount());
+			GeoCluster cluster = addItem(item);
+			if(cluster != null)
+			{
+				if(poiCluster.containsKey(cluster))
+				{
+					List<POI> temp = poiCluster.get(cluster);
+					temp.add(poi);
+				}
+				else
+				{
+					List<POI> temp = new ArrayList<POI>();
+					temp.add(poi);
+					poiCluster.put(cluster, temp);
+				}
+			}
+		}
+	}
+	
+	public GeoCluster addItem(GeoItem item) 
+	{
+		totalCheckins+=item.getCheckins();
 		// if not in viewport, add to leftItems_
 		if(!isItemInViewport(item)) {
 			leftItems_.add(item);
-			return;
+			return null;
 		}
 		// else add to items_;
 		items_.add(item);
@@ -103,11 +135,11 @@ public class ClusteringAlgorithm {
 				  pos.y >= ptCenter.y - GridSizePx && pos.y <= ptCenter.y + GridSizePx) 
 			  {
 				  cluster.addItem(item);
-				  return;
+				  return cluster;
 			  }
 		}
 		// No cluster contain the marker, create a new cluster.
-		createCluster(item);
+		return createCluster(item);
 	}
 
 	/**
@@ -115,10 +147,11 @@ public class ClusteringAlgorithm {
 	 * override this method, if you want to use custom GeoCluster class.
 	 * @param item GeoItem to be set to cluster.
 	 */
-	 private void createCluster(GeoItem item){
+	 private GeoCluster createCluster(GeoItem item){
 		 GeoCluster cluster = new GeoCluster(this);
 		 cluster.addItem(item);
 		 clusters_.add(cluster);
+		 return cluster;
 	 }
 
 	 public List<GeoCluster> getClusters()
@@ -177,6 +210,7 @@ public class ClusteringAlgorithm {
 		this.items_.clear();
 		this.clusters_.clear();
 		this.leftItems_.clear();
+		this.totalCheckins = 0;
 	}
 	
 	/**
@@ -203,6 +237,20 @@ public class ClusteringAlgorithm {
 	public List<MarkerBitmap> getBitmaps()
 	{
 		return this.markerIconBmps_;
+	}
+	
+	public List<POI> getClusterPoiList(GeoCluster cluster)
+	{
+		if(poiCluster.containsKey(cluster))
+		{
+			return poiCluster.get(cluster);
+		}
+		return new ArrayList<POI>();
+	}
+	
+	public int getTotalCheckins()
+	{
+		return totalCheckins;
 	}
 	
 	

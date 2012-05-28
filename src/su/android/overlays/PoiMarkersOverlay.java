@@ -61,29 +61,34 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 
 	@Override
 	protected boolean onBalloonTap(int index, PoiMarker item) {
-		POI poi = item.getPoi();
-		
-		Intent myIntent = new Intent(mainScreen.getApplicationContext(), InfoTabActivity.class);
-		
-		myIntent.putExtra("poiID", poi.getId());
-		myIntent.putExtra("poiName", poi.getName());
-		myIntent.putExtra("poiAddress", poi.getAddress());
-		myIntent.putExtra("poiCategory", poi.getCategory());
-		myIntent.putExtra("poiSubCategory", poi.getSubCategory());
-		myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
-		
-		if(poi.getPhotos() != null)
-			if(!poi.getPhotos().isEmpty())
-				myIntent.putExtra("poiPhoto01", poi.getPhotos().get(0));
-
-		mainScreen.startActivity(myIntent);
-
-		return true;
+		if(item != null)
+		{
+			POI poi = item.getPoi();
+			
+			Intent myIntent = new Intent(mainScreen.getApplicationContext(), InfoTabActivity.class);
+			
+			myIntent.putExtra("poiID", poi.getId());
+			myIntent.putExtra("poiName", poi.getName());
+			myIntent.putExtra("poiAddress", poi.getAddress());
+			myIntent.putExtra("poiCategory", poi.getCategory());
+			myIntent.putExtra("poiSubCategory", poi.getSubCategory());
+			myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
+			
+			if(poi.getPhotos() != null)
+				if(!poi.getPhotos().isEmpty())
+					myIntent.putExtra("poiPhoto01", poi.getPhotos().get(0));
+	
+			mainScreen.startActivity(myIntent);
+	
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean onHandlePoiList(List<POI> poiList)
 	{		
-		items.clear();
+		this.hideAllBalloons();
+		items.clear();		
 		for (int i = 0; i < poiList.size(); i++) {
 			POI poi = poiList.get(i);
 			double lat = poi.getLocationArray()[0];
@@ -143,6 +148,7 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			}
 			this.items.add(overlayItem);
 		}
+		onNotifyFilter(mainScreen.getCurrentAppContext().getCategory());
 		populate();
 		mainScreen.getMap().postInvalidate();
 		return true;
@@ -151,6 +157,7 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 	public boolean onNotifyFilter(String category)
 	{
 		//	Remove all items to garbage
+		this.hideAllBalloons();
 		unusedItems.addAll(items);
 		items.clear();
 		if(category.equals(mainScreen.getResources().getString(R.string.all)))
