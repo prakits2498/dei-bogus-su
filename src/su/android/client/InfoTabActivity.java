@@ -62,9 +62,10 @@ public class InfoTabActivity extends GDTabActivity {
         poiExtras.put("poiName", b.getString("poiName"));
         poiExtras.put("poiAddress", b.getString("poiAddress"));
         poiExtras.put("poiCategory", b.getString("poiCategory"));
-        poiExtras.put("poiSubCategory", b.getString("poiSubCategory"));
+        poiExtras.put("poiSubCategory", b.getString("poiSubCategory"));        
         poiExtras.put("poiCatIcon", b.getString("poiCatIcon"));
         poiExtras.put("poiPhoto01", b.getString("poiPhoto01"));
+        poiExtras.put("poiAffluence", b.getString("poiAffluence"));
     }
     
     private Intent putExtraPOIDetails(Intent intent) {

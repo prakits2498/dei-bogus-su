@@ -63,8 +63,6 @@ public class ClusteringAlgorithm {
 	protected GeoBounds savedBounds_;
 	/** flag for detecting map moves. true if map is moving or zooming. */
 	protected boolean isMoving_;
-	//Total checkins;
-	protected int totalCheckins;
 	
 	private HashMap<GeoCluster, List<POI>> poiCluster;
 	/**
@@ -77,7 +75,6 @@ public class ClusteringAlgorithm {
 		markerIconBmps_ = markerIconBmps;
 		screenDensity_ = screenDensity;
 		isMoving_ = false;
-		totalCheckins = 0;
 		poiCluster = new HashMap<GeoCluster, List<POI>>();
 	}
 
@@ -89,7 +86,7 @@ public class ClusteringAlgorithm {
 			double lat = poi.getLocationArray()[0];
 			double lng = poi.getLocationArray()[1];		
 			GeoItem item = new GeoItem(i, (int) (lat * 1E6),
-					(int) (lng * 1E6), poi.getCheckinsCount());
+					(int) (lng * 1E6), poi.getAffluence());
 			GeoCluster cluster = addItem(item);
 			if(cluster != null)
 			{
@@ -110,7 +107,6 @@ public class ClusteringAlgorithm {
 	
 	public GeoCluster addItem(GeoItem item) 
 	{
-		totalCheckins+=item.getCheckins();
 		// if not in viewport, add to leftItems_
 		if(!isItemInViewport(item)) {
 			leftItems_.add(item);
@@ -210,7 +206,6 @@ public class ClusteringAlgorithm {
 		this.items_.clear();
 		this.clusters_.clear();
 		this.leftItems_.clear();
-		this.totalCheckins = 0;
 	}
 	
 	/**
@@ -246,11 +241,6 @@ public class ClusteringAlgorithm {
 			return poiCluster.get(cluster);
 		}
 		return new ArrayList<POI>();
-	}
-	
-	public int getTotalCheckins()
-	{
-		return totalCheckins;
 	}
 	
 	

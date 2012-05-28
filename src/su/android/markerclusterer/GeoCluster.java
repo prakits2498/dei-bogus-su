@@ -25,7 +25,7 @@ public class GeoCluster {
 	/** zoomlevel at the point Cluster was made */
 	private int zoom_;
 	/** number of checkins of GeoItems within the cluster */
-	protected int totalCheckins;
+	protected double affluence;
 
 	/**
 	 * @param clusterer GeoClusterer object.
@@ -44,7 +44,7 @@ public class GeoCluster {
 			center_ = item.getLocation();
 		}
 		items_.add(item);
-		totalCheckins += item.getCheckins();
+		affluence += item.getAffluence();
 	}
 	
 	/**
@@ -55,8 +55,8 @@ public class GeoCluster {
 		return center_;
 	}
 	
-	public int getTotalCheckins(){
-		return totalCheckins;
+	public double getAffluence(){
+		return affluence;
 	}
 
 	/**
