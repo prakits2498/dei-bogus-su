@@ -55,6 +55,7 @@
             android:layout_y="55dp"
             android:text="100"
             android:textSize="20sp"
+            android:textColor="@color/white"
             android:textStyle="bold" />
 
         <TextView
