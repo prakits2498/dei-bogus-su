@@ -6,7 +6,10 @@ public class AppContext
 	private double lat;	
 	private int dayWeekIndex;
 	private int hourOfDay;
+	private String category;
+	
 	public static final String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+	public static final String[] moment = {"Morning", "Lunch", "Evening", "Dinner", "Afternoon" };
 	
 	public double getLng() 
 	{
@@ -38,6 +41,11 @@ public class AppContext
 		this.dayWeekIndex = dayWeekIndex;
 	}
 	
+	public String getMoment()
+	{
+		return AppContext.moment[hourOfDay];
+	}
+	
 	public String getDayOfWeek()
 	{
 		return AppContext.days[dayWeekIndex];
@@ -51,6 +59,16 @@ public class AppContext
 	public void setHourOfDay(int hourOfDay) 
 	{
 		this.hourOfDay = hourOfDay;
+	}
+	
+	public void setCategory(String category)
+	{
+		this.category = category;
+	}
+	
+	public String getCategory()
+	{
+		return category;
 	}
 	
 	public String toString()

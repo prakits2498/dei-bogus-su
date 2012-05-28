@@ -35,7 +35,7 @@ public class GeoItem implements Parcelable {
 	/** selection state flag. true if selected.*/
 	protected boolean isSelected_;
 	/** number of checkins. */
-	protected int nCheckins;
+	protected int checkins;
 	
 	/**
 	 * @param id item id.
@@ -46,15 +46,15 @@ public class GeoItem implements Parcelable {
 		id_ = id;
 		location_ = new GeoPoint(latitudeE6, longitudeE6);
 		isSelected_ = false;
-		nCheckins = checkins;
+		this.checkins = checkins;
 	}
 
-	public int getnCheckins() {
-		return nCheckins;
+	public int getCheckins() {
+		return checkins;
 	}
 
-	public void setnCheckins(int nCheckins) {
-		this.nCheckins = nCheckins;
+	public void setCheckins(int checkins) {
+		this.checkins = checkins;
 	}
 
 	/**

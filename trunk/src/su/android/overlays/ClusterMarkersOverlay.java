@@ -3,15 +3,14 @@ package su.android.overlays;
 import java.util.ArrayList;
 import java.util.List;
 
+import su.android.client.CustomMapView;
 import su.android.client.MainScreen;
 import su.android.client.R;
 import su.android.mapviewutil.GeoBounds;
-import su.android.mapviewutil.GeoItem;
 import su.android.markerclusterer.ClusteringAlgorithm;
 import su.android.markerclusterer.GeoCluster;
 import su.android.markerclusterer.MarkerBitmap;
 import su.android.model.POI;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,6 +19,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.util.Log;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
@@ -68,22 +68,14 @@ public class ClusterMarkersOverlay extends Overlay{
 	
 
 
-	public void cluster(List<POI> poiList) 
+	public void cluster(List<POI> poiList)
 	{		
 		Log.i("Cluster", "Restart");
-		this.poiList = poiList;
 		//	Clear cluster marker overlays
 		clusterer.clearAlgorithm();			
 		// create clusterer instance
 		// add geoitems for clustering
-		for (int i = 0; i < poiList.size(); i++) 
-		{
-			POI poi = poiList.get(i);
-			double lat = poi.getLocationArray()[0];
-			double lng = poi.getLocationArray()[1];
-			clusterer.addItem(new GeoItem(i, (int) (lat * 1E6),
-					(int) (lng * 1E6), poi.getCheckinsCount()));
-		}
+		clusterer.addItems(poiList);
 		// create markers.		
 		clusters = clusterer.getClusters();
 	}
@@ -112,31 +104,101 @@ public class ClusterMarkersOverlay extends Overlay{
 							proj.fromPixels(mapView.getWidth(), mapView.getHeight()));
 					if (this.lastBounds.isInBounds(cluster.getCenter()))
 					{
-						MarkerBitmap mkrBmp = markerIcons.get(0);
-						Bitmap bmp = mkrBmp.getBitmapNormal();
-						
-						Point grid = mkrBmp.getGrid();
-						Point gridReal = new Point((int) (grid.x * clusterer.getDensity() + 0.5f),
-								(int) (grid.y * clusterer.getDensity() + 0.5f));
-						canvas.drawBitmap(bmp, p.x - gridReal.x, p.y - gridReal.y, paint);
-						// Draw a circle
-						// Paint circle = new Paint(Paint.ANTI_ALIAS_FLAG);
-						// the circle to mark the spot
-						// circle.setColor(Color.parseColor("#88ff0000"));
-						// circle.setAlpha(35); // trasparenza
-						// // int radius = metersToRadius(1000, mapView,
-						// // (double) center_.getLatitudeE6() / 1000000);
-						// canvas.drawCircle(p.x, p.y, 56, circle);
-						// End of circle	
+//						MarkerBitmap mkrBmp = markerIcons.get(0);
+//						Bitmap bmp = mkrBmp.getBitmapNormal();
+//						
+//						Point grid = mkrBmp.getGrid();
+//						Point gridReal = new Point((int) (grid.x * clusterer.getDensity() + 0.5f),
+//								(int) (grid.y * clusterer.getDensity() + 0.5f));
+//						canvas.drawBitmap(bmp, p.x - gridReal.x, p.y - gridReal.y, paint);
+						//Draw a circle
+						 Paint circle = new Paint(Paint.ANTI_ALIAS_FLAG);
+						 //the circle to mark the spot
+						 int perc = 0;
+						 if(clusterer.getTotalCheckins() == 0)
+						 {
+							 perc = 0;
+						 }
+						 else
+						 {
+							 perc = (100*cluster.getTotalCheckins())/clusterer.getTotalCheckins();
+						 }
+						 if(perc < 11)
+						 {
+							 circle.setColor(Color.parseColor("#CCE0FF"));
+						 }
+						 else if(perc < 21)
+						 {
+							 circle.setColor(Color.parseColor("#99C2FF"));
+						 }
+						 else if(perc < 31)
+						 {
+							 circle.setColor(Color.parseColor("#66A3FF"));
+						 }
+						 else if(perc < 41)
+						 {
+							 circle.setColor(Color.parseColor("#3385FF"));
+						 }
+						 else if(perc < 51)
+						 {
+							 circle.setColor(Color.parseColor("#0066FF"));
+						 }
+						 else if(perc < 61)
+						 {
+							 circle.setColor(Color.parseColor("#0052CC"));
+						 }
+						 else
+						 {
+							 circle.setColor(Color.parseColor("#003D99"));
+						 }
+						 
+						 circle.setAlpha(200);
+						 // int radius = metersToRadius(1000, mapView,
+						 // (double) center_.getLatitudeE6() / 1000000);
+						 canvas.drawCircle(p.x, p.y, 40, circle);
+						//End of circle	
 						FontMetrics metrics = paint.getFontMetrics();
 						int txtHeightOffset = (int) ((metrics.bottom + metrics.ascent) / 2.0f);
 						int x = p.x;
 						int y = p.y - txtHeightOffset;
-						canvas.drawText(""+cluster.getItems().size(), x, y, paint);
+						canvas.drawText(cluster.getItems().size()+"/"+cluster.getTotalCheckins()+"/"+perc, x, y, paint);
 					}
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean onTap(GeoPoint p, MapView mapView)
+	{
+		GeoCluster selectedCluster = null;
+		for(GeoCluster cluster: clusters)
+		{
+			Projection proj = mapView.getProjection();
+			Point pos = proj.toPixels(p, null);
+			GeoPoint gpCenter = cluster.getLocation();
+			Point ptCenter = proj.toPixels(gpCenter, null);
+			final int GridSizePx = (int) ((ClusteringAlgorithm.GRIDSIZE / 2) * clusterer.getDensity() + 0.5f);
+			if (pos.x >= ptCenter.x - GridSizePx
+					&& pos.x <= ptCenter.x + GridSizePx
+					&& pos.y >= ptCenter.y - GridSizePx
+					&& pos.y <= ptCenter.y + GridSizePx) {
+				Log.i("ClusterMarker", "TAPPED!");
+				selectedCluster = cluster;
+				break;
+			}
+		}
+		if(selectedCluster != null)
+		{
+			List<POI> poiList = clusterer.getClusterPoiList(selectedCluster);
+			mainScreen.onNotifyItemsOverlay(poiList);
+			Projection pro = mapView.getProjection();
+			Point ppt = pro.toPixels(selectedCluster.getCenter(), null);
+			mapView.getController().setZoom(16);
+			mapView.getController().zoomInFixing(ppt.x, ppt.y);
+			((CustomMapView)mapView).poiMarkersMode();
+		}
+		return true;
 	}
 	
 	public void activate()
@@ -157,7 +219,7 @@ public class ClusterMarkersOverlay extends Overlay{
 		if(category.equals(mainScreen.getResources().getString(R.string.all)))
 		{
 			poiList.addAll(unusedPoiList);
-			unusedPoiList.clear();			
+			unusedPoiList.clear();
 		}
 		else
 		{			
@@ -203,16 +265,8 @@ public class ClusterMarkersOverlay extends Overlay{
 
 	public boolean onHandlePoiList(List<POI> poiList) 
 	{
-		if(activated)
-		{
-			cluster(poiList);
-			mainScreen.getMap().postInvalidate();
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		this.poiList = poiList;
+		return onNotifyFilter(mainScreen.getCurrentAppContext().getCategory());		
 	}
 
 	public boolean isActivated() 
