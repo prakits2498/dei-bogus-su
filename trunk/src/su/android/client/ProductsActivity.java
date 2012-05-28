@@ -153,17 +153,17 @@ public class ProductsActivity extends GDActivity {
 			}
 
 			if (product != null) {
-				TextView tv = (TextView) convertView.findViewById(R.id.productNameID);
+				TextView tv = (TextView) convertView.findViewById(R.id.product_nome_ID);
 				tv.setText(product.getName());
 
-				TextView priceTv = (TextView) convertView.findViewById(R.id.productPriceID);
+				TextView priceTv = (TextView) convertView.findViewById(R.id.product_price_ID);
 				priceTv.setText(product.getPrice());
 
-				ImageView imageV = (ImageView) convertView.findViewById(R.id.productImageID);
+				ImageView imageV = (ImageView) convertView.findViewById(R.id.product_photoID);
 				ImageLoader imageLoader = new ImageLoader(imageV.getContext());
 				imageLoader.DisplayImage(product.getImage(), imageV);
 
-				TextView descriptionTv = (TextView) convertView.findViewById(R.id.productDescriptionID);
+				TextView descriptionTv = (TextView) convertView.findViewById(R.id.product_descr_ID);
 				descriptionTv.setText(product.getDescription());
 			}
 		}

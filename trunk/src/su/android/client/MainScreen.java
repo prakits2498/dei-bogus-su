@@ -51,12 +51,19 @@ public class MainScreen extends GDMapActivity
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		setActionBarContentView(R.layout.main);
-		addActionBarItem(Type.Eye, R.id.action_bar_slider); 
-		addActionBarItem(Type.Compass, R.id.action_bar_category);
+		
+		addActionBarItem(getActionBar()
+				.newActionBarItem(NormalActionBarItem.class)
+				.setDrawable(new ActionBarDrawable(this,
+							R.drawable.slider_icon)), R.id.action_bar_slider); 
+		addActionBarItem(getActionBar()
+				.newActionBarItem(NormalActionBarItem.class)
+				.setDrawable(new ActionBarDrawable(this,
+							R.drawable.search_cat_icon)), R.id.action_bar_category);
 		addActionBarItem(getActionBar()
 					.newActionBarItem(NormalActionBarItem.class)
 					.setDrawable(new ActionBarDrawable(this,
-								R.drawable.ic_search_light)),R.id.action_bar_search);		
+								R.drawable.search_icon)),R.id.action_bar_search);		
 		/**
 		 * Map initialization
 		 */

@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_x="195dp"
-            android:layout_y="110dp"
+            android:layout_y="115dp"
             android:text="Afluência"
             android:textColor="@color/myDarkGray"
             android:textSize="20sp" />

@@ -15,17 +15,20 @@
  */
 package su.android.client;
 
+import greendroid.app.GDActivity;
+
 import java.util.HashMap;
 
-import com.fedorvlasov.lazylist.ImageLoader;
-
-import greendroid.app.GDActivity;
 import su.android.model.POIDetails;
 import su.android.model.Promotions;
 import su.android.server.connection.ServerConnection;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.fedorvlasov.lazylist.ImageLoader;
 
 public class AboutActivity extends GDActivity {
 	
@@ -48,7 +51,7 @@ public class AboutActivity extends GDActivity {
         getExtrasPOI();
 
         loadPOIDetails();
-        
+
         if(poiDetails != null) {
         	final TextView aboutText = (TextView) findViewById(R.id.poi_promotionID);
         	aboutText.setText(promotion.getDescription());
@@ -56,8 +59,20 @@ public class AboutActivity extends GDActivity {
         	
         	ImageView imageV = (ImageView) findViewById(R.id.poi_photoID);
     		ImageLoader imageLoader = new ImageLoader(imageV.getContext());
-    		imageLoader.DisplayImage(poiExtras.get("poiPhoto01"), imageV);
+
+    		if(poiExtras.get("poiPhoto01") != null) {
+    			imageLoader.DisplayImage(poiExtras.get("poiPhoto01"), imageV);
+    		} else {
+    			imageV.setImageResource(R.drawable.image_default);
+    		}
+
         }
+        
+        //Typeface fontLight = Typeface.createFromAsset(getAssets(),"fonts/Helvetica Neue.ttf");
+        Typeface fontBold = Typeface.createFromAsset(getAssets(),"fonts/Helvetica Neue Bold.ttf");
+        
+        TextView afluenciaTv = (TextView) findViewById(R.id.afluencia_text_ID);
+        afluenciaTv.setTypeface(fontBold);
     }
     
     private void loadPOIDetails() {
