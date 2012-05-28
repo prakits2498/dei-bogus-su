@@ -50,12 +50,21 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 	}
 
 	@Override
-	protected PoiMarker createItem(int i) {
-		return items.get(i);
+	protected PoiMarker createItem(int i) 
+	{
+		if(items.size() > 0)
+		{
+			return items.get(i);
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	@Override
-	public int size() {
+	public int size() 
+	{
 		return items.size();
 	}
 
@@ -88,7 +97,7 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 	public boolean onHandlePoiList(List<POI> poiList)
 	{		
 		this.hideAllBalloons();
-		items.clear();		
+		items.clear();
 		for (int i = 0; i < poiList.size(); i++) {
 			POI poi = poiList.get(i);
 			double lat = poi.getLocationArray()[0];
@@ -176,8 +185,11 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 				}
 			}	
 		}
-		populate();
-		mainScreen.getMap().postInvalidate();
+		if(items.size() > 0)
+		{
+			populate();
+			mainScreen.getMap().postInvalidate();
+		}
 		return true;
 	}
 	
