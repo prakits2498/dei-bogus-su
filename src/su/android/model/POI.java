@@ -22,6 +22,7 @@ public class POI {
 	private String name;
 	private Double lat;
 	private Double lng;
+	private int zoneAffluence = 0;
 	@Deprecated
 	private String location;
 	private int checkinsCount;
@@ -150,6 +151,14 @@ public class POI {
 		this.photos = photos;
 	}
 	
+	public int getZoneAffluence() {
+		return zoneAffluence;
+	}
+
+	public void setZoneAffluence(int zoneAffluence) {
+		this.zoneAffluence = zoneAffluence;
+	}
+
 	public String toString()
 	{
 		return "[ID: "+id+"] [Lat: "+lat+" Lng: "+lng+"] [Name: "+name+"] [Cat: "+category+"] [SubCat: "+subCategory+"] [Address: "+address+"] [Photos: "+photos+"]";
