@@ -20,10 +20,9 @@ import greendroid.app.GDActivity;
 import java.util.HashMap;
 
 import su.android.model.POIDetails;
-import su.android.model.Promotions;
+import su.android.model.Promotion;
 import su.android.server.connection.ServerConnection;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,7 +33,7 @@ public class AboutActivity extends GDActivity {
 	
 	private ServerConnection conn;
 	private POIDetails poiDetails;
-	private Promotions promotion;
+	private Promotion promotion;
 	
 	private HashMap<String, String> poiExtras = new HashMap<String, String>();
 	
@@ -81,9 +80,7 @@ public class AboutActivity extends GDActivity {
 		
 		if(poiDetails != null) {
 			//TODO isto só está a ir buscar uma promotion, ver se o indice zero é a mais recente
-			promotion = poiDetails.getPromotionList().get(0); 
-			
-			
+			promotion = poiDetails.getPromotionList().get(0);
 		}
 		
 	}

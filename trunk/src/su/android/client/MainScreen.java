@@ -26,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.widget.ZoomButtonsController.OnZoomListener;
 import android.widget.ZoomControls;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MyLocationOverlay;
 
 public class MainScreen extends GDMapActivity 
@@ -80,12 +81,21 @@ public class MainScreen extends GDMapActivity
 //		LocationListener mlocListener = new MyLocationListener();
 //		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 //				1000, 0, mlocListener);
+		// Set the map viewport to Coimbra
+		Criteria hdCrit = new Criteria();
+		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
+		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
+		GeoPoint point = new GeoPoint((int)(currentLocation.getLatitude()*1E6), (int)(currentLocation.getLongitude()*1E6));
+		map.getController().animateTo(point);
+		// Capture the context
 		this.prepareContext();
 		/**
 		 * Additional Views Initialization
 		 */
 		this.browseDialog = new BrowseDialog(this);
-		this.categoryGridView = new CategoryGridView(this);		
+		this.categoryGridView = new CategoryGridView(this);
 		/**
 		 * Overlays Initialization
 		 */
@@ -101,13 +111,13 @@ public class MainScreen extends GDMapActivity
 
 	public void prepareContext() {
 		this.currentContext = new AppContext();
-		Criteria hdCrit = new Criteria();
-		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
-		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
-		double currentLatitude = currentLocation.getLatitude();
-		double currentLongitude = currentLocation.getLongitude();
+//		Criteria hdCrit = new Criteria();
+//		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
+//		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
+//		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
+//		double currentLatitude = currentLocation.getLatitude();
+//		double currentLongitude = currentLocation.getLongitude();
 //		double currentLatitude = 40.2072;
 //		double currentLongitude = -8.426428;
 		Time today = new Time(Time.getCurrentTimezone());
@@ -138,8 +148,8 @@ public class MainScreen extends GDMapActivity
 		this.currentContext.setCategory(category);
 		this.currentContext.setDayOfWeekIndex(weekDayIndex);
 		this.currentContext.setHourOfDay(hour);
-		this.currentContext.setLat(currentLatitude);
-		this.currentContext.setLng(currentLongitude);
+//		this.currentContext.setLat(currentLatitude);
+//		this.currentContext.setLng(currentLongitude);
 		Log.i("AppContext", this.currentContext.toString());
 	}
 
@@ -151,11 +161,9 @@ public class MainScreen extends GDMapActivity
 			@Override
 			public void run() 
 			{
-				List<POI> poiList = conn.getPOIRecommendations(currentContext.getLat(),
-						currentContext.getLng(), 
+				List<POI> poiList = conn.getPOIRecommendations(
 						currentContext.getDayOfWeek(), 
 						currentContext.getHourOfDay(), 
-						0.5, 
 						60);
 				onNotifyClusterOverlay(poiList);
 				onNotifyItemsOverlay(poiList);
@@ -181,7 +189,6 @@ public class MainScreen extends GDMapActivity
 			default:
 				return super.onHandleActionBarItemClick(item, position);
 		}
-
 	}
 
 	@Override

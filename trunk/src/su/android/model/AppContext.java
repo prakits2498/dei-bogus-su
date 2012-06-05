@@ -2,8 +2,8 @@ package su.android.model;
 
 public class AppContext 
 {
-	private double lng;
-	private double lat;	
+	private double lng = 0;
+	private double lat = 0;	
 	private int dayWeekIndex;
 	private int hourOfDay;
 	private String category;

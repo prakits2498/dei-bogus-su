@@ -6,7 +6,7 @@ import greendroid.widget.PagedAdapter;
 import greendroid.widget.PagedView;
 import greendroid.widget.PagedView.OnPagedViewChangeListener;
 import su.android.model.POIDetails;
-import su.android.model.Products;
+import su.android.model.Product;
 import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
 import android.os.Handler;
@@ -144,7 +144,7 @@ public class ProductsActivity extends GDActivity {
 		}
 
 		public void viewProductDetails(int position, View convertView) {
-			Products product = null;
+			Product product = null;
 
 			if (poiDetails != null) {
 				if (!poiDetails.getProductList().isEmpty()) {
@@ -161,7 +161,7 @@ public class ProductsActivity extends GDActivity {
 
 				ImageView imageV = (ImageView) convertView.findViewById(R.id.product_photoID);
 				ImageLoader imageLoader = new ImageLoader(imageV.getContext());
-				imageLoader.DisplayImage(product.getImage(), imageV);
+				imageLoader.DisplayImage(product.getImageUrl(), imageV);
 
 				TextView descriptionTv = (TextView) convertView.findViewById(R.id.product_descr_ID);
 				descriptionTv.setText(product.getDescription());
