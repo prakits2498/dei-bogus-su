@@ -82,7 +82,10 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			myIntent.putExtra("poiCategory", poi.getCategory());
 			myIntent.putExtra("poiSubCategory", poi.getSubCategory());
 			myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
-			myIntent.putExtra("poiAffluence", poi.getAffluence());
+			
+				myIntent.putExtra("poiAffluence", (double)poi.getZoneAffluence());
+			
+			System.out.println(poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
 			
 			System.out.println("AFLUENCIA: "+poi.getAffluence());
 			

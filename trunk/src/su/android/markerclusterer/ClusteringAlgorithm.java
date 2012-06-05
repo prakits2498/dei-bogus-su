@@ -152,6 +152,13 @@ public class ClusteringAlgorithm {
 
 	 public List<GeoCluster> getClusters()
 	 {
+		 for(GeoCluster geoCluster: clusters_)
+		 {
+			 for(POI poi: this.poiCluster.get(geoCluster))
+			 {
+				 poi.setZoneAffluence((int)(poi.getAffluence()*100)/Math.max((int)geoCluster.getAffluence(), 1));
+			 }
+		 }
 		 return this.clusters_;
 	 }
 	
