@@ -70,9 +70,13 @@ public class AboutActivity extends GDActivity {
         //Typeface fontLight = Typeface.createFromAsset(getAssets(),"fonts/Helvetica Neue.ttf");
         Typeface fontBold = Typeface.createFromAsset(getAssets(),"fonts/Helvetica Neue Bold.ttf");
         
-        TextView afluenciaTv = (TextView) findViewById(R.id.afluencia_text_ID);
+        TextView afluenciaTextTv = (TextView) findViewById(R.id.afluencia_text_ID);
+        afluenciaTextTv.setTypeface(fontBold);
+        
+        TextView afluenciaTv = (TextView) findViewById(R.id.afluenciaID);
         afluenciaTv.setText(poiExtras.get("poiAffluence")+"%");
-        afluenciaTv.setTypeface(fontBold);
+        
+        
     }
     
     private void loadPOIDetails() {
@@ -96,6 +100,7 @@ public class AboutActivity extends GDActivity {
         poiExtras.put("poiSubCategory", b.getString("poiSubCategory"));
         poiExtras.put("poiCatIcon", b.getString("poiCatIcon"));
         poiExtras.put("poiPhoto01", b.getString("poiPhoto01"));
+        poiExtras.put("poiAffluence", b.getString("poiAffluence"));
     }
     
 }

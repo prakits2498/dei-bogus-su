@@ -53,7 +53,7 @@ public class InfoTabActivity extends GDTabActivity {
 		
     }
     
-    //Extras vindos do SimpleItemizedOverlay
+    //Extras vindos do PoiMarkersOverlay
     private void getExtrasPOI() {
     	Bundle b = new Bundle();
         b = getIntent().getExtras();
@@ -65,7 +65,14 @@ public class InfoTabActivity extends GDTabActivity {
         poiExtras.put("poiSubCategory", b.getString("poiSubCategory"));        
         poiExtras.put("poiCatIcon", b.getString("poiCatIcon"));
         poiExtras.put("poiPhoto01", b.getString("poiPhoto01"));
-        poiExtras.put("poiAffluence", b.getString("poiAffluence"));
+        
+        
+        int x = (int) Math.round(b.getDouble("poiAffluence"));
+        if(x<10) 
+        	poiExtras.put("poiAffluence", " "+Integer.toString(x));
+        else
+        	poiExtras.put("poiAffluence", Integer.toString(x));
+
     }
     
     private Intent putExtraPOIDetails(Intent intent) {
