@@ -153,7 +153,7 @@ public class ClusterMarkersOverlay extends Overlay{
 						int txtHeightOffset = (int) ((metrics.bottom + metrics.ascent) / 2.0f);
 						int x = p.x;
 						int y = p.y - txtHeightOffset;
-						canvas.drawText(roundDoubleToDecimals(cluster.getAffluence(), 2)+"%", x, y, paint);
+						canvas.drawText(roundDoubleToDecimals(cluster.getAffluence(), 0)+"%", x, y, paint);
 					}
 				}
 			}

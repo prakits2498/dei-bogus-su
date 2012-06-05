@@ -14,8 +14,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import su.android.model.POI;
 import su.android.model.POIDetails;
 import su.android.model.POIList;
-import su.android.model.Products;
-import su.android.model.Promotions;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -159,45 +157,7 @@ public class ServerConnection
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
 		
-		if(poiDetails != null) {
-			return poiDetails;
-		} else {
-			poiDetails = new POIDetails();
-			
-			List<Products> products = new ArrayList<Products>();
-			Products p1 = new Products();
-			p1.setId("1");
-			p1.setName("Gelado Morango");
-			p1.setPrice("2€");
-			p1.setID_Catgory("1");
-			p1.setID_SubCatgory("1");
-			p1.setID_Merchant("1");
-			p1.setDescription("Gelado muita bom com sabor a morango");
-			p1.setImage("http://www.haagen-dazs.com/img_db/pro/pro_sti_101.jpg");
-			products.add(p1);
-			
-			Products p2 = new Products();
-			p2.setId("2");
-			p2.setName("Pastel de Nata");
-			p2.setPrice("0.5€");
-			p2.setID_Catgory("1");
-			p2.setID_SubCatgory("1");
-			p2.setID_Merchant("1");
-			p2.setDescription("Pastel de Nata espectacular com canela");
-			p2.setImage("http://2.bp.blogspot.com/_oBsXNzbpvUM/TSpCQI7deVI/AAAAAAAAF2A/jrWotSklRnY/s1600/p.nata.jpg");
-			products.add(p2);
-			
-			poiDetails.setProductList(products);
-			
-			List<Promotions> promotions = new ArrayList<Promotions>();
-			Promotions promo = new Promotions();
-			promo.setDescription("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-			promotions.add(promo);
-			
-			poiDetails.setPromotionList(promotions);
-			
-			return poiDetails;
-		}
+		return poiDetails;		
 	}
 	
 	public List<POI> searchPOIS(String query)
@@ -232,6 +192,47 @@ public class ServerConnection
 			{
 				Log.i("POI", poi.toString());
 			}
+			return poiList.getPoiList();
+		}
+		else
+		{
+			return new ArrayList<POI>();
+		}
+	}
+	
+	public List<POI> getPOIRecommendations(String dayOfWeek, int hour, int limit)
+	{
+		POIList poiList = null;
+		String method = "getPOIS";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		RecommendationRequest req = new RecommendationRequest();
+		req.setLimit(limit);
+		req.setDayOfWeek(dayOfWeek);
+		req.setHour(hour);
+		String request = gson.toJson(req);
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(request);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			poiList = (POIList)gson.fromJson(result, POIList.class);
+			Log.i("SERVER REQUEST(RECOMMENDATION)", "[POIS: "+poiList.getPoiList().size()+"]");
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+		if(poiList != null)
+		{
 			return poiList.getPoiList();
 		}
 		else
