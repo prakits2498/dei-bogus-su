@@ -17,10 +17,10 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import su.server.foursquare.db.model.POI;
-import su.server.foursquare.db.model.POIList;
 import su.server.ws.DB.MySQLAccess;
 import su.server.ws.model.Login;
+import su.server.ws.model.POI;
+import su.server.ws.model.POIList;
 
 import com.google.gson.Gson;
 
@@ -76,7 +76,12 @@ public class PoisWebService implements IPoisWebService
 	public String verifyLogin(String request){
 		Gson gson = new Gson();
 		Login login = (Login)gson.fromJson(request, Login.class);
-		boolean result = Db.verifyLogin(login);
+		boolean result = false;
+		try {
+			result = Db.verifyLogin(login);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return gson.toJson(result);
 	}
 	
