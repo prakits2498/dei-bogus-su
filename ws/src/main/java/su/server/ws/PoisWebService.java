@@ -19,6 +19,8 @@ import javax.jws.WebService;
 
 import su.server.foursquare.db.model.POI;
 import su.server.foursquare.db.model.POIList;
+import su.server.ws.DB.MySQLAccess;
+import su.server.ws.model.Login;
 
 import com.google.gson.Gson;
 
@@ -31,10 +33,12 @@ import com.google.gson.Gson;
 public class PoisWebService implements IPoisWebService 
 {
 	//private Server server;
+	private MySQLAccess Db;
 	
 	public PoisWebService() 
 	{
 		//this.server = new Server();
+		this.Db = new MySQLAccess(); 
 	}
 
 	public String getPOIRecommendations(String request)
@@ -67,6 +71,13 @@ public class PoisWebService implements IPoisWebService
 		poiList.setPoiList(cantinas);
 		
 		return gson.toJson(poiList);
+	}
+	
+	public String verifyLogin(String request){
+		Gson gson = new Gson();
+		Login login = (Login)gson.fromJson(request, Login.class);
+		boolean result = Db.verifyLogin(login);
+		return gson.toJson(result);
 	}
 	
 	/*public String getPOIDetails(String poiId)
