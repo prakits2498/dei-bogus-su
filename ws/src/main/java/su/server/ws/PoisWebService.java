@@ -12,14 +12,10 @@
 
 package su.server.ws;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jws.WebService;
 
 import su.server.ws.DB.MySQLAccess;
 import su.server.ws.model.Login;
-import su.server.ws.model.POI;
 import su.server.ws.model.POIList;
 
 import com.google.gson.Gson;
@@ -42,41 +38,23 @@ public class PoisWebService implements IPoisWebService
 	}
 
 	public String getPOIRecommendations(String request)
-	{				
+	{			
 		Gson gson = new Gson();
-		//RecommendationRequest recommendationReq = (RecommendationRequest)gson.fromJson(request, RecommendationRequest.class);
-		//System.out.println("GetPOIRecommendations [lat:"+recommendationReq.getLat()+", lng:"+recommendationReq.getLng()+"]");
-		//double lat = recommendationReq.getLat();
-		//double lng = recommendationReq.getLng();
-		//int hour = recommendationReq.getHour();
-		//String dayOfWeek = recommendationReq.getDayOfWeek();
-		//Double maxDistance = recommendationReq.getMaxDistance();
-		//int limit = recommendationReq.getLimit();
-		//POIList poiList = this.server.searchNear(lat, lng, hour, dayOfWeek, maxDistance, limit);				
-		
-		List<POI> cantinas = new ArrayList<POI>();
-		POI cantina = new POI();
-		cantina.setId("1");
-		cantina.setLocation(40.220200, -8.417983);
-		cantina.setName("POLOII");
-		cantinas.add(cantina);
-		
-		POI c = new POI();
-		c.setId("2");
-		c.setLocation(40.208572, -8.421364);
-		c.setName("CASA DA PEDRA");
-		cantinas.add(c);
-		
-		POIList poiList = new POIList();
-		poiList.setPoiList(cantinas);
+		POIList poiList = null;
+		try {
+			poiList = Db.getPOIs();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return gson.toJson(poiList);
 	}
 	
-	public String verifyLogin(String request){
+	public String verifyLogin(String request) {
 		Gson gson = new Gson();
 		Login login = (Login)gson.fromJson(request, Login.class);
 		boolean result = false;
+		
 		try {
 			result = Db.verifyLogin(login);
 		} catch (Exception e) {

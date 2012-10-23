@@ -6,76 +6,83 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import su.server.ws.model.Login;
+import su.server.ws.model.POI;
+import su.server.ws.model.POIList;
+
 
 public class MySQLAccess {
 	private Connection connect = null;
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	
-	
 
 	public MySQLAccess() {
 		try {
 			// This will load the MySQL driver, each DB has its own driver
 			Class.forName("com.mysql.jdbc.Driver");
-			// Setup the connection with the DB ---feedback é o nome da tabela
-			connect = DriverManager.getConnection("jdbc:mysql://localhost/feedback?" + "user=sqluser&password=sqluserpw");
+			// Setup the connection with the DB
+			connect = DriverManager.getConnection("jdbc:mysql://localhost/aLaCarte?" + "user=root");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public boolean verifyLogin(Login login) throws Exception {
 		try {
-//			// Statements allow to issue SQL queries to the database
-//			statement = connect.createStatement();
-//			// Result set get the result of the SQL query
-//			resultSet = statement.executeQuery("select * from FEEDBACK.COMMENTS");
-//			writeResultSet(resultSet);
-
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT * FROM utilizadores WHERE email=" + login.getEmail() + " AND password=" + login.getPass());
-			// Parameters start with 1
-//			preparedStatement.setString(1, login.getEmail());
-//			preparedStatement.setString(2, login.getPass());
+			preparedStatement = connect.prepareStatement("SELECT * FROM utilizadores WHERE email='" + login.getEmail() + "' AND password='" + login.getPass() +"'");
 			resultSet = preparedStatement.executeQuery();
 			
 			if(resultSet.next()){
-				System.out.println("Login bem sucedido!!");
 				return true;
 			}
 			else{
-				System.out.println("Login mal sucedido!!");
 				return false;
 			}
-//			preparedStatement = connect.prepareStatement("SELECT myuser, webpage, datum, summery, COMMENTS from FEEDBACK.COMMENTS");
-//			resultSet = preparedStatement.executeQuery();
-//			writeResultSet(resultSet);
-//
-//			// Remove again the insert comment
-//			preparedStatement = connect
-//					.prepareStatement("delete from FEEDBACK.COMMENTS where myuser= ? ; ");
-//			preparedStatement.setString(1, "Test");
-//			preparedStatement.executeUpdate();
-//
-//			resultSet = statement
-//					.executeQuery("select * from FEEDBACK.COMMENTS");
-//			writeMetaData(resultSet);
 
 		} catch (Exception e) {
 			throw e;
-		} finally {
-			close();
 		}
 
+	}
+	
+	public POIList getPOIs() throws Exception {
+		POIList poiList = null;
+		
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT id, lat, lng, name, address, category, capacity FROM cantinas");
+			resultSet = preparedStatement.executeQuery();
+			
+			poiList = new POIList();
+			List<POI> list = new ArrayList<POI>();
+			
+			while(resultSet.next()) {
+				POI poi = new POI();
+				poi.setId(resultSet.getString(1));
+				poi.setLocation(resultSet.getDouble(2), resultSet.getDouble(3));
+				poi.setName(resultSet.getString(4));
+				poi.setAddress(resultSet.getString(5));
+				poi.setCategory(resultSet.getString(6));
+				poi.setCapacity(resultSet.getInt(7));
+				
+				list.add(poi);
+			}
+			
+			poiList.setPoiList(list);
+			
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		return poiList;
 	}
 	
 	

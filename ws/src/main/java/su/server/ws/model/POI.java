@@ -11,7 +11,9 @@ public class POI {
 	private String name;
 	private Double lat;
 	private Double lng;
-	
+	private String address;
+	private String category;
+	private int capacity;
 	
 	public String getId() {
 		return id;
@@ -43,6 +45,30 @@ public class POI {
 	public String toString()
 	{
 		return "[ID: "+id+"] [Lat: "+lat+" Lng: "+lng+"] [Name: "+name+"]";
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
 	}
 
 }

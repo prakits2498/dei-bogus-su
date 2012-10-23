@@ -9,6 +9,9 @@ public interface IPoisWebService {
 	@WebMethod(operationName="getPOIRecommendations")
 	public String getPOIRecommendations(String request);
 	
+	@WebMethod(operationName="verifyLogin")
+	public String verifyLogin(String request);
+	
 	/*@WebMethod(operationName="getPOIDetails")
 	public String getPOIDetails(String poiId);
 	
