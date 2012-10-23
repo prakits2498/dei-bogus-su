@@ -22,13 +22,10 @@ import su.android.client.InfoTabActivity;
 import su.android.client.MainScreen;
 import su.android.client.R;
 import su.android.model.POI;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
 public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
@@ -78,16 +75,10 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			
 			myIntent.putExtra("poiID", poi.getId());
 			myIntent.putExtra("poiName", poi.getName());
-			myIntent.putExtra("poiAddress", poi.getAddress());
-			myIntent.putExtra("poiCategory", poi.getCategory());
-			myIntent.putExtra("poiSubCategory", poi.getSubCategory());
-			myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
-			
-				myIntent.putExtra("poiAffluence", (double)poi.getZoneAffluence());
-			
-			System.out.println(poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
-			
-			System.out.println("AFLUENCIA: "+poi.getAffluence());
+			//myIntent.putExtra("poiAddress", poi.getAddress());
+			//myIntent.putExtra("poiCategory", poi.getCategory());
+			//myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
+			myIntent.putExtra("poiCatIcon", "https://dl.dropbox.com/u/999549/Foursquare/pin_food.png");
 			
 			if(poi.getPhotos() != null)
 				if(!poi.getPhotos().isEmpty())
@@ -111,7 +102,7 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
 			// Balloon
 			PoiMarker overlayItem = new PoiMarker(point, poi.getName(),
-					"Nº checkins: " + poi.getCheckinsCount(), poi);
+					"N checkins: " + poi.getCheckinsCount(), poi);
 			
 			String mainCat1 = mainScreen.getResources().getString(R.string.mainCat1);
 			String mainCat2 = mainScreen.getResources().getString(R.string.mainCat2);
@@ -119,7 +110,13 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			String mainCat4 = mainScreen.getResources().getString(R.string.mainCat4);
 			String mainCat5 = mainScreen.getResources().getString(R.string.mainCat5);
 			String mainCat6 = mainScreen.getResources().getString(R.string.mainCat6);
-			if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat1))
+			
+			//TODO pins das categorias
+			Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+			boundCenter(drawable);
+			overlayItem.setMarker(drawable);
+			
+			/*if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat1))
 			{
 				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_arts_entertainment);
 				boundCenter(drawable);
@@ -160,7 +157,7 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_default);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
-			}
+			}*/
 			this.items.add(overlayItem);
 		}
 		onNotifyFilter(mainScreen.getCurrentAppContext().getCategory());

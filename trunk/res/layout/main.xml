@@ -42,10 +42,13 @@
         android:id="@+id/mvMain"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="0ZeXen_TNCs9m_sTIxYuWK0ZMc4BeNV0UmgsAIA"
+        android:apiKey="0ZeXen_TNCs-C50wpum3s3M1Q82j36NWphfRzPQ"
         android:clickable="true" />
     
-    <!-- BB KEY -->
+    <!-- BB KEY MAC -->
+    <!-- 0ZeXen_TNCs-C50wpum3s3M1Q82j36NWphfRzPQ -->
+    
+    <!-- BB KEY BOLINHAS -->
 	<!-- android:apiKey="0ZeXen_TNCs9m_sTIxYuWK0ZMc4BeNV0UmgsAIA" -->
 	
 	<!-- DURVAS KEY -->

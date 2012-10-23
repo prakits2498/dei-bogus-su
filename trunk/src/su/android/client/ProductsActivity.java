@@ -78,7 +78,7 @@ public class ProductsActivity extends GDActivity {
 
 		String poiID = b.getString("poiID");
 
-		poiDetails = conn.getPOIDetails(poiID);
+		//poiDetails = conn.getPOIDetails(poiID);
 
 		if (poiDetails != null) {
 			if (!poiDetails.getProductList().isEmpty()) {

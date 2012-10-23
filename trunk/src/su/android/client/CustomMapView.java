@@ -1,24 +1,19 @@
 package su.android.client;
 
-import java.util.List;
-
-import su.android.overlays.ClusterMarkersOverlay;
 import su.android.overlays.PoiMarkersOverlay;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ZoomButtonsController.OnZoomListener;
 
 import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
 
 public class CustomMapView extends MapView {
 
 	private int oldZoomLevel = -1;
-	private PoiMarkersOverlay itemsOverlay = null;
-	private ClusterMarkersOverlay clusterOverlay = null;
+	private PoiMarkersOverlay poisOverlay = null;
+	//private ClusterMarkersOverlay clusterOverlay = null;
 	
 	public CustomMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -71,40 +66,34 @@ public class CustomMapView extends MapView {
 						  getZoomButtonsController().setZoomOutEnabled(false);
 					  }
 				}			
-				
-				if (getZoomLevel() > 17)
-				{
-					poiMarkersZoomMode();
-				}
-				else
-				{
-					clusterMarkersMode();
-				}				 
+
+				//poiMarkersZoomMode();
+			 
 				oldZoomLevel = getZoomLevel(); 
 				
-				if(clusterOverlay.isActivated())
+				/*if(clusterOverlay.isActivated())
 				{
 					clusterOverlay.onViewChange();
 					Log.i("onTouchEvent", "RefreshCluster");
-				}
+				}*/
 				
 			}
 			
 		});
 	}
 	
-	public void poiMarkersZoomMode()
+	/*public void poiMarkersZoomMode()
 	{
 		if(clusterOverlay.isActivated())
 		{
 			clusterOverlay.deactivate();
 			Log.i("ZoomLevel", "Remove ClusterOverlay");
 		}
-		if(!getOverlays().contains(itemsOverlay))
+		if(!getOverlays().contains(poisOverlay))
 		{			
-			itemsOverlay.onHandlePoiList(clusterOverlay.getPoiList());
-			getOverlays().add(itemsOverlay);
-			Log.i("ZoomLevel", "Add ItemsOverlay");
+			poisOverlay.onHandlePoiList(clusterOverlay.getPoiList());
+			getOverlays().add(poisOverlay);
+			Log.i("ZoomLevel", "Add poisOverlay");
 		}
 	}
 	
@@ -115,14 +104,14 @@ public class CustomMapView extends MapView {
 			clusterOverlay.deactivate();
 			Log.i("ZoomLevel", "Remove ClusterOverlay");
 		}
-		if(!getOverlays().contains(itemsOverlay))
+		if(!getOverlays().contains(poisOverlay))
 		{
-			getOverlays().add(itemsOverlay);
-			Log.i("ZoomLevel", "Add ItemsOverlay");
+			getOverlays().add(poisOverlay);
+			Log.i("ZoomLevel", "Add poisOverlay");
 		}
-	}
+	}*/
 	
-	public void clusterMarkersMode()
+	/*public void clusterMarkersMode()
 	{
 		if(getOverlays().contains(itemsOverlay))
 		{
@@ -134,14 +123,15 @@ public class CustomMapView extends MapView {
 			clusterOverlay.activate();
 			Log.i("ZoomLevel", "Add ClusterOverlay");
 		}
-	}
+	}*/
 	
-	public void setPrimaryOverlays(ClusterMarkersOverlay clusterOverlay, PoiMarkersOverlay itemsOverlay)
+	public void setPrimaryOverlays(PoiMarkersOverlay poisOverlay)
 	{
-		this.clusterOverlay = clusterOverlay;
-		this.getOverlays().add(clusterOverlay);
-		this.itemsOverlay = itemsOverlay;
-		Log.i("Primary Overlay", "Activate ClusterOverlay");
+		//this.clusterOverlay = clusterOverlay;
+		//this.getOverlays().add(clusterOverlay);
+		this.poisOverlay = poisOverlay;
+		this.getOverlays().add(poisOverlay);
+		Log.i("Primary Overlay", "Activate poisOverlay");
 	}
 	
 	@Override
@@ -150,14 +140,14 @@ public class CustomMapView extends MapView {
 		super.onTouchEvent(ev);
 		if (ev.getAction()==MotionEvent.ACTION_UP)
 		{
-			if(clusterOverlay.isActivated())
+			/*if(clusterOverlay.isActivated())
 			{
 				clusterOverlay.onViewChange();
 				Log.i("onTouchEvent", "RefreshCluster");
-			}
+			}*/
 		}
 		
-		itemsOverlay.hideAllBalloons();
+		poisOverlay.hideAllBalloons();
 		return true;
 	}
 

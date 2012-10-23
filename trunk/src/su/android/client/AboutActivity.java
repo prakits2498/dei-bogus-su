@@ -6,7 +6,6 @@ import greendroid.app.GDActivity;
 import java.util.HashMap;
 
 import su.android.model.POIDetails;
-import su.android.model.Promotion;
 import su.android.server.connection.ServerConnection;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ public class AboutActivity extends GDActivity {
 	
 	private ServerConnection conn;
 	private POIDetails poiDetails;
-	private Promotion promotion;
 	
 	private HashMap<String, String> poiExtras = new HashMap<String, String>();
 	
@@ -35,11 +33,11 @@ public class AboutActivity extends GDActivity {
         
         getExtrasPOI();
 
-        loadPOIDetails();
+        //loadPOIDetails();
 
         if(poiDetails != null) {
         	final TextView aboutText = (TextView) findViewById(R.id.poi_promotionID);
-        	aboutText.setText(promotion.getDescription());
+        	aboutText.setText("descricao...");
         	//aboutText.setMovementMethod(LinkMovementMethod.getInstance());
         	
         	ImageView imageV = (ImageView) findViewById(R.id.poi_photoID);
@@ -65,7 +63,7 @@ public class AboutActivity extends GDActivity {
         
     }
     
-    private void loadPOIDetails() {
+    /*private void loadPOIDetails() {
 		poiDetails = conn.getPOIDetails(poiExtras.get("poiID"));
 		
 		if(poiDetails != null) {
@@ -73,7 +71,7 @@ public class AboutActivity extends GDActivity {
 			promotion = poiDetails.getPromotionList().get(0);
 		}
 		
-	}
+	}*/
     
     private void getExtrasPOI() {
     	Bundle b = new Bundle();
