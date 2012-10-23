@@ -12,7 +12,6 @@ import org.ksoap2.transport.AndroidHttpTransport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import su.android.model.POI;
-import su.android.model.POIDetails;
 import su.android.model.POIList;
 import android.util.Log;
 
@@ -21,8 +20,11 @@ import com.google.gson.Gson;
 public class ServerConnection 
 {	
 	private static final String NAMESPACE = "http://iPois/";
-	private static final String URL = "http://ipois.dei.uc.pt:8080/su-server/ws?wsdl";
-	
+	//private static final String URL = "http://ipois.dei.uc.pt:8080/su-server/ws?wsdl";
+	//private static final String URL = "http://localhost:8083/su-server/ws?wsdl";
+	//private static final String URL = "http://193.136.207.29:8080/su-server/ws?wsdl";
+	private static final String URL = "http://10.16.0.3:8080/su-server/ws?wsdl";
+
 	private SoapSerializationEnvelope soapEnvelope;
 	private AndroidHttpTransport httpTransport;
 	private Gson gson;
@@ -45,7 +47,7 @@ public class ServerConnection
 		gson = new Gson();
 	}
 	
-	public List<POI> getPOIRecommendations(double lat, double lng, String dayOfWeek, int hour, double maxDistance, int limit)
+	/*public List<POI> getPOIRecommendations(double lat, double lng, String dayOfWeek, int hour, double maxDistance, int limit)
 	{
 		POIList poiList = null;
 		String method = "getPOIRecommendations";
@@ -198,12 +200,12 @@ public class ServerConnection
 		{
 			return new ArrayList<POI>();
 		}
-	}
+	}*/
 	
 	public List<POI> getPOIRecommendations(String dayOfWeek, int hour, int limit)
 	{
 		POIList poiList = null;
-		String method = "getPOIS";
+		String method = "getPOIRecommendations";
 		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
 		RecommendationRequest req = new RecommendationRequest();
 		req.setLimit(limit);
@@ -225,7 +227,7 @@ public class ServerConnection
 		} 
 		catch (IOException e) 
 		{
-			Log.e("error", "IOException!!"+e.getMessage());
+			Log.e("error", ">>>> IOException!!"+e.getMessage());
 		} 
 		catch (XmlPullParserException e) 
 		{

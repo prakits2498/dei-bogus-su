@@ -3,7 +3,6 @@ package su.android.client;
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.Item;
-import greendroid.widget.item.SeparatorItem;
 import greendroid.widget.item.ThumbnailItem;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.SearchRecentSuggestions;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -38,7 +36,7 @@ public class SearchableActivity extends GDListActivity
 					SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
 			suggestions.saveRecentQuery(query, null);
 			ServerConnection conn = new ServerConnection();
-			pois = conn.searchPOIS(query);
+			//pois = conn.searchPOIS(query); //TODO
 			dialog.dismiss();
 			List<Item> items = new ArrayList<Item>();
 			for(POI poi: pois)

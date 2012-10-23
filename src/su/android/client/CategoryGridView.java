@@ -52,7 +52,7 @@ public class CategoryGridView
 				}
 				mainScreen.getCurrentAppContext().setCategory(category);
 				mainScreen.onNotifyItemsOverlay(category);
-				mainScreen.onNotifyClusterOverlay(category);
+				//mainScreen.onNotifyClusterOverlay(category);
 			}
 		});
 	}

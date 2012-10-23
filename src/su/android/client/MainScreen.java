@@ -9,43 +9,41 @@ import java.util.List;
 
 import su.android.model.AppContext;
 import su.android.model.POI;
-import su.android.overlays.ClusterMarkersOverlay;
 import su.android.overlays.PoiMarkersOverlay;
 import su.android.server.connection.ServerConnection;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Time;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ZoomButtonsController.OnZoomListener;
-import android.widget.ZoomControls;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MyLocationOverlay;
 
 public class MainScreen extends GDMapActivity 
 {
-		
 	//	Server connection
 	private ServerConnection conn;
+	
+	
 	//	Overlays
 	private PoiMarkersOverlay itemizedOverlay;
-	private ClusterMarkersOverlay clusterOverlay;
+	//private ClusterMarkersOverlay clusterOverlay;
 	private MyLocationOverlay compass;
+	
+	
 	//	Map Viewer
 	private CustomMapView map;
+	
+	
 	//	ActionBar viewers	
 	private CategoryGridView categoryGridView;
 	private BrowseDialog browseDialog;	
+	
+	
 	//	Current Context 
 	private AppContext currentContext;
-	private Handler handler;
+
 	
 	public MainScreen() {
 		conn = new ServerConnection();
@@ -80,29 +78,41 @@ public class MainScreen extends GDMapActivity
 //		LocationListener mlocListener = new MyLocationListener();
 //		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 //				1000, 0, mlocListener);
+		
+		
+		//************* GPS *************
 		// Set the map viewport to Coimbra
-		Criteria hdCrit = new Criteria();
+		/*Criteria hdCrit = new Criteria();
 		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
-		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
-		GeoPoint point = new GeoPoint((int)(currentLocation.getLatitude()*1E6), (int)(currentLocation.getLongitude()*1E6));
+		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);*/
+		
+		//40.186300, -8.414211
+		
+		GeoPoint point = new GeoPoint((int)(40.186300*1E6), (int)(-8.414211*1E6));
+		
 		map.getController().animateTo(point);
 		map.getController().setZoom(13);
+		
 		// Capture the context
 		this.prepareContext();
+		
 		/**
 		 * Additional Views Initialization
 		 */
 		this.browseDialog = new BrowseDialog(this);
 		this.categoryGridView = new CategoryGridView(this);
+		
+		
 		/**
 		 * Overlays Initialization
 		 */
-		itemizedOverlay = new PoiMarkersOverlay(this);
-		clusterOverlay = new ClusterMarkersOverlay(this);
+		itemizedOverlay = new PoiMarkersOverlay(this); //POIS
+		//clusterOverlay = new ClusterMarkersOverlay(this);
+		
 		//	Set the primary overlays in the map
-		map.setPrimaryOverlays(clusterOverlay, itemizedOverlay);
+		map.setPrimaryOverlays(itemizedOverlay);
 		/**
 		 * Start application
 		 */
@@ -161,11 +171,13 @@ public class MainScreen extends GDMapActivity
 			@Override
 			public void run() 
 			{
+				//TODO ir buscar as cantinas ˆ BD
 				List<POI> poiList = conn.getPOIRecommendations(
 						currentContext.getDayOfWeek(), 
 						currentContext.getHourOfDay(), 
 						60);
-				onNotifyClusterOverlay(poiList);
+				
+				//onNotifyClusterOverlay(poiList);
 				onNotifyItemsOverlay(poiList);
 				progressDialog.dismiss();
 			}
@@ -193,21 +205,18 @@ public class MainScreen extends GDMapActivity
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		compass.disableCompass();
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		compass.enableCompass();
 		super.onResume();
 	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -219,16 +228,6 @@ public class MainScreen extends GDMapActivity
 	public boolean onNotifyItemsOverlay(String category)
 	{
 		return this.itemizedOverlay.onNotifyFilter(category);
-	}
-	
-	public boolean onNotifyClusterOverlay(String category)
-	{
-		return this.clusterOverlay.onNotifyFilter(category);
-	}
-	
-	public boolean onNotifyClusterOverlay(List<POI> poiList)
-	{
-		return this.clusterOverlay.onHandlePoiList(poiList);
 	}
 
 	public CustomMapView getMap()
