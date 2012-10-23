@@ -26,59 +26,59 @@ public class SearchableActivity extends GDListActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final ProgressDialog dialog = ProgressDialog.show(SearchableActivity.this, "", "Searching.");
+//		final ProgressDialog dialog = ProgressDialog.show(SearchableActivity.this, "", "Searching.");
 		// Get the intent, verify the action and get the query
-		Intent intent = getIntent();
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) 
-		{
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this.getApplicationContext(),
-					SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
-			suggestions.saveRecentQuery(query, null);
+//		Intent intent = getIntent();
+//		if (Intent.ACTION_SEARCH.equals(intent.getAction())) 
+//		{
+//			String query = intent.getStringExtra(SearchManager.QUERY);
+//			SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this.getApplicationContext(),
+//					SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+//			suggestions.saveRecentQuery(query, null);
 			ServerConnection conn = new ServerConnection();
-			//pois = conn.searchPOIS(query); //TODO
-			dialog.dismiss();
+			pois = conn.getPOIRecommendations(getIntent().getExtras().getString("dayOfWeek"), getIntent().getExtras().getInt("hour"), 1); //TODO
+//			dialog.dismiss();
 			List<Item> items = new ArrayList<Item>();
 			for(POI poi: pois)
 			{
-				String mainCat1 = getResources().getString(R.string.mainCat1);
-				String mainCat2 = getResources().getString(R.string.mainCat2);
-				String mainCat3 = getResources().getString(R.string.mainCat3);
-				String mainCat4 = getResources().getString(R.string.mainCat4);
-				String mainCat5 = getResources().getString(R.string.mainCat5);
-				String mainCat6 = getResources().getString(R.string.mainCat6);
-				if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat1))
-				{
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_arts_entertainment));
-				}
-				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat2))
-				{
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_food));
-				}
-				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat3))
-				{
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_coffee));
-				}
-				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat4))
-				{	
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_nightlife));
-				}
-				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat5))
-				{
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_shops));
-				}
-				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat6))
-				{
-					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_outdoors));
-				}
-				else
-				{
+//				String mainCat1 = getResources().getString(R.string.mainCat1);
+//				String mainCat2 = getResources().getString(R.string.mainCat2);
+//				String mainCat3 = getResources().getString(R.string.mainCat3);
+//				String mainCat4 = getResources().getString(R.string.mainCat4);
+//				String mainCat5 = getResources().getString(R.string.mainCat5);
+//				String mainCat6 = getResources().getString(R.string.mainCat6);
+//				if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat1))
+//				{
+//					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_arts_entertainment));
+//				}
+//				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat2))
+//				{
+//					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_food));
+//				}
+//				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat3))
+//				{
+//					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_coffee));
+//				}
+//				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat4))
+//				{	
+//					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_nightlife));
+//				}
+//				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat5))
+//				{
+//					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_shops));
+//				}
+//				else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat6))
+//				{
+//					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_outdoors));
+//				}
+//				else
+//				{
 					items.add(new ThumbnailItem(poi.getName(), poi.getAddress(),R.drawable.pin_default));
-				}
+//				}
 			}
 			final ItemAdapter adapter = new ItemAdapter(this, items);
 			setListAdapter(adapter);
-		}
+//		}
 	}
 
 	@Override
