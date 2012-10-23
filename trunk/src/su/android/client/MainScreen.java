@@ -12,6 +12,7 @@ import su.android.model.POI;
 import su.android.overlays.PoiMarkersOverlay;
 import su.android.server.connection.ServerConnection;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Time;
@@ -193,7 +194,11 @@ public class MainScreen extends GDMapActivity
 				this.browseDialog.onActivateDialog();
 				return true;		
 			case R.id.action_bar_search:
-				onSearchRequested(); 
+				//onSearchRequested();
+				Intent i = new Intent(getApplicationContext(), SearchableActivity.class);
+				i.putExtra("dayOfWeek", this.currentContext.getDayOfWeek());
+				i.putExtra("hour", this.currentContext.getHourOfDay());
+				startActivity(i);
 				return true;		
 			case R.id.action_bar_category: 
 				this.categoryGridView.onActivateCategory(item.getItemView()); 
