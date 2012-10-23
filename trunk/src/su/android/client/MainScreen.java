@@ -26,21 +26,15 @@ public class MainScreen extends GDMapActivity
 	//	Server connection
 	private ServerConnection conn;
 	
-	
 	//	Overlays
-	private PoiMarkersOverlay itemizedOverlay;
-	//private ClusterMarkersOverlay clusterOverlay;
+	private PoiMarkersOverlay poisOverlay;
 	private MyLocationOverlay compass;
-	
 	
 	//	Map Viewer
 	private CustomMapView map;
 	
-	
 	//	ActionBar viewers	
 	private CategoryGridView categoryGridView;
-	private BrowseDialog browseDialog;	
-	
 	
 	//	Current Context 
 	private AppContext currentContext;
@@ -58,11 +52,7 @@ public class MainScreen extends GDMapActivity
 		addActionBarItem(getActionBar()
 				.newActionBarItem(NormalActionBarItem.class)
 				.setDrawable(new ActionBarDrawable(this,
-							R.drawable.slider_icon)), R.id.action_bar_slider); 
-		addActionBarItem(getActionBar()
-				.newActionBarItem(NormalActionBarItem.class)
-				.setDrawable(new ActionBarDrawable(this,
-							R.drawable.search_cat_icon)), R.id.action_bar_category);
+							R.drawable.search_cat_icon)), R.id.action_bar_category); //TODO mudar para icon de calendario
 		addActionBarItem(getActionBar()
 					.newActionBarItem(NormalActionBarItem.class)
 					.setDrawable(new ActionBarDrawable(this,
@@ -76,11 +66,7 @@ public class MainScreen extends GDMapActivity
 		map.setSatellite(true);
 		compass = new MyLocationOverlay(MainScreen.this, map);
 		map.getOverlays().add(compass);		
-//		LocationListener mlocListener = new MyLocationListener();
-//		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-//				1000, 0, mlocListener);
-		
-		
+
 		//************* GPS *************
 		// Set the map viewport to Coimbra
 		/*Criteria hdCrit = new Criteria();
@@ -89,12 +75,10 @@ public class MainScreen extends GDMapActivity
 		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
 		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);*/
 		
-		//40.186300, -8.414211
-		
 		GeoPoint point = new GeoPoint((int)(40.186300*1E6), (int)(-8.414211*1E6));
 		
 		map.getController().animateTo(point);
-		map.getController().setZoom(13);
+		map.getController().setZoom(14);
 		
 		// Capture the context
 		this.prepareContext();
@@ -102,18 +86,16 @@ public class MainScreen extends GDMapActivity
 		/**
 		 * Additional Views Initialization
 		 */
-		this.browseDialog = new BrowseDialog(this);
 		this.categoryGridView = new CategoryGridView(this);
 		
 		
 		/**
 		 * Overlays Initialization
 		 */
-		itemizedOverlay = new PoiMarkersOverlay(this); //POIS
-		//clusterOverlay = new ClusterMarkersOverlay(this);
+		poisOverlay = new PoiMarkersOverlay(this); 
 		
 		//	Set the primary overlays in the map
-		map.setPrimaryOverlays(itemizedOverlay);
+		map.setPrimaryOverlays(poisOverlay);
 		/**
 		 * Start application
 		 */
@@ -122,15 +104,7 @@ public class MainScreen extends GDMapActivity
 
 	public void prepareContext() {
 		this.currentContext = new AppContext();
-//		Criteria hdCrit = new Criteria();
-//		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
-//		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//		String mlocProvider = locationManager.getBestProvider(hdCrit, true);
-//		Location currentLocation = locationManager.getLastKnownLocation(mlocProvider);
-//		double currentLatitude = currentLocation.getLatitude();
-//		double currentLongitude = currentLocation.getLongitude();
-//		double currentLatitude = 40.2072;
-//		double currentLongitude = -8.426428;
+
 		Time today = new Time(Time.getCurrentTimezone());
 		today.setToNow();
 		int weekDayIndex = today.weekDay;
@@ -166,19 +140,17 @@ public class MainScreen extends GDMapActivity
 
 	public void handle()
 	{
-		final ProgressDialog progressDialog = ProgressDialog.show(this, "", "Loading POIs...");
+		final ProgressDialog progressDialog = ProgressDialog.show(this, "", "Loading...");
 		new Handler().postDelayed(new Runnable() {
 
 			@Override
 			public void run() 
 			{
-				//TODO ir buscar as cantinas ˆ BD
 				List<POI> poiList = conn.getPOIRecommendations(
 						currentContext.getDayOfWeek(), 
 						currentContext.getHourOfDay(), 
 						60);
 				
-				//onNotifyClusterOverlay(poiList);
 				onNotifyItemsOverlay(poiList);
 				progressDialog.dismiss();
 			}
@@ -189,10 +161,7 @@ public class MainScreen extends GDMapActivity
 	@Override
 	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
 		switch (item.getItemId()) 
-		{
-			case R.id.action_bar_slider: 
-				this.browseDialog.onActivateDialog();
-				return true;		
+		{		
 			case R.id.action_bar_search:
 				//onSearchRequested();
 				Intent i = new Intent(getApplicationContext(), SearchableActivity.class);
@@ -200,7 +169,7 @@ public class MainScreen extends GDMapActivity
 				i.putExtra("hour", this.currentContext.getHourOfDay());
 				startActivity(i);
 				return true;		
-			case R.id.action_bar_category: 
+			case R.id.action_bar_category: //TODO meter a abrir uma nova activity das reservas
 				this.categoryGridView.onActivateCategory(item.getItemView()); 
 				return true;		
 			default:
@@ -227,12 +196,12 @@ public class MainScreen extends GDMapActivity
 	
 	public boolean onNotifyItemsOverlay(List<POI> poiList)
 	{
-		return this.itemizedOverlay.onHandlePoiList(poiList);
+		return this.poisOverlay.onHandlePoiList(poiList);
 	}
 	
 	public boolean onNotifyItemsOverlay(String category)
 	{
-		return this.itemizedOverlay.onNotifyFilter(category);
+		return this.poisOverlay.onNotifyFilter(category);
 	}
 
 	public CustomMapView getMap()
@@ -244,29 +213,4 @@ public class MainScreen extends GDMapActivity
 	{
 		return currentContext;
 	}
-	
-//	/**
-//	 * onCreateOptionsMenu handler
-//	 */
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		super.onCreateOptionsMenu(menu);
-//		MenuItem menu_Revert = menu.add(0, 1, 0, "Display GeoItems");
-//		menu_Revert.setIcon(android.R.drawable.ic_menu_myplaces);
-//		return true;
-//	}
-//
-//	/**
-//	 * onOptionsItemSelected handler since clustering need MapView to be created
-//	 * and visible, this sample do clustering here.
-//	 */
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case 1:
-//			pins();
-//			break;
-//		}
-//		return true;
-//	}
 }
