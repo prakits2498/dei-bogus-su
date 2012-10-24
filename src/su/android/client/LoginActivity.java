@@ -46,10 +46,11 @@ public class LoginActivity extends Activity {
 				
 				//Verify credentials on DB
 				Login login = new Login(emailEdit.getText().toString(),passEdit.getText().toString());
-
-				if(conn.verifyLogin(login) == true){
+				int id = conn.verifyLogin(login);
+				if(id != -1){
 					// Switching to Main Activity
 					Intent i = new Intent(getApplicationContext(), MainScreen.class);
+					i.putExtra("id", id);
 					startActivity(i);
 				}
 				else{
