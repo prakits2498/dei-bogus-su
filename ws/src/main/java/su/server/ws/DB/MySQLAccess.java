@@ -61,7 +61,7 @@ public class MySQLAccess {
 
 	public MonthlyEventsRequest checkEvents(MonthlyEventsRequest req) throws Exception{
 		//List<String> lista_eventos = new ArrayList<String>();
-		HashMap<String, Integer> lista_eventos = new HashMap<String, Integer>();
+		HashMap<String, String> lista_eventos = new HashMap<String, String>();
 
 		try {
 			// PreparedStatements can use variables and are more efficient
@@ -70,7 +70,7 @@ public class MySQLAccess {
 			
 			while(resultSet.next()){
 				//lista_eventos.add(resultSet.getString(1)+"|"+resultSet.getString(2));
-				lista_eventos.put(resultSet.getString(1), resultSet.getInt(2));
+				lista_eventos.put(resultSet.getString(2), resultSet.getString(1));
 			}
 			req.setListEvents(lista_eventos);
 
