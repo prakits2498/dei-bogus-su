@@ -2,7 +2,6 @@ package su.android.server.connection;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.ksoap2.SoapEnvelope;
@@ -13,8 +12,8 @@ import org.ksoap2.transport.AndroidHttpTransport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import su.android.model.Login;
-import su.android.model.MonthlyEventsRequest;
 import su.android.model.MenuDetails;
+import su.android.model.MonthlyEventsRequest;
 import su.android.model.POI;
 import su.android.model.POIList;
 import android.util.Log;
@@ -28,8 +27,8 @@ public class ServerConnection
 	//private static final String URL = "http://ipois.dei.uc.pt:8080/su-server/ws?wsdl";
 	//private static final String URL = "http://localhost:8083/su-server/ws?wsdl";
 	//private static final String URL = "http://193.136.207.29:8080/su-server/ws?wsdl";
-	//private static final String URL = "http://10.16.0.3:8080/su-server/ws?wsdl";
-	private static final String URL = "http://10.16.0.196:8080/su-server/ws?wsdl";
+	private static final String URL = "http://10.16.0.3:8080/su-server/ws?wsdl"; //BB
+	//private static final String URL = "http://10.16.0.196:8080/su-server/ws?wsdl"; //DURVAS
 
 	private SoapSerializationEnvelope soapEnvelope;
 	private AndroidHttpTransport httpTransport;
@@ -281,8 +280,10 @@ public class ServerConnection
 		return res;
 	}
 	
-	public HashMap<String, Integer> checkEvents(MonthlyEventsRequest context){
-		HashMap lista_eventos = new HashMap<String, Integer>();
+	public MonthlyEventsRequest checkEvents(MonthlyEventsRequest context){
+		//HashMap<String,Integer> lista_eventos = new HashMap<String, Integer>();
+		MonthlyEventsRequest events = null;
+		
 		String method = "checkEvents";
 		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
 		String request = gson.toJson(context);
@@ -296,8 +297,9 @@ public class ServerConnection
 		{
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
-			lista_eventos = (HashMap<String,Integer>)gson.fromJson(result, HashMap.class);
-			Log.i("MONTHLY EVENTS VERIFICATION", "[Result do day one: " + lista_eventos.get(0) + "]");
+			events = (MonthlyEventsRequest)gson.fromJson(result, MonthlyEventsRequest.class);
+			if(events.getListEvents() != null)
+				Log.i("MONTHLY EVENTS VERIFICATION", "[Result do day one: " + events.getListEvents() + "]");
 		} 
 		catch (IOException e) 
 		{
@@ -308,7 +310,7 @@ public class ServerConnection
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
 		
-		return lista_eventos;
+		return events;
 	}
 	
 }
