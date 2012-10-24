@@ -133,6 +133,7 @@ public class MainScreen extends GDMapActivity
 		this.currentContext.setCategory(category);
 		this.currentContext.setDayOfWeekIndex(weekDayIndex);
 		this.currentContext.setHourOfDay(hour);
+		this.currentContext.setIdUtilizador(this.getIntent().getExtras().getInt("id"));
 //		this.currentContext.setLat(currentLatitude);
 //		this.currentContext.setLng(currentLongitude);
 		Log.i("AppContext", this.currentContext.toString());
@@ -170,7 +171,10 @@ public class MainScreen extends GDMapActivity
 				startActivity(i);
 				return true;		
 			case R.id.action_bar_category: //TODO meter a abrir uma nova activity das reservas
-				this.categoryGridView.onActivateCategory(item.getItemView()); 
+				Intent ii = new Intent(getApplicationContext(), SimpleCalendarViewActivity.class);
+				ii.putExtra("id_utilizador", this.currentContext.getIdUtilizador());
+				startActivity(ii);
+				//this.categoryGridView.onActivateCategory(item.getItemView()); 
 				return true;		
 			default:
 				return super.onHandleActionBarItemClick(item, position);
