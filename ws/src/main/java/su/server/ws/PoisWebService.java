@@ -12,11 +12,14 @@
 
 package su.server.ws;
 
+import java.util.HashMap;
+
 import javax.jws.WebService;
 
 import su.server.ws.DB.MySQLAccess;
 import su.server.ws.model.Login;
 import su.server.ws.model.MenuDetails;
+import su.server.ws.model.MonthlyEventsRequest;
 import su.server.ws.model.POIList;
 
 import com.google.gson.Gson;
@@ -54,16 +57,34 @@ public class PoisWebService implements IPoisWebService
 	public String verifyLogin(String request) {
 		Gson gson = new Gson();
 		Login login = (Login)gson.fromJson(request, Login.class);
-		boolean result = false;
+
+		boolean result=false;
 
 		try {
 			result = Db.verifyLogin(login);
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return gson.toJson(result);
 	}
-
+	
+	public String checkEvents(String request){
+		Gson gson = new Gson();
+		MonthlyEventsRequest req = (MonthlyEventsRequest)gson.fromJson(request, MonthlyEventsRequest.class);
+		
+		HashMap<String, Integer> lista_eventos=null;
+		
+		try {
+			lista_eventos = Db.checkEvents(req);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return gson.toJson(lista_eventos);
+	}
+	
 	public String getMenuDetails(String poiId)
 	{
 		Gson gson = new Gson();
