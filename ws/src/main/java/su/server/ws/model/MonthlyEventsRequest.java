@@ -1,14 +1,13 @@
 package su.server.ws.model;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class MonthlyEventsRequest {
 	private int month;
 	private int year;
 	private int idUser;
 	//private List<String> listEvents;
-	HashMap<String, Integer> listEvents;
+	HashMap<String, String> listEvents;
 	
 	public MonthlyEventsRequest() {
 
@@ -38,11 +37,11 @@ public class MonthlyEventsRequest {
 		this.idUser = idUser;
 	}
 
-	public HashMap<String, Integer> getListEvents() {
+	public HashMap<String, String> getListEvents() {
 		return listEvents;
 	}
 
-	public void setListEvents(HashMap<String, Integer> listEvents) {
+	public void setListEvents(HashMap<String, String> listEvents) {
 		this.listEvents = listEvents;
 	}
 
