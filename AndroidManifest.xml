@@ -40,8 +40,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".MainScreen"
-            android:label="@string/app_name" >
+            android:name=".MainScreen" >
             <!--  <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,12 +51,12 @@
                 android:name="android.app.default_searchable"
                 android:value=".SearchableActivity" />
         </activity>
-        <activity android:name=".ProductsActivity" />
+        <activity android:name=".MenuLunchActivity" />
+        <activity android:name=".MenuDinnerActivity" />
         <activity android:name=".InfoTabActivity" />
-        <activity android:name=".AboutActivity" />
         
         <activity android:name=".LoginActivity"
-                  android:label="Login to your Account">
+                  android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
