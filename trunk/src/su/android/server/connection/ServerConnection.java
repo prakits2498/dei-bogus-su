@@ -12,6 +12,7 @@ import org.ksoap2.transport.AndroidHttpTransport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import su.android.model.Login;
+import su.android.model.MenuDetails;
 import su.android.model.POI;
 import su.android.model.POIList;
 import android.util.Log;
@@ -135,34 +136,7 @@ public class ServerConnection
 		}
 	}
 	
-	public POIDetails getPOIDetails(String poiId)
-	{
-		String method = "getPOIDetails";
-		SoapObject soapRequest = new SoapObject(NAMESPACE, method);		
-		PropertyInfo param1 = new PropertyInfo();
-		param1.setName("arg0");
-		param1.setValue(poiId);
-		param1.setType(PropertyInfo.STRING_CLASS);
-		soapRequest.addProperty(param1);
-		soapEnvelope.setOutputSoapObject(soapRequest);
-		POIDetails poiDetails = null;
-		try 
-		{
-			httpTransport.call(NAMESPACE+method, soapEnvelope);
-			String result = soapEnvelope.getResponse().toString();
-			poiDetails = (POIDetails)gson.fromJson(result, POIDetails.class);
-		} 
-		catch (IOException e) 
-		{
-			Log.e("error", "IOException!!"+e.getMessage());
-		} 
-		catch (XmlPullParserException e) 
-		{
-			Log.e("error", "XMLPullParserException!!"+e.getMessage());
-		}
-		
-		return poiDetails;		
-	}
+	
 	
 	public List<POI> searchPOIS(String query)
 	{
@@ -243,6 +217,35 @@ public class ServerConnection
 		{
 			return new ArrayList<POI>();
 		}
+	}
+	
+	public MenuDetails getMenuDetails(String poiId)
+	{
+		String method = "getMenuDetails";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);		
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(poiId);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		MenuDetails menuDetails = null;
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			menuDetails = (MenuDetails)gson.fromJson(result, MenuDetails.class);
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+		
+		return menuDetails;		
 	}
 	
 	public boolean verifyLogin (Login login){
