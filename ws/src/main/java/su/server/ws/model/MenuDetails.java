@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Lista de Refei›es da semana
+ * Lista de Refeiçoes da semana
  * @author bfurtado
  *
  */
