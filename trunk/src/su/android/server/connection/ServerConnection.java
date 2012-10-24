@@ -251,8 +251,8 @@ public class ServerConnection
 		return menuDetails;		
 	}
 	
-	public boolean verifyLogin (Login login){
-		boolean res=false;
+	public int verifyLogin (Login login){
+		int res=-1;
 		String method = "verifyLogin";
 		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
 		String request = gson.toJson(login);
@@ -266,7 +266,7 @@ public class ServerConnection
 		{
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
-			res = (Boolean)gson.fromJson(result, Boolean.class);
+			res = (Integer)gson.fromJson(result, Integer.class);
 			Log.i("SERVER LOGIN VERIFICATION", "[Result: " + res + "]");
 		} 
 		catch (IOException e) 
