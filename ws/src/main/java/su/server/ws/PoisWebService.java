@@ -1,21 +1,10 @@
-/**
- * SDiC (Software Development in Context)
- *
- * Knowledge and Intelligent Systems Laboratory
- * Cognitive and Media Systems Group
- * Centre for Informatics and Systems of the University of Coimbra
- *
- * Copyright (c) 2010-2011 University of Coimbra
- * All rights reserved.
- * 
- */
-
 package su.server.ws;
 
 import java.util.HashMap;
 
 import javax.jws.WebService;
 
+import net.sf.json.JSONObject;
 import su.server.ws.DB.MySQLAccess;
 import su.server.ws.model.Login;
 import su.server.ws.model.MenuDetails;
@@ -63,7 +52,6 @@ public class PoisWebService implements IPoisWebService
 		try {
 			result = Db.verifyLogin(login);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return gson.toJson(result);
@@ -72,17 +60,14 @@ public class PoisWebService implements IPoisWebService
 	public String checkEvents(String request){
 		Gson gson = new Gson();
 		MonthlyEventsRequest req = (MonthlyEventsRequest)gson.fromJson(request, MonthlyEventsRequest.class);
-		
-		HashMap<String, Integer> lista_eventos=null;
-		
+		MonthlyEventsRequest response = null;
 		try {
-			lista_eventos = Db.checkEvents(req);
+			response = Db.checkEvents(req);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return gson.toJson(lista_eventos);
+
+		return gson.toJson(response);
 	}
 	
 	public String getMenuDetails(String poiId)

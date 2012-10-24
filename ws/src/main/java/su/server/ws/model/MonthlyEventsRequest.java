@@ -1,15 +1,17 @@
 package su.server.ws.model;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class MonthlyEventsRequest {
 	private int month;
 	private int year;
-	private int id_utilizador;
+	private int idUser;
+	//private List<String> listEvents;
+	HashMap<String, Integer> listEvents;
 	
-	public MonthlyEventsRequest(int month, int year, int id_utilizador) {
-		super();
-		this.month = month;
-		this.year = year;
-		this.id_utilizador = id_utilizador;
+	public MonthlyEventsRequest() {
+
 	}
 
 	public int getMonth() {
@@ -28,15 +30,20 @@ public class MonthlyEventsRequest {
 		this.year = year;
 	}
 
-	public int getId_utilizador() {
-		return id_utilizador;
+	public int getIdUser() {
+		return idUser;
 	}
 
-	public void setId_utilizador(int id_utilizador) {
-		this.id_utilizador = id_utilizador;
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
 	}
 
-	
-	
+	public HashMap<String, Integer> getListEvents() {
+		return listEvents;
+	}
+
+	public void setListEvents(HashMap<String, Integer> listEvents) {
+		this.listEvents = listEvents;
+	}
 
 }

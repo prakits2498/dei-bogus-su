@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import su.server.ws.model.Login;
-import su.server.ws.model.MonthlyEventsRequest;
 import su.server.ws.model.Meal;
 import su.server.ws.model.MenuDetails;
+import su.server.ws.model.MonthlyEventsRequest;
 import su.server.ws.model.POI;
 import su.server.ws.model.POIList;
 
@@ -59,25 +59,26 @@ public class MySQLAccess {
 
 	}
 
-	public HashMap<String, Integer> checkEvents(MonthlyEventsRequest req) throws Exception{
-		HashMap<String, Integer> lista_eventos = null;
-		int counter=0;
-		
+	public MonthlyEventsRequest checkEvents(MonthlyEventsRequest req) throws Exception{
+		//List<String> lista_eventos = new ArrayList<String>();
+		HashMap<String, Integer> lista_eventos = new HashMap<String, Integer>();
+
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT COUNT(r.id), DAYOFMONTH(s.horario) FROM reservas r, utilizadores u, slots s WHERE r.id_utilizador = u.id AND r.id_slot = s.id AND u.id = "+req.getId_utilizador()+" GROUP BY DAYOFMONTH(s.horario)");
+			preparedStatement = connect.prepareStatement("SELECT COUNT(r.id), DAYOFMONTH(s.horario) FROM reservas r, utilizadores u, slots s WHERE r.id_utilizador = u.id AND r.id_slot = s.id AND u.id = "+req.getIdUser()+" GROUP BY DAYOFMONTH(s.horario)");
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()){
-				//return true;
+				//lista_eventos.add(resultSet.getString(1)+"|"+resultSet.getString(2));
 				lista_eventos.put(resultSet.getString(1), resultSet.getInt(2));
 			}
+			req.setListEvents(lista_eventos);
 
 		} catch (Exception e) {
 			throw e;
 		}
 		
-		return lista_eventos;
+		return req;
 	}
 	
 	public POIList getPOIs() throws Exception {
