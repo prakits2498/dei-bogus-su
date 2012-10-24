@@ -5,11 +5,9 @@ import su.android.server.connection.ServerConnection;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
@@ -25,7 +23,7 @@ public class LoginActivity extends Activity {
 
 		//server interface
 		conn = new ServerConnection();
-
+		
 		//ligaçoes com elementos do layout
 		loginButton = (Button) findViewById(R.id.btnLogin);
 
@@ -43,10 +41,12 @@ public class LoginActivity extends Activity {
 					toast.show();
 					
 					return;
-
+					
 				}
+				
 				//Verify credentials on DB
 				Login login = new Login(emailEdit.getText().toString(),passEdit.getText().toString());
+
 				if(conn.verifyLogin(login) == true){
 					// Switching to Main Activity
 					Intent i = new Intent(getApplicationContext(), MainScreen.class);

@@ -43,7 +43,6 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 		setShowClose(false);
 		setShowDisclosure(true);
 		setSnapToCenter(false);
-				
 	}
 
 	@Override
@@ -75,11 +74,11 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			
 			myIntent.putExtra("poiID", poi.getId());
 			myIntent.putExtra("poiName", poi.getName());
-			//myIntent.putExtra("poiAddress", poi.getAddress());
-			//myIntent.putExtra("poiCategory", poi.getCategory());
+			myIntent.putExtra("poiAddress", poi.getAddress());
+			myIntent.putExtra("poiCategory", poi.getCategory());
 			//myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
-			myIntent.putExtra("poiCatIcon", "https://dl.dropbox.com/u/999549/Foursquare/pin_food.png");
-			
+			myIntent.putExtra("poiCatIcon", "https://dl.dropbox.com/u/999549/Foursquare/"+poi.getCategory()+".png");
+			//TODO mudar icon (este icon Ž o que aparece nos detalhes do poi)
 			if(poi.getPhotos() != null)
 				if(!poi.getPhotos().isEmpty())
 					myIntent.putExtra("poiPhoto01", poi.getPhotos().get(0));
@@ -111,11 +110,32 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			String mainCat5 = mainScreen.getResources().getString(R.string.mainCat5);
 			String mainCat6 = mainScreen.getResources().getString(R.string.mainCat6);
 			
-			//TODO pins das categorias
-			Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
-			boundCenter(drawable);
-			overlayItem.setMarker(drawable);
-			
+			//TODO mudar pins das categorias
+			if(poi.getCategory().equals("cantina")) {
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				boundCenter(drawable);
+				overlayItem.setMarker(drawable);
+			} else if(poi.getCategory().equals("bar")) {
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				boundCenter(drawable);
+				overlayItem.setMarker(drawable);
+			} else if(poi.getCategory().equals("vegetariano")) {
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				boundCenter(drawable);
+				overlayItem.setMarker(drawable);
+			} else if(poi.getCategory().equals("grelhados")) {
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				boundCenter(drawable);
+				overlayItem.setMarker(drawable);
+			} else if(poi.getCategory().equals("pizza")) {
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				boundCenter(drawable);
+				overlayItem.setMarker(drawable);
+			} else if(poi.getCategory().equals("sandes")) {
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				boundCenter(drawable);
+				overlayItem.setMarker(drawable);
+			}
 			/*if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat1))
 			{
 				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_arts_entertainment);
