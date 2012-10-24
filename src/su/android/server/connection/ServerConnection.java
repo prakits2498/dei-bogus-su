@@ -260,7 +260,7 @@ public class ServerConnection
 		{
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
-			res = (boolean)gson.fromJson(result, Boolean.class);
+			res = (Boolean)gson.fromJson(result, Boolean.class);
 			Log.i("SERVER LOGIN VERIFICATION", "[Result: " + res + "]");
 		} 
 		catch (IOException e) 
