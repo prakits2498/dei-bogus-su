@@ -16,6 +16,7 @@ import javax.jws.WebService;
 
 import su.server.ws.DB.MySQLAccess;
 import su.server.ws.model.Login;
+import su.server.ws.model.MenuDetails;
 import su.server.ws.model.POIList;
 
 import com.google.gson.Gson;
@@ -30,7 +31,7 @@ public class PoisWebService implements IPoisWebService
 {
 	//private Server server;
 	private MySQLAccess Db;
-	
+
 	public PoisWebService() 
 	{
 		//this.server = new Server();
@@ -46,15 +47,15 @@ public class PoisWebService implements IPoisWebService
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return gson.toJson(poiList);
 	}
-	
+
 	public String verifyLogin(String request) {
 		Gson gson = new Gson();
 		Login login = (Login)gson.fromJson(request, Login.class);
 		boolean result = false;
-		
+
 		try {
 			result = Db.verifyLogin(login);
 		} catch (Exception e) {
@@ -62,15 +63,21 @@ public class PoisWebService implements IPoisWebService
 		}
 		return gson.toJson(result);
 	}
-	
-	/*public String getPOIDetails(String poiId)
+
+	public String getMenuDetails(String poiId)
 	{
 		Gson gson = new Gson();
-		POIDetails poiDetails = this.server.getPOIDetails(poiId);
-		String response = gson.toJson(poiDetails);
-		return response;
+		MenuDetails menuDetails = null;
+		
+		try {
+			menuDetails = Db.getMenuDetails(poiId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gson.toJson(menuDetails);
 	}
 
+	/*
 	@Override
 	public String searchPois(String query) {
 		Gson gson = new Gson();

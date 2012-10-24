@@ -12,9 +12,10 @@ public interface IPoisWebService {
 	@WebMethod(operationName="verifyLogin")
 	public String verifyLogin(String request);
 	
-	/*@WebMethod(operationName="getPOIDetails")
-	public String getPOIDetails(String poiId);
+	@WebMethod(operationName="getMenuDetails")
+	public String getMenuDetails(String poiId);
 	
+	/*
 	@WebMethod(operationName="searchPOIS")
 	public String searchPois(String poiId);
 	

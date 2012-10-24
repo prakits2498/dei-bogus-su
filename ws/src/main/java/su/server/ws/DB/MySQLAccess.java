@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 import su.server.ws.model.Login;
+import su.server.ws.model.Meal;
+import su.server.ws.model.MenuDetails;
 import su.server.ws.model.POI;
 import su.server.ws.model.POIList;
 
@@ -39,7 +41,7 @@ public class MySQLAccess {
 			// PreparedStatements can use variables and are more efficient
 			preparedStatement = connect.prepareStatement("SELECT * FROM utilizadores WHERE email='" + login.getEmail() + "' AND password='" + login.getPass() +"'");
 			resultSet = preparedStatement.executeQuery();
-			
+
 			if(resultSet.next()){
 				return true;
 			}
@@ -52,18 +54,18 @@ public class MySQLAccess {
 		}
 
 	}
-	
+
 	public POIList getPOIs() throws Exception {
 		POIList poiList = null;
-		
+
 		try {
 			// PreparedStatements can use variables and are more efficient
 			preparedStatement = connect.prepareStatement("SELECT id, lat, lng, name, address, category, capacity FROM cantinas");
 			resultSet = preparedStatement.executeQuery();
-			
+
 			poiList = new POIList();
 			List<POI> list = new ArrayList<POI>();
-			
+
 			while(resultSet.next()) {
 				POI poi = new POI();
 				poi.setId(resultSet.getString(1));
@@ -72,20 +74,60 @@ public class MySQLAccess {
 				poi.setAddress(resultSet.getString(5));
 				poi.setCategory(resultSet.getString(6));
 				poi.setCapacity(resultSet.getInt(7));
-				
+
 				list.add(poi);
 			}
-			
+
 			poiList.setPoiList(list);
-			
+
 		} catch (Exception e) {
 			throw e;
 		}
-		
+
 		return poiList;
 	}
-	
-	
+
+	public MenuDetails getMenuDetails(String poiID) throws Exception {
+		MenuDetails menuDetails = null;
+
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT m.id, m.sopa, m.carne, m.peixe, m.price FROM menu m, cantinas c, slots s WHERE c.id = s.id_cantina AND m.id = s.id_menu AND c.id = "+poiID+" GROUP BY m.id");
+			resultSet = preparedStatement.executeQuery();
+			
+			menuDetails = new MenuDetails();
+			List<Meal> lunch = new ArrayList<Meal>();
+			List<Meal> dinner = new ArrayList<Meal>();
+
+			int i=0;
+			while(resultSet.next()) {
+				i++;
+				
+				Meal meal = new Meal();
+				meal.setId(resultSet.getString(1));
+				meal.setSopa(resultSet.getString(2));
+				meal.setCarne(resultSet.getString(3));
+				meal.setPeixe(resultSet.getString(4));
+				meal.setPrice(resultSet.getString(5));
+				
+				if(i%2 == 1) {
+					lunch.add(meal);
+				} else {
+					dinner.add(meal);
+				}
+			}
+			
+			menuDetails.setMenuLunch(lunch);
+			menuDetails.setMenuDinner(dinner);
+
+		} catch(Exception e) {
+			throw e;
+		}
+		
+		return menuDetails;
+	}
+
+
 
 	private void writeMetaData(ResultSet resultSet) throws SQLException {
 		//   Now get some metadata from the database
