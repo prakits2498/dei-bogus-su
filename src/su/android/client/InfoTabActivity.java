@@ -13,6 +13,11 @@ import android.widget.TextView;
 import greendroid.app.ActionBarActivity;
 import greendroid.app.GDTabActivity;
 
+/**
+ * Activity dos detalhes do POI -- parte de cima, antes das Tabs
+ * @author bfurtado
+ *
+ */
 public class InfoTabActivity extends GDTabActivity {
 
 	private HashMap<String, String> poiExtras = new HashMap<String, String>();
@@ -22,23 +27,26 @@ public class InfoTabActivity extends GDTabActivity {
         super.onCreate(savedInstanceState);
 
         getExtrasPOI();
+        
+        // ******* MENU LUNCH TAB *******
+        final String menuLunchText =  getString(R.string.menuLunch);
+        Intent menuLunchIntent = new Intent(this, MenuLunchActivity.class);
+        
+        menuLunchIntent = putExtraPOIDetails(menuLunchIntent);
+        
+        menuLunchIntent.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
+        addTab(menuLunchText, menuLunchText, menuLunchIntent); //O style do titulo da tab esta em gd_styles.xml em TabIndicator
 
-        final String aboutText =  getString(R.string.poi_details);
-        Intent aboutIntent = new Intent(this, AboutActivity.class);
+        // ******* MENU DINNER TAB *******
+        final String menuDinnerText = getString(R.string.menuDinner);
+        Intent menuDinnerIntent = new Intent(this, MenuDinnerActivity.class);
         
-        aboutIntent = putExtraPOIDetails(aboutIntent);
+        menuDinnerIntent = putExtraPOIDetails(menuDinnerIntent);
         
-        aboutIntent.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
-        addTab(aboutText, aboutText, aboutIntent); //O style do titulo da tab esta em gd_styles.xml em TabIndicator
-
-        final String productsText = getString(R.string.poi_products);
-        Intent productsIntent = new Intent(this, ProductsActivity.class);
+        menuDinnerIntent.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
+        addTab(menuDinnerText, menuDinnerText, menuDinnerIntent);
         
-        productsIntent = putExtraPOIDetails(productsIntent);
-        
-        productsIntent.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
-        addTab(productsText, productsText, productsIntent);
-        
+        // ******* DADOS DA CANTINA *******
         TextView poiNameTv = (TextView) findViewById(R.id.poiNameID);
         poiNameTv.setText(poiExtras.get("poiName"));
         

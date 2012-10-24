@@ -5,22 +5,21 @@ import greendroid.widget.PageIndicator;
 import greendroid.widget.PagedAdapter;
 import greendroid.widget.PagedView;
 import greendroid.widget.PagedView.OnPagedViewChangeListener;
-import su.android.model.POIDetails;
-import su.android.model.Product;
+import su.android.model.Meal;
+import su.android.model.MenuDetails;
 import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fedorvlasov.lazylist.ImageLoader;
-
-public class ProductsActivity extends GDActivity {
-
-	private final Handler mHandler = new Handler();
+/**
+ * Tab Menu -- Nos detalhes da Cantina
+ * @author bfurtado
+ *
+ */
+public class MenuDinnerActivity extends GDActivity {
 
 	private static int PAGE_COUNT = 7;
 	private static int PAGE_MAX_INDEX = PAGE_COUNT - 1;
@@ -31,9 +30,9 @@ public class ProductsActivity extends GDActivity {
 
 	ServerConnection conn;
 
-	public POIDetails poiDetails;
+	public MenuDetails menuDetails;
 
-	public ProductsActivity() {
+	public MenuDinnerActivity() {
 		conn = ServerConnection.getInstance();
 	}
 
@@ -43,7 +42,7 @@ public class ProductsActivity extends GDActivity {
 
 		setActionBarContentView(R.layout.paged_view);
 		
-		loadPOIDetails();
+		loadMenuDetails();
 
 		final PagedView pagedView = (PagedView) findViewById(R.id.paged_view);
 		pagedView.setOnPageChangeListener(mOnPagedViewChangedListener);
@@ -72,24 +71,18 @@ public class ProductsActivity extends GDActivity {
 
 	}
 
-	private void loadPOIDetails() {
+	private void loadMenuDetails() {
 		Bundle b = new Bundle();
 		b = getIntent().getExtras();
 
 		String poiID = b.getString("poiID");
 
-		//poiDetails = conn.getPOIDetails(poiID);
+		menuDetails = conn.getMenuDetails(poiID);
 
-		if (poiDetails != null) {
-			if (!poiDetails.getProductList().isEmpty()) {
-				PAGE_COUNT = poiDetails.getProductList().size();
-				PAGE_MAX_INDEX = PAGE_COUNT - 1;
-			}
-		} else {
-			PAGE_COUNT = 1;
+		if (menuDetails != null) {
+			PAGE_COUNT = 7;
 			PAGE_MAX_INDEX = PAGE_COUNT - 1;
-		}
-
+		} 
 	}
 
 	private void setActivePage(int page) {
@@ -135,37 +128,76 @@ public class ProductsActivity extends GDActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
 				convertView = getLayoutInflater().inflate(
-						R.layout.product_info, parent, false);
+						R.layout.menu_details, parent, false);
 			}
 
-			viewProductDetails(position, convertView);
+			viewMenuDetails(position, convertView);
 
 			return convertView;
 		}
 
-		public void viewProductDetails(int position, View convertView) {
-			Product product = null;
+		public void viewMenuDetails(int position, View convertView) {
+			Meal dinner = null;
+			boolean same = false;
 
-			if (poiDetails != null) {
-				if (!poiDetails.getProductList().isEmpty()) {
-					product = poiDetails.getProductList().get(position);
+			if (menuDetails != null) {
+				if (!menuDetails.getMenuDinner().isEmpty()) {
+					dinner = menuDetails.getMenuDinner().get(position);
+				} else {
+					// CANTINAS COM MENU IGUAL TODOS OS DIAS --- BAGUETES E PIZZAS
+					dinner = menuDetails.getMenuLunch().get(0);
+					same = true;
 				}
 			}
+			
+			/*ImageView imageV = (ImageView) convertView.findViewById(R.id.product_photoID);
+			ImageLoader imageLoader = new ImageLoader(imageV.getContext());
+			imageLoader.DisplayImage(product.getImageUrl(), imageV);*/
 
-			if (product != null) {
-				TextView tv = (TextView) convertView.findViewById(R.id.product_nome_ID);
-				tv.setText(product.getName());
+			if (dinner != null) {
+				
+				TextView dayOfWeekTv = (TextView) convertView.findViewById(R.id.dayOfWeek_text_ID);
+				dayOfWeekTv.setText(getDayOfWeek(position));
+				
+				if(same) {
+					TextView lunchTv = (TextView) convertView.findViewById(R.id.sopa_ID);
+					lunchTv.setText(dinner.getCarne());
+				} else {
+					TextView sopaTv = (TextView) convertView.findViewById(R.id.sopa_ID);
+					sopaTv.setText(dinner.getSopa());
 
-				TextView priceTv = (TextView) convertView.findViewById(R.id.product_price_ID);
-				priceTv.setText(product.getPrice());
+					TextView carneTv = (TextView) convertView.findViewById(R.id.carne_ID);
+					carneTv.setText(dinner.getCarne());
 
-				ImageView imageV = (ImageView) convertView.findViewById(R.id.product_photoID);
-				ImageLoader imageLoader = new ImageLoader(imageV.getContext());
-				imageLoader.DisplayImage(product.getImageUrl(), imageV);
-
-				TextView descriptionTv = (TextView) convertView.findViewById(R.id.product_descr_ID);
-				descriptionTv.setText(product.getDescription());
+					TextView peixeTv = (TextView) convertView.findViewById(R.id.peixe_ID);
+					peixeTv.setText(dinner.getPeixe());
+				}
+				
+				TextView priceTv = (TextView) convertView.findViewById(R.id.price_ID);
+				priceTv.setText(dinner.getPrice()+" €");
+				
 			}
+		}
+		
+		private String getDayOfWeek(int position) {
+			switch(position) {
+			case 0:
+				return "Segunda";
+			case 1:
+				return "Terça";
+			case 2: 
+				return "Quarta";
+			case 3:
+				return "Quinta";
+			case 4:
+				return "Sexta";
+			case 5:
+				return "Sábado";
+			case 6:
+				return "Domingo";
+			}
+			
+			return "";
 		}
 
 	}

@@ -5,7 +5,7 @@ import greendroid.app.GDActivity;
 
 import java.util.HashMap;
 
-import su.android.model.POIDetails;
+import su.android.model.MenuDetails;
 import su.android.server.connection.ServerConnection;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import com.fedorvlasov.lazylist.ImageLoader;
 public class AboutActivity extends GDActivity {
 	
 	private ServerConnection conn;
-	private POIDetails poiDetails;
+	private MenuDetails poiDetails;
 	
 	private HashMap<String, String> poiExtras = new HashMap<String, String>();
 	
