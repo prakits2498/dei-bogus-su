@@ -1,10 +1,7 @@
 package su.server.ws;
 
-import java.util.HashMap;
-
 import javax.jws.WebService;
 
-import net.sf.json.JSONObject;
 import su.server.ws.DB.MySQLAccess;
 import su.server.ws.model.Login;
 import su.server.ws.model.MenuDetails;
