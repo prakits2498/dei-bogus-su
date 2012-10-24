@@ -2,6 +2,7 @@ package su.android.server.connection;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.ksoap2.SoapEnvelope;
@@ -12,6 +13,7 @@ import org.ksoap2.transport.AndroidHttpTransport;
 import org.xmlpull.v1.XmlPullParserException;
 
 import su.android.model.Login;
+import su.android.model.MonthlyEventsRequest;
 import su.android.model.MenuDetails;
 import su.android.model.POI;
 import su.android.model.POIList;
@@ -26,7 +28,8 @@ public class ServerConnection
 	//private static final String URL = "http://ipois.dei.uc.pt:8080/su-server/ws?wsdl";
 	//private static final String URL = "http://localhost:8083/su-server/ws?wsdl";
 	//private static final String URL = "http://193.136.207.29:8080/su-server/ws?wsdl";
-	private static final String URL = "http://10.16.0.3:8080/su-server/ws?wsdl";
+	//private static final String URL = "http://10.16.0.3:8080/su-server/ws?wsdl";
+	private static final String URL = "http://10.16.0.196:8080/su-server/ws?wsdl";
 
 	private SoapSerializationEnvelope soapEnvelope;
 	private AndroidHttpTransport httpTransport;
@@ -276,6 +279,36 @@ public class ServerConnection
 		}
 		
 		return res;
+	}
+	
+	public HashMap<String, Integer> checkEvents(MonthlyEventsRequest context){
+		HashMap lista_eventos = new HashMap<String, Integer>();
+		String method = "checkEvents";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		String request = gson.toJson(context);
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(request);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			lista_eventos = (HashMap<String,Integer>)gson.fromJson(result, HashMap.class);
+			Log.i("MONTHLY EVENTS VERIFICATION", "[Result do day one: " + lista_eventos.get(0) + "]");
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", ">>>> IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+		
+		return lista_eventos;
 	}
 	
 }
