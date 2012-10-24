@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/menuDetailsAbsoluteLayoutID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white" >
+        
+     	<TextView
+		    android:id="@+id/dayOfWeek_text_ID"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentTop="true"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="25sp"
+		    android:text="Semana"
+		    android:textColor="@color/myTurquesa"
+		    android:textSize="16sp"
+		    android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/sopa_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dayOfWeek_text_ID"
+            android:layout_marginLeft="30sp"
+            android:layout_marginBottom="15sp"
+            android:layout_marginTop="15sp"
+            android:text="TextView"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/carne_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sopa_ID"
+            android:layout_marginLeft="30sp"
+            android:layout_marginBottom="15sp"
+            android:layout_marginTop="15sp"
+            android:text="TextView"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+        
+        <TextView
+            android:id="@+id/peixe_ID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/carne_ID"
+            android:layout_marginLeft="30sp"
+            android:layout_marginBottom="15sp"
+            android:layout_marginTop="15sp"
+            android:text="TextView"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+	
+        <TextView
+            android:id="@+id/price_text_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/peixe_ID"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="15sp"
+            android:text="Preço"
+            android:textColor="@color/myTurquesa"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        
+		<TextView
+            android:id="@+id/price_ID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+		    android:layout_centerHorizontal="true"
+		    android:layout_alignTop="@id/price_text_ID"
+		    android:layout_toRightOf="@id/price_text_ID"
+		    android:layout_marginLeft="10sp"
+            android:text="2.40 €"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
