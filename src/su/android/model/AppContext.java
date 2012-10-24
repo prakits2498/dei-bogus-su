@@ -7,6 +7,7 @@ public class AppContext
 	private int dayWeekIndex;
 	private int hourOfDay;
 	private String category;
+	private int idUtilizador;
 	
 	public static final String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 	public static final String[] moment = {"Morning", "Lunch", "Evening", "Dinner", "Afternoon" };
@@ -74,6 +75,14 @@ public class AppContext
 	public String toString()
 	{
 		return "[LOCATION: "+lat+", "+lng+"] [DAY: "+this.getDayOfWeek()+"] [HOUR: "+hourOfDay+"]";
+	}
+
+	public int getIdUtilizador() {
+		return idUtilizador;
+	}
+
+	public void setIdUtilizador(int idUtilizador) {
+		this.idUtilizador = idUtilizador;
 	}
 	
 	
