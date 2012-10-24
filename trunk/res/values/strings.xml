@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, MainScreen!</string>
-    <string name="app_name">Su-android</string>
+    <string name="app_name">aLaCarte</string>
     <string name="search_hint">Search Points Of Interest</string>
     <string name="search_app_name">Search</string>
     <string name="poi_name">POI Name Default</string>
@@ -18,5 +18,14 @@
     <string name="all">All</string>
     <string name="poi_details">Detalhes</string>
     <string name="poi_products">Produtos</string>
+    <string name="menuLunch">Almoço</string>
+    <string name="menuDinner">Jantar</string><string name="segunda">Segunda</string>
+    <string name="terca">Terça</string>
+    <string name="quarta">Quarta</string>
+    <string name="quinta">Quinta</string>
+    <string name="sexta">Sexta</string>
+    <string name="sabado">Sábado</string>
+    <string name="domingo">Domingo</string>
+    
 
 </resources>
