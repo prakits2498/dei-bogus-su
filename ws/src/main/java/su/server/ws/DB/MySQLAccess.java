@@ -8,9 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import su.server.ws.model.Login;
+import su.server.ws.model.MonthlyEventsRequest;
 import su.server.ws.model.Meal;
 import su.server.ws.model.MenuDetails;
 import su.server.ws.model.POI;
@@ -27,8 +29,10 @@ public class MySQLAccess {
 		try {
 			// This will load the MySQL driver, each DB has its own driver
 			Class.forName("com.mysql.jdbc.Driver");
+
 			// Setup the connection with the DB
 			connect = DriverManager.getConnection("jdbc:mysql://localhost/aLaCarte?" + "user=root");
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -55,6 +59,27 @@ public class MySQLAccess {
 
 	}
 
+	public HashMap<String, Integer> checkEvents(MonthlyEventsRequest req) throws Exception{
+		HashMap<String, Integer> lista_eventos = null;
+		int counter=0;
+		
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT COUNT(r.id), DAYOFMONTH(s.horario) FROM reservas r, utilizadores u, slots s WHERE r.id_utilizador = u.id AND r.id_slot = s.id AND u.id = "+req.getId_utilizador()+" GROUP BY DAYOFMONTH(s.horario)");
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()){
+				//return true;
+				lista_eventos.put(resultSet.getString(1), resultSet.getInt(2));
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		return lista_eventos;
+	}
+	
 	public POIList getPOIs() throws Exception {
 		POIList poiList = null;
 
