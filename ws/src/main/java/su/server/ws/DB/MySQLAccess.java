@@ -40,17 +40,17 @@ public class MySQLAccess {
 		}
 	}
 
-	public boolean verifyLogin(Login login) throws Exception {
+	public int verifyLogin(Login login) throws Exception {
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT * FROM utilizadores WHERE email='" + login.getEmail() + "' AND password='" + login.getPass() +"'");
+			preparedStatement = connect.prepareStatement("SELECT id FROM utilizadores WHERE email='" + login.getEmail() + "' AND password='" + login.getPass() +"'");
 			resultSet = preparedStatement.executeQuery();
 
 			if(resultSet.next()){
-				return true;
+				return resultSet.getInt(1);
 			}
 			else{
-				return false;
+				return -1;
 			}
 
 		} catch (Exception e) {
