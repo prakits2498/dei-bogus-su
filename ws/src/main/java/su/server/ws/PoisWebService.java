@@ -58,7 +58,7 @@ public class PoisWebService implements IPoisWebService
 		Gson gson = new Gson();
 		Login login = (Login)gson.fromJson(request, Login.class);
 
-		boolean result=false;
+		int result=-1;
 
 		try {
 			result = Db.verifyLogin(login);
