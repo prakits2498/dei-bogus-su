@@ -1,5 +1,7 @@
 package su.android.client;
 
+import greendroid.app.GDActivity;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SimpleCalendarViewActivity extends Activity implements OnClickListener
+public class SimpleCalendarViewActivity extends GDActivity implements OnClickListener
 	{
 		private static final String tag = "SimpleCalendarViewActivity";
 
