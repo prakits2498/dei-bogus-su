@@ -50,7 +50,7 @@ public class LoginActivity extends Activity {
 				if(id != -1){
 					// Switching to Main Activity
 					Intent i = new Intent(getApplicationContext(), MainScreen.class);
-					i.putExtra("id", id);
+					i.putExtra("idUser", id);
 					startActivity(i);
 				}
 				else{
