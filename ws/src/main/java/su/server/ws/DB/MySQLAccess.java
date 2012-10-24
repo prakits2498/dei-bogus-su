@@ -65,7 +65,7 @@ public class MySQLAccess {
 
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT COUNT(r.id), DAYOFMONTH(s.horario) FROM reservas r, utilizadores u, slots s WHERE r.id_utilizador = u.id AND r.id_slot = s.id AND u.id = "+req.getIdUser()+" GROUP BY DAYOFMONTH(s.horario)");
+			preparedStatement = connect.prepareStatement("SELECT COUNT(r.id), DAYOFMONTH(s.horario) FROM reservas r, utilizadores u, slots s WHERE r.id_utilizador = u.id AND r.id_slot = s.id AND u.id = "+req.getIdUser()+" AND MONTH(s.horario)="+req.getMonth()+" GROUP BY DAYOFMONTH(s.horario)");
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()){
