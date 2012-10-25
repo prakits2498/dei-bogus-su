@@ -60,6 +60,23 @@ public class MySQLAccess {
 
 	}
 
+	public int getCredits(int idUser) throws Exception {
+		try {
+			preparedStatement = connect.prepareStatement("SELECT credits FROM utilizadores WHERE id=" + idUser);
+			resultSet = preparedStatement.executeQuery();
+
+			if(resultSet.next()){
+				return resultSet.getInt(1);
+			}
+			else{
+				return -1;
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
 	public MonthlyEventsRequest checkEvents(MonthlyEventsRequest req) throws Exception{
 		//List<String> lista_eventos = new ArrayList<String>();
 		HashMap<String, String> lista_eventos = new HashMap<String, String>();
@@ -68,7 +85,7 @@ public class MySQLAccess {
 			// PreparedStatements can use variables and are more efficient
 			preparedStatement = connect.prepareStatement("SELECT COUNT(r.id), DAYOFMONTH(s.horario) FROM reservas r, utilizadores u, slots s WHERE r.id_utilizador = u.id AND r.id_slot = s.id AND u.id = "+req.getIdUser()+" AND MONTH(s.horario)="+req.getMonth()+" GROUP BY DAYOFMONTH(s.horario)");
 			resultSet = preparedStatement.executeQuery();
-			
+
 			while(resultSet.next()){
 				//lista_eventos.add(resultSet.getString(1)+"|"+resultSet.getString(2));
 				lista_eventos.put(resultSet.getString(2), resultSet.getString(1));
@@ -78,10 +95,10 @@ public class MySQLAccess {
 		} catch (Exception e) {
 			throw e;
 		}
-		
+
 		return req;
 	}
-	
+
 	public DayEventsRequest getMenuFromReservations(DayEventsRequest req) throws Exception{
 		HashMap<String, String> eventos_almoco = new HashMap<String, String>();
 		HashMap<String, String> eventos_jantar = new HashMap<String, String>();
@@ -90,7 +107,7 @@ public class MySQLAccess {
 			// PreparedStatements can use variables and are more efficient
 			preparedStatement = connect.prepareStatement("SELECT m.sopa, m.carne, m.peixe, m.price, c.name, hour(s.horario),minute(s.horario) FROM utilizadores u, reservas r, cantinas c, slots s, menu m  WHERE u.id = r.id_utilizador AND r.id_cantina  = c.id AND r.id_slot = s.id AND s.id_menu = m.id AND u.id = " + req.getIdUser() + " AND MONTH(s.horario) = " + req.getMonth() + " AND DAYOFMONTH(s.horario) = " + req.getDay());
 			resultSet = preparedStatement.executeQuery();
-			
+
 			while(resultSet.next()){
 				if(resultSet.getInt(6) >= 19){
 					System.out.println(resultSet.toString());
@@ -120,10 +137,10 @@ public class MySQLAccess {
 		} catch (Exception e) {
 			throw e;
 		}
-		
+
 		return req;
 	}
-	
+
 	public POIList getPOIs() throws Exception {
 		POIList poiList = null;
 
@@ -163,7 +180,7 @@ public class MySQLAccess {
 			// PreparedStatements can use variables and are more efficient
 			preparedStatement = connect.prepareStatement("SELECT m.id, m.sopa, m.carne, m.peixe, m.price FROM menu m, cantinas c, slots s WHERE c.id = s.id_cantina AND m.id = s.id_menu AND c.id = "+poiID+" GROUP BY m.id");
 			resultSet = preparedStatement.executeQuery();
-			
+
 			menuDetails = new MenuDetails();
 			List<Meal> lunch = new ArrayList<Meal>();
 			List<Meal> dinner = new ArrayList<Meal>();
@@ -171,21 +188,21 @@ public class MySQLAccess {
 			int i=0;
 			while(resultSet.next()) {
 				i++;
-				
+
 				Meal meal = new Meal();
 				meal.setId(resultSet.getString(1));
 				meal.setSopa(resultSet.getString(2));
 				meal.setCarne(resultSet.getString(3));
 				meal.setPeixe(resultSet.getString(4));
 				meal.setPrice(resultSet.getString(5));
-				
+
 				if(i%2 == 1) {
 					lunch.add(meal);
 				} else {
 					dinner.add(meal);
 				}
 			}
-			
+
 			menuDetails.setPOI(poiID);
 			menuDetails.setMenuLunch(lunch);
 			menuDetails.setMenuDinner(dinner);
@@ -193,7 +210,7 @@ public class MySQLAccess {
 		} catch(Exception e) {
 			throw e;
 		}
-		
+
 		return menuDetails;
 	}
 
