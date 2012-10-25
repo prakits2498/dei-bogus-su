@@ -22,6 +22,9 @@ public interface IPoisWebService {
 	@WebMethod(operationName="getMenuFromReservations")
 	public String getMenuFromReservations(String request);
 	
+	@WebMethod(operationName="getCredits")
+	public String getCredits(String request);
+	
 	/*
 	@WebMethod(operationName="searchPOIS")
 	public String searchPois(String poiId);
