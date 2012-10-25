@@ -143,6 +143,7 @@ public class MySQLAccess {
 				}
 			}
 			
+			menuDetails.setPOI(poiID);
 			menuDetails.setMenuLunch(lunch);
 			menuDetails.setMenuDinner(dinner);
 

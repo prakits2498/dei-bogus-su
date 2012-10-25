@@ -10,25 +10,24 @@ import java.util.List;
  */
 public class MenuDetails {
 	
-	private POI poi;
+	private String poiID;
 	private List<Meal> menuLunch;
 	private List<Meal> menuDinner;
 	
 	public MenuDetails()
 	{		
-		poi = null;
 		menuLunch = new ArrayList<Meal>();
 		menuDinner = new ArrayList<Meal>();
 	}
 		
-	public void setPOI(POI poi)
+	public void setPOI(String poiID)
 	{
-		this.poi = poi;
+		this.poiID = poiID;
 	}
 	
-	public POI getPOI()
+	public String getPOI()
 	{
-		return poi;
+		return poiID;
 	}
 	
 	public void addLunch(Meal meal)
