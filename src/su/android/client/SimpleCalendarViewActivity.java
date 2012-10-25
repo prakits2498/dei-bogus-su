@@ -418,7 +418,7 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 			String date_month_year = (String) view.getTag();
 			selectedDayMonthYearButton.setText("Selected: " + date_month_year);
 			
-			Intent ii = new Intent(getApplicationContext(), SimpleCalendarViewActivity.class);
+			Intent ii = new Intent(getApplicationContext(), ViewReservationsActivity.class);
 			ii.putExtra("idUser", getIntent().getExtras().getInt("idUser"));
 			ii.putExtra("month", month);
 			ii.putExtra("year", year);
