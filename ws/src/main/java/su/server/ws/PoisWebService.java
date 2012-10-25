@@ -3,6 +3,7 @@ package su.server.ws;
 import javax.jws.WebService;
 
 import su.server.ws.DB.MySQLAccess;
+import su.server.ws.model.DayEventsRequest;
 import su.server.ws.model.Login;
 import su.server.ws.model.MenuDetails;
 import su.server.ws.model.MonthlyEventsRequest;
@@ -65,6 +66,18 @@ public class PoisWebService implements IPoisWebService
 		}
 
 		return gson.toJson(response);
+	}
+	
+	public String getMenuFromReservations(String request){
+		Gson gson = new Gson();
+		DayEventsRequest eventsReq = (DayEventsRequest)gson.fromJson(request, DayEventsRequest.class);
+		
+		try {
+			eventsReq = Db.getMenuFromReservations(eventsReq);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gson.toJson(eventsReq);
 	}
 	
 	public String getMenuDetails(String poiId)
