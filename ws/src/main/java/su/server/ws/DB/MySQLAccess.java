@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import su.server.ws.model.DayEventsRequest;
 import su.server.ws.model.Login;
 import su.server.ws.model.Meal;
 import su.server.ws.model.MenuDetails;
@@ -73,6 +74,47 @@ public class MySQLAccess {
 				lista_eventos.put(resultSet.getString(2), resultSet.getString(1));
 			}
 			req.setListEvents(lista_eventos);
+
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		return req;
+	}
+	
+	public DayEventsRequest getMenuFromReservations(DayEventsRequest req) throws Exception{
+		HashMap<String, String> eventos_almoco = new HashMap<String, String>();
+		HashMap<String, String> eventos_jantar = new HashMap<String, String>();
+
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT m.sopa, m.carne, m.peixe, m.price, c.name, hour(s.horario),minute(s.horario) FROM utilizadores u, reservas r, cantinas c, slots s, menu m,  WHERE u.id = r.id_utilizador AND r.id_cantina  = c.id AND r.id_slot = s.id AND s.id_menu = m.id AND u.id = " + req.getIdUser() + " AND MONTH(s.horario) = " + req.getMonth() + " AND DAYOFMONTH(s.horario) = " + req.getDay());
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()){
+				if(resultSet.getInt(6) >= 19){
+					eventos_almoco.put("sopa", resultSet.getString(1));
+					eventos_almoco.put("carne", resultSet.getString(2));
+					eventos_almoco.put("peixe", resultSet.getString(3));
+					eventos_almoco.put("preco", Integer.toString(resultSet.getInt(4)));
+					eventos_almoco.put("cantina", resultSet.getString(5));
+					String slot = resultSet.getString(6).concat(":").concat(resultSet.getString(7));
+					eventos_almoco.put("slot", slot);
+				}
+				else{
+					eventos_jantar.put("sopa", resultSet.getString(1));
+					eventos_jantar.put("carne", resultSet.getString(2));
+					eventos_jantar.put("peixe", resultSet.getString(3));
+					eventos_jantar.put("preco", Integer.toString(resultSet.getInt(4)));
+					eventos_jantar.put("cantina", resultSet.getString(5));
+					String slot = resultSet.getString(6).concat(":").concat(resultSet.getString(7));
+					eventos_jantar.put("slot", slot);
+				}
+				//lista_eventos.add(resultSet.getString(1)+"|"+resultSet.getString(2));
+				//lista_eventos.put(resultSet.getString(2), resultSet.getString(1));
+			}
+			req.setLunchEvents(eventos_almoco);
+			req.setDinnerEvents(eventos_jantar);
 
 		} catch (Exception e) {
 			throw e;
