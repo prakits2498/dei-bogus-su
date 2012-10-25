@@ -1,6 +1,7 @@
 package su.android.client;
 
 import greendroid.app.GDActivity;
+import greendroid.app.GDListActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import java.util.Locale;
 import su.android.model.MonthlyEventsRequest;
 import su.android.server.connection.ServerConnection;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -23,10 +25,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class SimpleCalendarViewActivity extends GDActivity implements OnClickListener
@@ -46,11 +50,13 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 	private static final String dateTemplate = "MMMM yyyy";
 	private static final String dateTemplateMonth = "MMMM";
 	private ServerConnection conn;
+	MonthlyEventsRequest context = new MonthlyEventsRequest();
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+
 		super.onCreate(savedInstanceState);
 		setActionBarContentView(R.layout.simple_calendar_view);
 
@@ -62,11 +68,11 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 		year = _calendar.get(Calendar.YEAR);
 		Log.d(tag, "Calendar Instance:= " + "Month: " + month + " " + "Year: " + year);
 
-		//bot„o de cima que diz o dia seleccionado
+		//bot√£o de cima que diz o dia seleccionado
 		selectedDayMonthYearButton = (Button) this.findViewById(R.id.selectedDayMonthYear);
 		selectedDayMonthYearButton.setText("Selected: ");
 
-		//setas e mÍs
+		//setas e m√™s
 		prevMonth = (ImageView) this.findViewById(R.id.prevMonth);
 		prevMonth.setOnClickListener(this);
 		currentMonth = (Button) this.findViewById(R.id.currentMonth);
@@ -146,8 +152,8 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 
 		private final List<String> list;
 		private static final int DAY_OFFSET = 1;
-		private final String[] weekdays = new String[]{"Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "S·b"};
-		private final String[] months = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
+		private final String[] weekdays = new String[]{"Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "S√°b"};
+		private final String[] months = {"Janeiro", "Fevereiro", "Mar√ßo", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
 		private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 		private final int month, year;
 		private int daysInMonth, prevMonthDays;
@@ -155,7 +161,7 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 		private int currentWeekDay;
 		private Button gridcell;
 		private TextView num_events_per_day;
-		private final HashMap<String, Integer> eventsPerMonthMap;
+		private final HashMap<String, String> eventsPerMonthMap;
 		private final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy");
 
 		// Days in Current Month
@@ -180,6 +186,7 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 
 			// Find Number of Events
 			eventsPerMonthMap = findNumberOfEventsPerMonth(year, month);
+			Log.i("calendar",eventsPerMonthMap.toString());
 		}
 		private String getMonthAsString(int i)
 		{
@@ -318,19 +325,19 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 		 * @param month
 		 * @return
 		 */
-		private HashMap<String, Integer> findNumberOfEventsPerMonth(int year, int month)
+		private HashMap<String, String> findNumberOfEventsPerMonth(int year, int month)
 		{
 			Bundle b = new Bundle();
 			b = getIntent().getExtras();
 			Log.i("USER", Integer.toString(b.getInt("idUser")));
 
-			MonthlyEventsRequest context = new MonthlyEventsRequest();
+			
 			context.setMonth(month);
 			context.setYear(year);
 			context.setIdUser(b.getInt("idUser"));
 			MonthlyEventsRequest events = conn.checkEvents(context);
 
-			
+
 			return events.getListEvents();
 		}
 
@@ -363,7 +370,7 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 			String theyear = day_color[3];
 			if ((!eventsPerMonthMap.isEmpty()) && (eventsPerMonthMap != null))
 			{
-				
+
 				/*for(int i=0; i<eventsPerMonthMap.size(); i++) {
 					String[] aux = eventsPerMonthMap.get(i).split("|");
 					String day = aux[0];
@@ -372,15 +379,15 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 						num_events_per_day = (TextView) row.findViewById(R.id.num_events_per_day);
 						Integer numEvents = Integer.parseInt(aux[1]);
 						num_events_per_day.setText(numEvents.toString());
-						
+
 						break;
 					}
 				}*/
-				
+
 				if(eventsPerMonthMap.containsKey(theday)) {
 					num_events_per_day = (TextView) row.findViewById(R.id.num_events_per_day);
-					Integer numEvents = eventsPerMonthMap.get(theday);
-					num_events_per_day.setText(numEvents.toString());
+					String numEvents = eventsPerMonthMap.get(theday);
+					num_events_per_day.setText(numEvents);
 				}
 			}
 			else
@@ -410,13 +417,19 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 		{
 			String date_month_year = (String) view.getTag();
 			selectedDayMonthYearButton.setText("Selected: " + date_month_year);
-
-			//view.setBackgroundDrawable(getResources().getDrawable(R.drawable.calendar_bg_orange));
+			
+			Intent ii = new Intent(getApplicationContext(), SimpleCalendarViewActivity.class);
+			ii.putExtra("idUser", getIntent().getExtras().getInt("idUser"));
+			ii.putExtra("month", month);
+			ii.putExtra("year", year);
+			ii.putExtra("day", date_month_year.split("-")[0] );
+			Log.i("Eventos",date_month_year.split("-")[0]);
+			startActivity(ii);
 
 			try
 			{
 				Date parsedDate = dateFormatter.parse(date_month_year);
-				
+
 				Log.d(tag, "Parsed Date: " + parsedDate.toString());
 
 			}
