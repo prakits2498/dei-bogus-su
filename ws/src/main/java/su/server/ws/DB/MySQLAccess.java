@@ -88,11 +88,12 @@ public class MySQLAccess {
 
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT m.sopa, m.carne, m.peixe, m.price, c.name, hour(s.horario),minute(s.horario) FROM utilizadores u, reservas r, cantinas c, slots s, menu m,  WHERE u.id = r.id_utilizador AND r.id_cantina  = c.id AND r.id_slot = s.id AND s.id_menu = m.id AND u.id = " + req.getIdUser() + " AND MONTH(s.horario) = " + req.getMonth() + " AND DAYOFMONTH(s.horario) = " + req.getDay());
+			preparedStatement = connect.prepareStatement("SELECT m.sopa, m.carne, m.peixe, m.price, c.name, hour(s.horario),minute(s.horario) FROM utilizadores u, reservas r, cantinas c, slots s, menu m  WHERE u.id = r.id_utilizador AND r.id_cantina  = c.id AND r.id_slot = s.id AND s.id_menu = m.id AND u.id = " + req.getIdUser() + " AND MONTH(s.horario) = " + req.getMonth() + " AND DAYOFMONTH(s.horario) = " + req.getDay());
 			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()){
 				if(resultSet.getInt(6) >= 19){
+					System.out.println(resultSet.toString());
 					eventos_almoco.put("sopa", resultSet.getString(1));
 					eventos_almoco.put("carne", resultSet.getString(2));
 					eventos_almoco.put("peixe", resultSet.getString(3));
