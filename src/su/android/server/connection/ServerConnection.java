@@ -11,6 +11,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.AndroidHttpTransport;
 import org.xmlpull.v1.XmlPullParserException;
 
+import su.android.model.DayEventsRequest;
 import su.android.model.Login;
 import su.android.model.MenuDetails;
 import su.android.model.MonthlyEventsRequest;
@@ -33,9 +34,9 @@ public class ServerConnection
 	private SoapSerializationEnvelope soapEnvelope;
 	private AndroidHttpTransport httpTransport;
 	private Gson gson;
-	
+
 	private static ServerConnection myInstance = null;
-	
+
 	public static ServerConnection getInstance() 
 	{
 		if(myInstance == null)
@@ -44,14 +45,14 @@ public class ServerConnection
 		}
 		return myInstance;
 	}
-	
+
 	public ServerConnection()
 	{
 		httpTransport = new AndroidHttpTransport(URL);
 		soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		gson = new Gson();
 	}
-	
+
 	/*public List<POI> getPOIRecommendations(double lat, double lng, String dayOfWeek, int hour, double maxDistance, int limit)
 	{
 		POIList poiList = null;
@@ -95,7 +96,7 @@ public class ServerConnection
 			return new ArrayList<POI>();
 		}
 	}
-	
+
 	public List<POI> getPOIRecommendations(double lat, double lng, double maxDistance, int limit)
 	{
 		POIList poiList = null;
@@ -137,9 +138,9 @@ public class ServerConnection
 			return new ArrayList<POI>();
 		}
 	}
-	
-	
-	
+
+
+
 	public List<POI> searchPOIS(String query)
 	{
 		POIList poiList = null;
@@ -179,7 +180,7 @@ public class ServerConnection
 			return new ArrayList<POI>();
 		}
 	}*/
-	
+
 	public List<POI> getPOIRecommendations(String dayOfWeek, int hour, int limit)
 	{
 		POIList poiList = null;
@@ -220,7 +221,7 @@ public class ServerConnection
 			return new ArrayList<POI>();
 		}
 	}
-	
+
 	public MenuDetails getMenuDetails(String poiId)
 	{
 		String method = "getMenuDetails";
@@ -246,10 +247,10 @@ public class ServerConnection
 		{
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
-		
+
 		return menuDetails;		
 	}
-	
+
 	public int verifyLogin (Login login){
 		int res=-1;
 		String method = "verifyLogin";
@@ -276,14 +277,47 @@ public class ServerConnection
 		{
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
-		
+
 		return res;
 	}
-	
+
+	public DayEventsRequest getMenuFromReservations (DayEventsRequest context){
+		DayEventsRequest events = null;
+
+		String method = "getMenuFromReservations";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		String request = gson.toJson(context);
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(request);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			events = (DayEventsRequest)gson.fromJson(result, DayEventsRequest.class);
+			if(events.getLunchEvents() != null)
+				Log.i("MONTHLY EVENTS VERIFICATION", "[Result do day one: " + events.getLunchEvents() + "]");
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", ">>>> IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+
+		return events;
+
+	}
+
 	public MonthlyEventsRequest checkEvents(MonthlyEventsRequest context){
 		//HashMap<String,Integer> lista_eventos = new HashMap<String, Integer>();
 		MonthlyEventsRequest events = null;
-		
+
 		String method = "checkEvents";
 		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
 		String request = gson.toJson(context);
@@ -309,8 +343,8 @@ public class ServerConnection
 		{
 			Log.e("error", "XMLPullParserException!!"+e.getMessage());
 		}
-		
+
 		return events;
 	}
-	
+
 }
