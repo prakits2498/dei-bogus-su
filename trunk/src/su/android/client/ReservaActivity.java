@@ -7,24 +7,28 @@ import java.util.HashMap;
 import java.util.List;
 
 import su.android.model.Meal;
-import su.android.model.MenuDetails;
 import su.android.model.Reserva;
 import su.android.model.Slot;
 import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class ReservaActivity extends GDActivity {
+public class ReservaActivity extends GDActivity implements AdapterView.OnItemSelectedListener {
 	
 	
 	private ServerConnection conn;
-	private MenuDetails poiDetails;
 	
 	private boolean temSopa = false;
 	private boolean temCarne = false;
 	private boolean temPeixe = false;
+	
+	TextView slotSelectedTv;
+	List<Slot> slots;
 	
 	private HashMap<String, String> reservaExtras = new HashMap<String, String>();
 	
@@ -67,19 +71,43 @@ public class ReservaActivity extends GDActivity {
         	pratoTv.setText(reservaExtras.get("peixeTv"));
         }
         
-        Spinner slot_spin = (Spinner) findViewById(R.id.slot);
+        Spinner slotSpin = (Spinner) findViewById(R.id.slot);
+        slotSelectedTv = new TextView(this.getApplicationContext());
         
         Reserva reserva = new Reserva();
         reserva.setPoiID(reservaExtras.get("poiID"));
         reserva.setUserID(reservaExtras.get("userID"));
         reserva.setMeal(meal);
+        reserva.setDay(Integer.parseInt(reservaExtras.get("dayMeal")));
+        reserva.setMonth(Integer.parseInt(reservaExtras.get("monthMeal")));
         
         reserva = conn.getSlots(reserva);
-        List<Slot> slots = reserva.getSlots();
+        slots = reserva.getSlots();
+        
+        slotSpin.setOnItemSelectedListener(this);
+
+		ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, slots);
+		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		slotSpin.setAdapter(aa);
         
         Button confirmar = (Button) findViewById(R.id.confirmar);
         
     }
+    
+    public void onItemSelected(AdapterView<?> parent, View v, int slotPosition, long id) {
+    	Slot slot = slots.get(slotPosition);
+    	if(slot.isAvailable())
+    		if(slot.getMinute() == 0)
+    			slotSelectedTv.setText(slot.getDay()+"-"+slot.getMonth()+"-2012 "+slot.getHour()+":"+slot.getMinute()+"0");
+    		else
+    			slotSelectedTv.setText(slot.getDay()+"-"+slot.getMonth()+"-2012 "+slot.getHour()+":"+slot.getMinute());
+    	else
+    		slotSelectedTv.setText("Nenhum slot disponivel");
+	}
+
+	public void onNothingSelected(AdapterView<?> parent) {
+		slotSelectedTv.setText("");
+	}
     
     private void getExtras() {
     	Bundle b = new Bundle();
@@ -99,6 +127,9 @@ public class ReservaActivity extends GDActivity {
         temSopa = b.getBoolean("sopa");
         temCarne = b.getBoolean("carne");
         temPeixe = b.getBoolean("peixe");
+        
+        reservaExtras.put("dayMeal", b.getString("dayMeal"));
+        reservaExtras.put("monthMeal", b.getString("monthMeal"));
     }
     
 }

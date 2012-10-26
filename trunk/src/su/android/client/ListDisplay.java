@@ -153,7 +153,7 @@ public class ListDisplay<T> {
 	}
 	
 	public Intent createReservaIntent(List<TestObject> itemsSelected) {
-		String userID = "", poiID = "", priceMeal = "", typeOfMeal = "", mealID = "", sopaTv = "", carneTv = "", peixeTv = "";
+		String userID = "", poiID = "", priceMeal = "", typeOfMeal = "", mealID = "", sopaTv = "", carneTv = "", peixeTv = "", dayMeal="", monthMeal="";
 		boolean sopa = false, carne = false, peixe = false;
 		for(TestObject item : itemsSelected) {
 			poiID = item.getMenuDetails().getPOI();
@@ -185,6 +185,9 @@ public class ListDisplay<T> {
 			
 			if(item.isSopa())
 				sopa = true;
+			
+			dayMeal = item.getMenuDetails().getDay();
+			monthMeal = item.getMenuDetails().getMonth();
 		}
 		
 		Intent i = new Intent(appContext, ReservaActivity.class);
@@ -202,6 +205,11 @@ public class ListDisplay<T> {
 		i.putExtra("userID", userID);
 		i.putExtra("poiID", poiID);
 		i.putExtra("priceMeal", priceMeal);
+		
+		i.putExtra("dayMeal", dayMeal);
+		i.putExtra("monthMeal", monthMeal);
+		i.putExtra("yearMeal", "2012");
+		
 		
 		return i;
 	}
