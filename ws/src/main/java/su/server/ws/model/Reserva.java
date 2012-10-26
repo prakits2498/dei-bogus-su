@@ -1,5 +1,7 @@
 package su.server.ws.model;
 
+
+
 import java.util.List;
 
 public class Reserva {
@@ -9,6 +11,9 @@ public class Reserva {
 	private String priceMeal;
 	private List<Slot> slots;
 	private Meal meal;
+	
+	private int day;
+	private int month;
 	
 	public Reserva() {
 		
@@ -52,6 +57,22 @@ public class Reserva {
 
 	public void setMeal(Meal meal) {
 		this.meal = meal;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public void setDay(int day) {
+		this.day = day;
+	}
+
+	public int getMonth() {
+		return month;
+	}
+
+	public void setMonth(int month) {
+		this.month = month;
 	}
 	
 	
