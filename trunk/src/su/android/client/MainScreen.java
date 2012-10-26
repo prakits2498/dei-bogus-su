@@ -188,8 +188,8 @@ public class MainScreen extends GDMapActivity
 				//this.categoryGridView.onActivateCategory(item.getItemView()); 
 				return true;
 			case R.id.action_bar_credits: //TODO meter a abrir uma nova activity das reservas
-				int creditos = conn.getCredits(this.currentContext.getIdUser());
-				Log.i("creditos",Integer.toString(creditos));
+				double creditos = conn.getCredits(this.currentContext.getIdUser());
+				Log.i("creditos",Double.toString(creditos));
 				
 				// get your custom_toast.xml ayout
 				LayoutInflater inflater = getLayoutInflater();
@@ -204,7 +204,7 @@ public class MainScreen extends GDMapActivity
  
 				// set a message
 				TextView text = (TextView) layout.findViewById(R.id.text);
-				text.setText("Tem " + Integer.toString(creditos) + " creditos");
+				text.setText("Tem " + Double.toString(creditos) + " creditos");
 				//text.setTextColor(R.color.myTurquesa);
  
 				// Toast...

@@ -79,7 +79,6 @@ public class MenuDinnerActivity extends GDActivity {
 
 		setActivePage(pagedView.getCurrentPage());
 		
-		
     	
 	}
 
