@@ -11,8 +11,9 @@ public class TestObject
 	private MenuDetails menuDetails;
 	private String userID;
 	private boolean dinner;
+	private String idMeal;
 	
-	public TestObject(String item1, String item2, String type, MenuDetails menuDetails, String userID, boolean dinner) 
+	public TestObject(String item1, String item2, String type, MenuDetails menuDetails, String userID, String idMeal, boolean dinner) 
 	{
 		this.item1 = item1;
 		this.item2 = item2;
@@ -20,6 +21,7 @@ public class TestObject
 		this.setMenuDetails(menuDetails);
 		this.setUserID(userID);
 		this.dinner = dinner;
+		this.setIdMeal(idMeal);
 	}
 	
 	public String[] getItems() 
@@ -92,6 +94,14 @@ public class TestObject
 			return "dinner";
 		else
 			return "lunch";
+	}
+
+	public String getIdMeal() {
+		return idMeal;
+	}
+
+	public void setIdMeal(String idMeal) {
+		this.idMeal = idMeal;
 	}
 	
 }
