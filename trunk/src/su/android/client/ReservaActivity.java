@@ -13,8 +13,10 @@ import su.android.model.Meal;
 import su.android.model.Reserva;
 import su.android.model.Slot;
 import su.android.server.connection.ServerConnection;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ReservaActivity extends GDActivity implements AdapterView.OnItemSelectedListener {
 
@@ -121,12 +124,10 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 			
 			public void onClick(View v) {
 				boolean reservado = false;
+				String payment = "";
 				
 				String idSlotSelected = reserva.getSlots().get(indexSlotSelected).getIdSlot();
 				reserva.setSlotID(idSlotSelected);
-				
-				Log.i("indexSlotSelected ", indexSlotSelected+"");
-				
 				
 				RadioButton paypalButton = (RadioButton) findViewById(R.id.paypal);
 				RadioButton multibancoButton = (RadioButton) findViewById(R.id.multibanco);
@@ -146,8 +147,17 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						
 						conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
 						conn.makeReservationSlots(reserva);
+						
+						payment = "credits";
 					} else {
 						//TODO Avisar que não tem creditos suficientes para pagar - ficar na mesma activity
+						Toast toast = new Toast(getApplicationContext());
+						toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+						toast.setDuration(Toast.LENGTH_SHORT);
+						toast.setView(v);
+						toast.setText("Não tem créditos suficiente para efectuar pagamento.");
+						toast.show();
+						
 						reservado = false;
 					}
 				} else if(paypalButton.isChecked()) {
@@ -157,6 +167,8 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 					reserva.setPaid(false);
 					
 					conn.makeReservationSlots(reserva);
+					
+					payment = "PayPal";
 				} else if(multibancoButton.isChecked()) {
 					String ent = "10664";
 					String ref = "124566788";
@@ -166,10 +178,17 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 					reserva.setPaid(false);
 					
 					conn.makeReservationSlots(reserva);
+					
+					payment = "MB";
 				}
 				
 				if(reservado) {
-					//TODO mostra confirmacao de pagamento
+					Intent i = new Intent(v.getContext(), PaymentActivity.class);
+					i.putExtra("userID", reserva.getUserID());
+					i.putExtra("payment", payment);
+					i.putExtra("priceMeal", reserva.getPriceMeal());
+					
+					v.getContext().startActivity(i);
 				}
 			}
 		});

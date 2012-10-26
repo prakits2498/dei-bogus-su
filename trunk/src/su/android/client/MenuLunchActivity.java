@@ -161,7 +161,7 @@ public class MenuLunchActivity extends GDActivity {
 			Meal lunch = null;
 			
 			if (menuDetails != null) {
-				if (!menuDetails.getMenuLunch().isEmpty()) {
+				if (!menuDetails.getMenuDinner().isEmpty()) {
 					lunch = menuDetails.getMenuLunch().get(position); //FIXME isto da bogus --> cantinas so com 1 menu
 					idMeal = menuDetails.getMenuLunch().get(position).getId();
 				} else {
