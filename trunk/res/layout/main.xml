@@ -42,7 +42,7 @@
         android:id="@+id/mvMain"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="0d9wW3Vy-7SIVcJ-2INtPB3plsEqm3hokupKSDA"
+        android:apiKey="0ZeXen_TNCs-C50wpum3s3M1Q82j36NWphfRzPQ"
         android:clickable="true" />
     
     <!-- BB KEY MAC -->
