@@ -46,6 +46,8 @@
         <activity android:name=".MenuDinnerActivity" />
         <activity android:name=".InfoTabActivity" />
         <activity android:name=".SimpleCalendarViewActivity" />
+        <activity android:name=".PaymentActivity" />
+
         <activity android:name=".ViewReservationsActivity" />
         <activity android:name=".ReservaActivity" />
         <activity
