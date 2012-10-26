@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,19 +63,6 @@ public class MySQLAccess {
 
 	}
 	
-	public String getSlotDate(String slotID) throws Exception {
-		try {
-			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT horario FROM slots WHERE id = "+slotID);
-			resultSet = preparedStatement.executeQuery();
-
-			return resultSet.getString(1);
-
-		} catch (Exception e) {
-			throw e;
-		}
-	}
-	
 	public boolean actualizaCreditos(String userID, String credits) throws Exception {
 		try {
 			// PreparedStatements can use variables and are more efficient
@@ -96,10 +84,8 @@ public class MySQLAccess {
 		try {
 			if(reserva.isCreditos())
 				actualizaCreditos(reserva.getUserID(), reserva.getUserCredits());
-			
-			String slotDate = getSlotDate(reserva.getSlotID());
-			
-			preparedStatement = connect.prepareStatement("INSERT INTO reservas (id_utilizador, id_cantina, date, id_slot, price) VALUES(" + reserva.getUserID() + ", " + reserva.getPoiID() + ", '" + Integer.toString(reserva.getDay()).concat("-").concat(Integer.toString(reserva.getMonth())) + "', " + reserva.getSlotID() + ", " + reserva.getPriceMeal() + ")");
+		
+			preparedStatement = connect.prepareStatement("INSERT INTO reservas (id_utilizador, id_cantina, date, id_slot, price) VALUES('" + reserva.getUserID() + "', '" + reserva.getPoiID() + "', NOW(), '" + reserva.getSlotID() + "', '" + reserva.getPriceMeal() + "')");
 			int num = preparedStatement.executeUpdate();
 
 			if(num==1){
@@ -114,13 +100,13 @@ public class MySQLAccess {
 		}
 	}
 
-	public int getCredits(int idUser) throws Exception {
+	public double getCredits(int idUser) throws Exception {
 		try {
 			preparedStatement = connect.prepareStatement("SELECT credits FROM utilizadores WHERE id=" + idUser);
 			resultSet = preparedStatement.executeQuery();
 
 			if(resultSet.next()){
-				return resultSet.getInt(1);
+				return resultSet.getDouble(1);
 			}
 			else{
 				return -1;
@@ -279,20 +265,22 @@ public class MySQLAccess {
 	public Reserva getSlots(Reserva reserva) throws Exception {
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT DAYOFMONTH(s.horario), MONTH(s.horario), HOUR(s.horario), MINUTE(s.horario), s.n_reservados, c.capacity FROM slots s, cantinas c, menu m WHERE s.id_cantina = c.id AND s.id_menu = m.id AND DAYOFMONTH(s.horario) = "+reserva.getDay()+" AND MONTH(s.horario) = "+reserva.getMonth()+"  AND c.id = "+reserva.getPoiID()+" AND m.id = "+reserva.getMeal().getId());
+			preparedStatement = connect.prepareStatement("SELECT s.id, DAYOFMONTH(s.horario), MONTH(s.horario), HOUR(s.horario), MINUTE(s.horario), s.n_reservados, c.capacity FROM slots s, cantinas c, menu m WHERE s.id_cantina = c.id AND s.id_menu = m.id AND DAYOFMONTH(s.horario) = "+reserva.getDay()+" AND MONTH(s.horario) = "+reserva.getMonth()+"  AND c.id = "+reserva.getPoiID()+" AND m.id = "+reserva.getMeal().getId());
 			resultSet = preparedStatement.executeQuery();
 
 			List<Slot> slots = new ArrayList<Slot>();
 			
 			while(resultSet.next()) {
 				Slot slot = new Slot();
-				slot.setDay(resultSet.getInt(1));
-				slot.setMonth(resultSet.getInt(2));
-				slot.setHour(resultSet.getInt(3));
-				slot.setMinute(resultSet.getInt(4));
 				
-				int reservados = resultSet.getInt(5);
-				int capacidade = resultSet.getInt(6);
+				slot.setIdSlot(resultSet.getString(1));
+				slot.setDay(resultSet.getInt(2));
+				slot.setMonth(resultSet.getInt(3));
+				slot.setHour(resultSet.getInt(4));
+				slot.setMinute(resultSet.getInt(5));
+				
+				int reservados = resultSet.getInt(6);
+				int capacidade = resultSet.getInt(7);
 				int available = capacidade - reservados;
 				
 				slot.setReservados(reservados);

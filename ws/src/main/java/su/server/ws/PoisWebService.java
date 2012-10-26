@@ -86,7 +86,7 @@ public class PoisWebService implements IPoisWebService
 		Gson gson = new Gson();
 		int idUser = (int)gson.fromJson(request, Integer.class);
 
-		int result=-1;
+		double result=-1;
 
 		try {
 			result = Db.getCredits(idUser);
