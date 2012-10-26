@@ -11,11 +11,12 @@ import su.android.model.Reserva;
 import su.android.model.Slot;
 import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioGroup;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,7 +31,10 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 
 	TextView slotSelectedTv;
 	String[] slotsAux;
-
+	int indexSlotSelected;
+	Reserva reserva;
+	String radioButtonSelected;
+	
 	private HashMap<String, String> reservaExtras = new HashMap<String, String>();
 
 	public ReservaActivity() {
@@ -72,20 +76,22 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 			pratoTv.setText(reservaExtras.get("peixeTv"));
 		}
 
-		Spinner slotSpin = (Spinner) findViewById(R.id.slot);
-		slotSelectedTv = new TextView(this.getApplicationContext());
-
-		Reserva reserva = new Reserva();
+		reserva = new Reserva();
 		reserva.setPoiID(reservaExtras.get("poiID"));
 		reserva.setUserID(reservaExtras.get("userID"));
 		reserva.setMeal(meal);
 		reserva.setDay(Integer.parseInt(reservaExtras.get("dayMeal")));
 		reserva.setMonth(Integer.parseInt(reservaExtras.get("monthMeal")));
-
-		data.setText(reserva.getDay()+"-"+reserva.getMonth()+"-2012");
-
 		reserva = conn.getSlots(reserva);
-		setSlots(reserva);
+		Log.i("getSlots BD: ", "dia: "+reserva.getDay()+" mes: "+reserva.getMonth()+" cantina: "+reserva.getPoiID()+" mealID: "+reserva.getMeal().getId());
+		
+		Log.i("n slots: ", ""+reserva.getSlots().size());
+		
+		data.setText(reserva.getDay()+"-"+reserva.getMonth()+"-2012");
+		
+		Spinner slotSpin = (Spinner) findViewById(R.id.slot);
+		slotSelectedTv = new TextView(this.getApplicationContext());
+		setSlots();
 
 		slotSpin.setOnItemSelectedListener(this);
 
@@ -93,40 +99,79 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		slotSpin.setAdapter(aa);
 
-		RadioGroup radioGroup = (RadioGroup) findViewById(R.id.pagamento);
-		int checkedRadioButton = radioGroup.getCheckedRadioButtonId();
-
-		String radioButtonSelected = "";
-
-		switch (checkedRadioButton) {
-		case R.id.paypal : radioButtonSelected = "radiobutton1"; //TODO vai pro site do paypal
-		break;
-		case R.id.multibanco : radioButtonSelected = "radiobutton2"; //TODO gera referencia MB
-		break;
-		case R.id.creditos : radioButtonSelected = "radiobutton3"; //TODO verifica se tem creditos suficientes
-		break;
-		}
-
 		Button confirmar = (Button) findViewById(R.id.confirmar);
 		confirmar.setOnClickListener(new View.OnClickListener() {
 			
-			@Override
 			public void onClick(View v) {
-				// TODO inserir reserva e pagamento
+				boolean reservado = false;
 				
+				String idSlotSelected = reserva.getSlots().get(indexSlotSelected).getIdSlot();
+				reserva.setSlotID(idSlotSelected);
+				
+				RadioButton paypalButton = (RadioButton) findViewById(R.id.paypal);
+				RadioButton multibancoButton = (RadioButton) findViewById(R.id.multibanco);
+				RadioButton creditosButton = (RadioButton) findViewById(R.id.creditos);
+
+				if(creditosButton.isChecked()) {
+					int userCredits = conn.getCredits(Integer.parseInt(reserva.getUserID()));
+					int userCreditsA = userCredits - Integer.parseInt(reserva.getPriceMeal());
+					
+					if(verifyCredits(userCredits)) {
+						reserva.setCreditos(true);						
+						reserva.setPaid(true);
+						reservado = true;
+						
+						conn.actualizaCreditos(reserva.getUserID(), Integer.toString(userCreditsA));
+						conn.makeReservationSlots(reserva);
+					} else {
+						//TODO Avisar que n‹o tem creditos suficientes para pagar - ficar na mesma activity
+						reservado = false;
+					}
+				} else if(paypalButton.isChecked()) {
+					//send to paypal 
+					reserva.setCreditos(false);
+					reservado = true;
+					reserva.setPaid(false);
+					
+					conn.makeReservationSlots(reserva);
+				} else if(multibancoButton.isChecked()) {
+					String ent = "10664";
+					String ref = "124566788";
+					String valor = reserva.getPriceMeal();
+					reserva.setCreditos(false);
+					reservado = true;
+					reserva.setPaid(false);
+					
+					conn.makeReservationSlots(reserva);
+				}
+				
+				if(reservado) {
+					//TODO mostra confirmacao de pagamento
+				}
 			}
 		});
+	}
+	
+	
+	
+	public boolean verifyCredits(int userCredits) {
+		int aux = userCredits - Integer.parseInt(reserva.getPriceMeal());
+		if(aux >= 0)
+			return true;
+		else 
+			return false;
 	}
 
 	public void onItemSelected(AdapterView<?> parent, View v, int slotPosition, long id) {
 		slotSelectedTv.setText(slotsAux[slotPosition]);
+		indexSlotSelected = slotPosition;
 	}
 
 	public void onNothingSelected(AdapterView<?> parent) {
 		slotSelectedTv.setText("Seleccione um slot");
 	}
 
-	private void setSlots(Reserva reserva) {
+	private void setSlots() {
 		List<Slot> slots = reserva.getSlots();
 		slotsAux = new String[slots.size()];
 
@@ -139,7 +184,8 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 					slotsAux[i] = s.getDay()+"-"+s.getMonth()+"-2012 "+s.getHour()+":"+s.getMinute();
 			} else 
 				slotsAux[i] = "Nenhum slot disponivel";
-
+			
+			Log.i("slotsAux: ", slotsAux[i]);
 		}
 	}
 

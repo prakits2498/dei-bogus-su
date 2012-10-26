@@ -39,9 +39,10 @@ public class MenuDinnerActivity extends GDActivity {
 	public String dayOfWeek = "";
 	public String poiID = "";
 	public String userID;
+	public String idMeal;
 	
 	private ListDisplay<TestObject> selectableTable;
-
+	
 	public MenuDinnerActivity() {
 		conn = ServerConnection.getInstance();
 	}
@@ -165,11 +166,14 @@ public class MenuDinnerActivity extends GDActivity {
 			if (menuDetails != null) {
 				if (!menuDetails.getMenuDinner().isEmpty()) {
 					dinner = menuDetails.getMenuDinner().get(position); //FIXME isto da bogus --> cantinas so com 1 menu
+					idMeal = menuDetails.getMenuDinner().get(position).getId();
 				} else {
 					// CANTINAS COM MENU IGUAL TODOS OS DIAS --- BAGUETES E PIZZAS
 					dinner = menuDetails.getMenuLunch().get(0);
+					idMeal = menuDetails.getMenuLunch().get(0).getId();
 					sameMenu = true;
 				}
+				
 			}
 			
 			return dinner;
@@ -179,14 +183,14 @@ public class MenuDinnerActivity extends GDActivity {
 			if(dinner != null) {
 	    		if(sameMenu) {
 	    			String[] aux = dinner.getCarne().replace("|", "#").split("#");
-	    			menuList.add(new TestObject(aux[0], aux[1], "outro", menuDetails, userID, true));
+	    			menuList.add(new TestObject(aux[0], aux[1], "carne", menuDetails, userID, idMeal, true));
 	    		} else {
 	    			String[] sopa = dinner.getSopa().replace("|", "#").split("#");
 	    			String[] carne = dinner.getCarne().replace("|", "#").split("#");
 	    			String[] peixe = dinner.getPeixe().replace("|", "#").split("#");
-	    			menuList.add(new TestObject(sopa[0], sopa[1]+" kcal", "sopa", menuDetails, userID, true));
-	    			menuList.add(new TestObject(carne[0], carne[1]+" kcal", "carne", menuDetails, userID, true));
-	    			menuList.add(new TestObject(peixe[0], peixe[1]+" kcal", "peixe", menuDetails, userID, true));
+	    			menuList.add(new TestObject(sopa[0], sopa[1]+" kcal", "sopa", menuDetails, userID, idMeal, true));
+	    			menuList.add(new TestObject(carne[0], carne[1]+" kcal", "carne", menuDetails, userID, idMeal, true));
+	    			menuList.add(new TestObject(peixe[0], peixe[1]+" kcal", "peixe", menuDetails, userID, idMeal, true));
 	    		}
 	    	}
 			

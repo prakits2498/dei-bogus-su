@@ -1,15 +1,12 @@
 package su.android.client;
 
-import greendroid.app.GDActivity;
-
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import su.android.model.TestObject;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,6 +43,7 @@ public class ListDisplay<T> {
 
 	private int weekIndex;
 	private String[] daysOfWeek = {"Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"};
+	public String dataActual[];
 
 	/**
 	 * Constructs the display manager for the watch list.
@@ -64,8 +62,6 @@ public class ListDisplay<T> {
 				TableRow.LayoutParams.FILL_PARENT,
 				TableRow.LayoutParams.WRAP_CONTENT);
 
-
-		displayParams.setMargins(10, 100, 10, 10);
 		display.setLayoutParams(displayParams);
 
 		display.setStretchAllColumns(true);
@@ -105,7 +101,6 @@ public class ListDisplay<T> {
 		TableRow.LayoutParams rowParams = new 
 				TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
 						TableRow.LayoutParams.WRAP_CONTENT);
-		rowParams.setMargins(10, 200, 10, 10);
 
 
 		TextView dayOfWeek = new TextView(appContext);
@@ -128,7 +123,7 @@ public class ListDisplay<T> {
 
 			newRow.setFocusable(true);
 			newRow.setFocusableInTouchMode(true);
-			newRow.setOnFocusChangeListener(new RowHighlighter(item));
+			//newRow.setOnFocusChangeListener(new RowHighlighter(item));
 			newRow.setOnTouchListener(new RowSelector(item));
 
 			display.addView(newRow);
@@ -160,14 +155,12 @@ public class ListDisplay<T> {
 			userID = item.getUserID();
 			if(item.isDinner()) {
 				priceMeal = item.getMenuDetails().getMenuDinner().get(0).getPrice();
-				mealID = item.getMenuDetails().getMenuDinner().get(0).getId();
 				
 				dayMeal = item.getMenuDetails().getMenuDinner().get(0).getDay();
 				monthMeal = item.getMenuDetails().getMenuDinner().get(0).getMonth();
 			}
 			else {
 				priceMeal = item.getMenuDetails().getMenuLunch().get(0).getPrice();
-				mealID = item.getMenuDetails().getMenuLunch().get(0).getId();
 				
 				dayMeal = item.getMenuDetails().getMenuLunch().get(0).getDay();
 				monthMeal = item.getMenuDetails().getMenuLunch().get(0).getMonth();
@@ -188,7 +181,10 @@ public class ListDisplay<T> {
 				peixe = true;
 			}
 			
+			mealID = item.getIdMeal();
 			typeOfMeal = item.getTypeOfMeal();
+			
+			Log.i("idMeal ListDisplay: ", mealID);
 		}
 		
 		Intent i = new Intent(appContext, ReservaActivity.class);
@@ -207,12 +203,52 @@ public class ListDisplay<T> {
 		i.putExtra("poiID", poiID);
 		i.putExtra("priceMeal", priceMeal);
 		
-		i.putExtra("dayMeal", dayMeal);
-		i.putExtra("monthMeal", monthMeal);
-		i.putExtra("yearMeal", "2012");
+		dataActual = generateDate(weekIndex, Integer.parseInt(dayMeal), Integer.parseInt(monthMeal));
 		
+		i.putExtra("dayMeal", dataActual[0]);
+		i.putExtra("monthMeal", dataActual[1]);
+		i.putExtra("yearMeal", dataActual[2]);
 		
 		return i;
+	}
+	
+	private String[] generateDate(int weekPosition, int dayMeal, int monthMeal) {
+		int dayI = dayMeal + weekPosition;
+		int dayA=0;
+		if(getMaxDaysOfMonth(monthMeal) == 30) {
+			dayA = dayI % 31;
+		}
+		else if(getMaxDaysOfMonth(monthMeal) == 31) {
+			dayA = dayI % 32;
+		}
+		else if(getMaxDaysOfMonth(monthMeal) == 29) {
+			dayA = dayI % 30;
+		}
+		
+		if(dayA < dayI) {
+			monthMeal++;
+			dayA++;
+		}
+		
+		String[] data = new String[3];
+		data[0] = Integer.toString(dayA);
+		data[1] = Integer.toString(monthMeal);
+		data[2] = "2012";
+		
+		return data;
+	}
+	
+	private int getMaxDaysOfMonth(int month) {
+		List<Integer> trintaUm = Arrays.asList(1,3,5,7,8,10,12);
+		List<Integer> trinta = Arrays.asList(4,6,9,11);
+		if(month == 2)
+			return 29;
+		else if(trintaUm.contains(month))
+			return 31;
+		else if(trinta.contains(month))
+			return 30;
+		
+		return -1;
 	}
 
 	/**
@@ -224,62 +260,6 @@ public class ListDisplay<T> {
 	public void setSelectionReceiver(SelectionReceiver<T> receiver)
 	{
 		this.selectionObserver = receiver;
-	}
-
-	/**
-	 * This focus change listener handles the changing the background colour
-	 * for highlighting the focused row. It also updates the variable keeping
-	 * track the highlighted item.
-	 */
-	private class RowHighlighter implements  View.OnFocusChangeListener, View.OnTouchListener
-	{
-
-		/**
-		 * The item that the highlighter is associated with. 
-		 */
-		private final T association;
-
-		public RowHighlighter(T association) 
-		{
-			this.association = association;
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public void onFocusChange(View v, boolean hasFocus)
-		{
-			int bgColourDisabled = Color.TRANSPARENT;
-			int bgColourEnabled = v.getContext().getResources().getColor(R.color.myTurquesa);
-
-			if (hasFocus == true) 
-			{
-				Log.v("ListDisplay", "hasFocus() is true");
-				Log.v("ListDisplay", "display focus is " + display.isFocused());
-				highlighted = association;
-
-				v.setBackgroundColor(bgColourEnabled);
-			} else {
-				Log.v("ListDisplay", "hasFocus() is false");
-				Log.v("ListDisplay", "display focus is " + display.isFocused());
-				//v.setBackgroundColor(bgColourDisabled);
-			}
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public boolean onTouch(View v, MotionEvent event)
-		{
-			if (event.getAction() != MotionEvent.ACTION_UP) 
-			{
-				v.requestFocus();
-			}
-			return false;
-		}
-
 	}
 
 	/**
