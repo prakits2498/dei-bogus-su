@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-/*
-** Copyright (C) 2011 Cyril Mottier (http://www.cyrilmottier.com)
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
--->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -27,71 +10,122 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/poiInfoAbsoluteLayoutID"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="466dp"
         android:background="@color/white" >
 
-        <ImageView
-            android:id="@+id/poi_photoID"
-            
-            
-            
-            
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+        <RadioGroup
+            android:id="@+id/pagamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_x="20dp"
-            android:layout_y="5dp"
-            android:padding="10dp"
-            android:src="@drawable/image_default" />
+            android:layout_y="265dp" >
 
-        <ImageView
-            android:id="@+id/widget60"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_x="186dp"
-            android:layout_y="11dp"
-            android:src="@drawable/afluencia_icon" />
+            <RadioButton
+                android:id="@+id/paypal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:textColor="@color/myDarkGray"
+                android:text="Paypal" />
+
+            <RadioButton
+                android:id="@+id/multibanco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/myDarkGray"
+                android:text="Multibanco" />
+
+            <RadioButton
+                android:id="@+id/creditos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/myDarkGray"
+                android:text="Pré-Pagamento" />
+        </RadioGroup>
 
         <TextView
-            android:id="@+id/afluenciaID"
-            android:layout_width="wrap_content"
+            android:id="@+id/sopaTv_ID"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_x="220dp"
-            android:layout_y="55dp"
-            android:text="100"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:layout_x="20dp"
+            android:layout_y="90dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/afluencia_text_ID"
+            android:id="@+id/prato_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="130dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+        
+        <TextView
+            android:id="@+id/reservaPriceTv"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_x="195dp"
-            android:layout_y="115dp"
-            android:text="Afluência"
-            android:textColor="@color/myDarkGray"
-            android:textSize="20sp" />
-
+            android:layout_x="20dp"
+            android:layout_y="175dp"
+            android:text="Preço"
+            android:textColor="@color/myTurquesa"
+            android:textSize="18sp" />
+        
         <TextView
-            android:id="@+id/promotion_text_ID"
+            android:id="@+id/reservaPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_x="90dp"
+            android:layout_y="175dp"
+            android:text="2.40 €"
+            android:textColor="@color/myDarkGray"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/slot"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="215dp" />
+
+        <Button
+            android:id="@+id/confirmar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_x="95dp"
-            android:layout_y="160dp"
-            android:text="Promoção"
+            android:layout_x="105dp"
+            android:layout_y="415dp"
+            android:text="Confirmar" />
+
+        <ImageView
+            android:id="@+id/reserva_icon"
+            android:layout_width="114dp"
+            android:layout_height="114dp"
+            android:layout_x="6dp"
+            android:layout_y="-16dp"
+            android:padding="10dp"
+            android:src="@drawable/food01_03" />
+
+        <TextView
+            android:id="@+id/reservaTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="145dp"
+            android:layout_y="-2dp"
+            android:text="Reserva"
             android:textColor="@color/myTurquesa"
             android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/poi_promotionID"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_x="0dp"
-            android:layout_y="199dp"
-            android:text="TextView"
-            android:textColor="@color/myDarkGray"
-            android:textSize="16sp" />
+            android:id="@+id/data"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_x="145dp"
+            android:layout_y="36dp"
+            android:text="Data"
+            android:textColor="@color/myTurquesa"
+            android:textSize="20sp" />
+
     </AbsoluteLayout>
 
 </ScrollView>
