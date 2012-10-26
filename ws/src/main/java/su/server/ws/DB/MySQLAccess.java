@@ -202,6 +202,9 @@ public class MySQLAccess {
 				
 				day = resultSet.getString(6);
 				month = resultSet.getString(7);
+				
+				meal.setDay(day);
+				meal.setMonth(month);
 
 				if(i%2 == 1) {
 					lunch.add(meal);
@@ -213,8 +216,6 @@ public class MySQLAccess {
 			menuDetails.setPOI(poiID);
 			menuDetails.setMenuLunch(lunch);
 			menuDetails.setMenuDinner(dinner);
-			menuDetails.setDay(day);
-			menuDetails.setMonth(month);
 
 		} catch(Exception e) {
 			throw e;
