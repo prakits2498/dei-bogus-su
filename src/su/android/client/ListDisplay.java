@@ -162,32 +162,33 @@ public class ListDisplay<T> {
 				priceMeal = item.getMenuDetails().getMenuDinner().get(0).getPrice();
 				mealID = item.getMenuDetails().getMenuDinner().get(0).getId();
 				
-				if(item.isSopa())
-					sopaTv = item.getItems()[0];
-							
-				if(item.isCarne())
-					carneTv = item.getItems()[0];
-				
-				if(item.isPeixe())
-					peixeTv = item.getItems()[0];
+				dayMeal = item.getMenuDetails().getMenuDinner().get(0).getDay();
+				monthMeal = item.getMenuDetails().getMenuDinner().get(0).getMonth();
 			}
 			else {
 				priceMeal = item.getMenuDetails().getMenuLunch().get(0).getPrice();
 				mealID = item.getMenuDetails().getMenuLunch().get(0).getId();
+				
+				dayMeal = item.getMenuDetails().getMenuLunch().get(0).getDay();
+				monthMeal = item.getMenuDetails().getMenuLunch().get(0).getMonth();
+			}
+			
+			if(item.isSopa()) {
+				sopaTv = item.getItems()[0];
+				sopa = true;
+			}
+						
+			if(item.isCarne()) {
+				carneTv = item.getItems()[0];
+				carne = true;
+			}
+			
+			if(item.isPeixe()) {
+				peixeTv = item.getItems()[0];
+				peixe = true;
 			}
 			
 			typeOfMeal = item.getTypeOfMeal();
-			
-			if(item.isCarne())
-				carne = true;
-			else if(item.isPeixe())
-				peixe = true;
-			
-			if(item.isSopa())
-				sopa = true;
-			
-			dayMeal = item.getMenuDetails().getDay();
-			monthMeal = item.getMenuDetails().getMonth();
 		}
 		
 		Intent i = new Intent(appContext, ReservaActivity.class);
