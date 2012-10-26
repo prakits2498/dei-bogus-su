@@ -33,10 +33,10 @@ public class PaymentActivity extends GDActivity {
 		b = getIntent().getExtras();
 		conn = new ServerConnection();
 
-		int idUser = b.getInt("idUser");
-		String metodo = b.getString("metodo");
-		int value = b.getInt("valor");
-		confData.setIdUser(value);
+		int idUser = Integer.parseInt(b.getString("userID"));
+		String metodo = b.getString("payment");
+		String value = b.getString("priceMeal");
+		confData.setIdUser(idUser);
 		confData = conn.getConfirmationData(confData);
 
 		TextView titulo = (TextView) findViewById(R.id.metodo);
@@ -63,7 +63,7 @@ public class PaymentActivity extends GDActivity {
 			valor.setText("Valor:");
 			TextView valorValue = (TextView) findViewById(R.id.campo3text);
 			valorValue.setVisibility(View.VISIBLE);
-			valorValue.setText(Integer.toString(value));
+			valorValue.setText(value);
 			
 			TextView msg = (TextView) findViewById(R.id.preco);
 			msg.setVisibility(View.VISIBLE);
@@ -80,7 +80,7 @@ public class PaymentActivity extends GDActivity {
 			entidade.setText("Valor:");
 			TextView entidadeValue = (TextView) findViewById(R.id.campo1text);
 			entidadeValue.setVisibility(View.VISIBLE);
-			entidadeValue.setText(Integer.toString(value));
+			entidadeValue.setText(value);
 			
 			ImageView paypal = (ImageView) findViewById(R.id.paypalimage);
 			paypal.setVisibility(View.VISIBLE);
@@ -106,7 +106,7 @@ public class PaymentActivity extends GDActivity {
 			entidade.setText("Valor:");
 			TextView entidadeValue = (TextView) findViewById(R.id.campo1text);
 			entidadeValue.setVisibility(View.VISIBLE);
-			entidadeValue.setText(Integer.toString(value));
+			entidadeValue.setText(value);
 			
 			TextView msg = (TextView) findViewById(R.id.preco);
 			msg.setVisibility(View.VISIBLE);
