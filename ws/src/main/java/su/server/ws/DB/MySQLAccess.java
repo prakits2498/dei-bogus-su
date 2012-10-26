@@ -62,10 +62,40 @@ public class MySQLAccess {
 
 	}
 	
-	public boolean makeReservation(Reserva reserva) throws Exception{
+	public String getSlotDate(String slotID) throws Exception {
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("INSERT INTO reservas (id_utilizador, id_cantina, date, id_slot, price) VALUES(" + reserva.getUserID() + ", " + reserva.getPoiID() + ", '" + Integer.toString(reserva.getDay()).concat("-").concat(Integer.toString(reserva.getMonth())) + "', " + reserva.getSlotId + ", " + reserva.getPriceMeal() + ")");
+			preparedStatement = connect.prepareStatement("SELECT horario FROM slots WHERE id = "+slotID);
+			resultSet = preparedStatement.executeQuery();
+
+			return resultSet.getString(1);
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public void actualizaCreditos(String userID, String credits) throws Exception {
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("UPDATE utilizadores SET credits = "+credits+" WHERE id = "+userID);
+			preparedStatement.executeUpdate();
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
+	
+	public boolean makeReservation(Reserva reserva) throws Exception{
+		try {
+			if(reserva.isCreditos())
+				actualizaCreditos(reserva.getUserID(), reserva.getUserCredits());
+			
+			String slotDate = getSlotDate(reserva.getSlotID());
+			
+			preparedStatement = connect.prepareStatement("INSERT INTO reservas (id_utilizador, id_cantina, date, id_slot, price) VALUES(" + reserva.getUserID() + ", " + reserva.getPoiID() + ", '" + Integer.toString(reserva.getDay()).concat("-").concat(Integer.toString(reserva.getMonth())) + "', " + reserva.getSlotID() + ", " + reserva.getPriceMeal() + ")");
 			int num = preparedStatement.executeUpdate();
 
 			if(num==1){
