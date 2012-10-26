@@ -84,6 +84,8 @@ public class MySQLAccess {
 		try {
 			if(reserva.isCreditos())
 				actualizaCreditos(reserva.getUserID(), reserva.getUserCredits());
+			
+			//actualizaReservados(reserva.getPoiID()); //TODO
 		
 			preparedStatement = connect.prepareStatement("INSERT INTO reservas (id_utilizador, id_cantina, date, id_slot, price) VALUES('" + reserva.getUserID() + "', '" + reserva.getPoiID() + "', NOW(), '" + reserva.getSlotID() + "', '" + reserva.getPriceMeal() + "')");
 			int num = preparedStatement.executeUpdate();
