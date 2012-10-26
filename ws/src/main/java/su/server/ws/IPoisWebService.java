@@ -27,4 +27,7 @@ public interface IPoisWebService {
 	@WebMethod(operationName="getSlots")
 	public String getSlots(String request);
 	
+	@WebMethod(operationName="makeReservation")
+	public String makeReservation(String request);
+	
 }

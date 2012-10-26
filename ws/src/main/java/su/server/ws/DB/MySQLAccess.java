@@ -61,6 +61,24 @@ public class MySQLAccess {
 		}
 
 	}
+	
+	public boolean makeReservation(Reserva reserva) throws Exception{
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("INSERT INTO reservas (id_utilizador, id_cantina, date, id_slot, price) VALUES(" + reserva.getUserID() + ", " + reserva.getPoiID() + ", '" + Integer.toString(reserva.getDay()).concat("-").concat(Integer.toString(reserva.getMonth())) + "', " + reserva.getSlotId + ", " + reserva.getPriceMeal() + ")");
+			int num = preparedStatement.executeUpdate();
+
+			if(num==1){
+				return true;
+			}
+			else{
+				return false;
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
 	public int getCredits(int idUser) throws Exception {
 		try {

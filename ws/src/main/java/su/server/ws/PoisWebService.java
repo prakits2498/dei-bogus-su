@@ -56,6 +56,20 @@ public class PoisWebService implements IPoisWebService
 		return gson.toJson(result);
 	}
 	
+	public String makeReservation(String request){
+		Gson gson = new Gson();
+		Reserva reserva = (Reserva)gson.fromJson(request, Reserva.class);
+
+		boolean result=true;
+
+		try {
+			result = Db.makeReservation(reserva);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gson.toJson(result);
+	}
+	
 	public String getCredits(String request) {
 		Gson gson = new Gson();
 		int idUser = (int)gson.fromJson(request, Integer.class);
