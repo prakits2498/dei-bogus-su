@@ -70,6 +70,18 @@ public class PoisWebService implements IPoisWebService
 		return gson.toJson(result);
 	}
 	
+	public String actualizaCreditos(String userID, String credits) {
+		Gson gson = new Gson();
+		boolean result=true;
+
+		try {
+			result = Db.actualizaCreditos(userID, credits);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gson.toJson(result);
+	}
+	
 	public String getCredits(String request) {
 		Gson gson = new Gson();
 		int idUser = (int)gson.fromJson(request, Integer.class);

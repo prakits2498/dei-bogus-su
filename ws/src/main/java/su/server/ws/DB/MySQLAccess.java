@@ -75,11 +75,15 @@ public class MySQLAccess {
 		}
 	}
 	
-	public void actualizaCreditos(String userID, String credits) throws Exception {
+	public boolean actualizaCreditos(String userID, String credits) throws Exception {
 		try {
 			// PreparedStatements can use variables and are more efficient
 			preparedStatement = connect.prepareStatement("UPDATE utilizadores SET credits = "+credits+" WHERE id = "+userID);
-			preparedStatement.executeUpdate();
+			int res = preparedStatement.executeUpdate();
+			if(res == 1)
+				return true;
+			else
+				return false;
 			
 		} catch (Exception e) {
 			throw e;

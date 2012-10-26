@@ -1,19 +1,23 @@
 package su.server.ws.model;
 
 
-
 import java.util.List;
 
 public class Reserva {
 
 	private String userID;
 	private String poiID;
+	private String slotID;
 	private String priceMeal;
 	private List<Slot> slots;
 	private Meal meal;
 	
 	private int day;
 	private int month;
+	
+	private boolean creditos;
+	private boolean paid;
+	private String userCredits;
 	
 	public Reserva() {
 		
@@ -73,6 +77,38 @@ public class Reserva {
 
 	public void setMonth(int month) {
 		this.month = month;
+	}
+
+	public String getSlotID() {
+		return slotID;
+	}
+
+	public void setSlotID(String slotID) {
+		this.slotID = slotID;
+	}
+
+	public boolean isCreditos() {
+		return creditos;
+	}
+
+	public void setCreditos(boolean creditos) {
+		this.creditos = creditos;
+	}
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
+	}
+
+	public String getUserCredits() {
+		return userCredits;
+	}
+
+	public void setUserCredits(String userCredits) {
+		this.userCredits = userCredits;
 	}
 	
 	
