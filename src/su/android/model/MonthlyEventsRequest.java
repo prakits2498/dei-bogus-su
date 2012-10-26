@@ -1,6 +1,7 @@
 package su.android.model;
 
 
+
 import java.util.HashMap;
 
 public class MonthlyEventsRequest {
@@ -8,7 +9,7 @@ public class MonthlyEventsRequest {
 	private int year;
 	private int idUser;
 	//private List<String> listEvents;
-	HashMap<String, Integer> listEvents;
+	HashMap<String, String> listEvents;
 	
 	public MonthlyEventsRequest() {
 
@@ -38,11 +39,11 @@ public class MonthlyEventsRequest {
 		this.idUser = idUser;
 	}
 
-	public HashMap<String, Integer> getListEvents() {
+	public HashMap<String, String> getListEvents() {
 		return listEvents;
 	}
 
-	public void setListEvents(HashMap<String, Integer> listEvents) {
+	public void setListEvents(HashMap<String, String> listEvents) {
 		this.listEvents = listEvents;
 	}
 
