@@ -5,14 +5,19 @@ import greendroid.widget.PageIndicator;
 import greendroid.widget.PagedAdapter;
 import greendroid.widget.PagedView;
 import greendroid.widget.PagedView.OnPagedViewChangeListener;
+
+import java.util.ArrayList;
+
 import su.android.model.Meal;
 import su.android.model.MenuDetails;
+import su.android.model.TestAdapter;
+import su.android.model.TestObject;
+import su.android.model.TestReceiver;
 import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * Tab Menu -- Nos detalhes da Cantina
@@ -31,6 +36,11 @@ public class MenuDinnerActivity extends GDActivity {
 	ServerConnection conn;
 
 	public MenuDetails menuDetails;
+	public String dayOfWeek = "";
+	public String poiID = "";
+	public String userID;
+	
+	private ListDisplay<TestObject> selectableTable;
 
 	public MenuDinnerActivity() {
 		conn = ServerConnection.getInstance();
@@ -39,7 +49,6 @@ public class MenuDinnerActivity extends GDActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setActionBarContentView(R.layout.paged_view);
 		
 		loadMenuDetails();
@@ -68,15 +77,18 @@ public class MenuDinnerActivity extends GDActivity {
 		mPageIndicatorOther.setDotCount(PAGE_COUNT);
 
 		setActivePage(pagedView.getCurrentPage());
-
+		
+		
+    	
 	}
 
 	private void loadMenuDetails() {
 		Bundle b = new Bundle();
 		b = getIntent().getExtras();
 
-		String poiID = b.getString("poiID");
-
+		poiID = b.getString("poiID");
+		userID = b.getString("userID");
+		
 		menuDetails = conn.getMenuDetails(poiID);
 
 		if (menuDetails != null) {
@@ -110,6 +122,8 @@ public class MenuDinnerActivity extends GDActivity {
 
 	private class PhotoSwipeAdapter extends PagedAdapter {
 
+		private boolean sameMenu = false;
+		
 		@Override
 		public int getCount() {
 			return PAGE_COUNT;
@@ -126,80 +140,58 @@ public class MenuDinnerActivity extends GDActivity {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = getLayoutInflater().inflate(
-						R.layout.menu_details, parent, false);
-			}
+			ArrayList<TestObject> menuList = new ArrayList<TestObject>();
 
-			viewMenuDetails(position, convertView);
+			Meal dinner = getMeal(position);
+			menuList = createMenuTable(dinner, menuList);
+	    	
+	    	if (convertView == null) {
+				convertView = getLayoutInflater().inflate(R.layout.menu_details, parent, false);
+			}
+	    	
+	    	selectableTable = new ListDisplay<TestObject> (menuList, convertView.getContext(), new TestAdapter(convertView.getContext()), position);
+
+	    	TestReceiver t = new TestReceiver(convertView.getContext());
+	    	selectableTable.setSelectionReceiver(t);
+
+			convertView = selectableTable.getDisplay();
 
 			return convertView;
 		}
-
-		public void viewMenuDetails(int position, View convertView) {
+		
+		public Meal getMeal(int position) {
 			Meal dinner = null;
-			boolean same = false;
-
+			
 			if (menuDetails != null) {
 				if (!menuDetails.getMenuDinner().isEmpty()) {
-					dinner = menuDetails.getMenuDinner().get(position);
+					dinner = menuDetails.getMenuDinner().get(position); //FIXME isto da bogus --> cantinas so com 1 menu
 				} else {
 					// CANTINAS COM MENU IGUAL TODOS OS DIAS --- BAGUETES E PIZZAS
 					dinner = menuDetails.getMenuLunch().get(0);
-					same = true;
+					sameMenu = true;
 				}
 			}
 			
-			/*ImageView imageV = (ImageView) convertView.findViewById(R.id.product_photoID);
-			ImageLoader imageLoader = new ImageLoader(imageV.getContext());
-			imageLoader.DisplayImage(product.getImageUrl(), imageV);*/
-
-			if (dinner != null) {
-				
-				TextView dayOfWeekTv = (TextView) convertView.findViewById(R.id.dayOfWeek_text_ID);
-				dayOfWeekTv.setText(getDayOfWeek(position));
-				
-				if(same) {
-					TextView lunchTv = (TextView) convertView.findViewById(R.id.sopa_ID);
-					lunchTv.setText(dinner.getCarne());
-				} else {
-					TextView sopaTv = (TextView) convertView.findViewById(R.id.sopa_ID);
-					sopaTv.setText(dinner.getSopa());
-
-					TextView carneTv = (TextView) convertView.findViewById(R.id.carne_ID);
-					carneTv.setText(dinner.getCarne());
-
-					TextView peixeTv = (TextView) convertView.findViewById(R.id.peixe_ID);
-					peixeTv.setText(dinner.getPeixe());
-				}
-				
-				TextView priceTv = (TextView) convertView.findViewById(R.id.price_ID);
-				priceTv.setText(dinner.getPrice()+" €");
-				
-			}
+			return dinner;
 		}
 		
-		private String getDayOfWeek(int position) {
-			switch(position) {
-			case 0:
-				return "Segunda";
-			case 1:
-				return "Terça";
-			case 2: 
-				return "Quarta";
-			case 3:
-				return "Quinta";
-			case 4:
-				return "Sexta";
-			case 5:
-				return "Sábado";
-			case 6:
-				return "Domingo";
-			}
+		public ArrayList<TestObject> createMenuTable(Meal dinner, ArrayList<TestObject> menuList) {
+			if(dinner != null) {
+	    		if(sameMenu) {
+	    			String[] aux = dinner.getCarne().replace("|", "#").split("#");
+	    			menuList.add(new TestObject(aux[0], aux[1], "outro", menuDetails, userID, true));
+	    		} else {
+	    			String[] sopa = dinner.getSopa().replace("|", "#").split("#");
+	    			String[] carne = dinner.getCarne().replace("|", "#").split("#");
+	    			String[] peixe = dinner.getPeixe().replace("|", "#").split("#");
+	    			menuList.add(new TestObject(sopa[0], sopa[1]+" kcal", "sopa", menuDetails, userID, true));
+	    			menuList.add(new TestObject(carne[0], carne[1]+" kcal", "carne", menuDetails, userID, true));
+	    			menuList.add(new TestObject(peixe[0], peixe[1]+" kcal", "peixe", menuDetails, userID, true));
+	    		}
+	    	}
 			
-			return "";
+			return menuList;
 		}
-
 	}
 
 }

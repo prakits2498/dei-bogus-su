@@ -251,6 +251,10 @@ public class ServerConnection
 		return menuDetails;		
 	}
 
+	public void getReservaDetails(String poiId, String userID) {
+		
+	}
+	
 	public int verifyLogin (Login login){
 		int res=-1;
 		String method = "verifyLogin";

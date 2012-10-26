@@ -167,14 +167,23 @@ public class MenuLunchActivity extends GDActivity {
 					TextView lunchTv = (TextView) convertView.findViewById(R.id.sopa_ID);
 					lunchTv.setText(lunch.getCarne());
 				} else {
-					TextView sopaLunchTv = (TextView) convertView.findViewById(R.id.sopa_ID);
-					sopaLunchTv.setText(lunch.getSopa());
+					TextView sopaTv = (TextView) convertView.findViewById(R.id.sopa_ID);
+					TextView sopaKcalTv = (TextView) convertView.findViewById(R.id.sopaKcal);
+					String[] aux = lunch.getSopa().replace("|", "#").split("#");
+					sopaTv.setText(aux[0]);
+					sopaKcalTv.setText(aux[1] +" Kcal");
 
-					TextView carneLunchTv = (TextView) convertView.findViewById(R.id.carne_ID);
-					carneLunchTv.setText(lunch.getCarne());
+					TextView carneTv = (TextView) convertView.findViewById(R.id.carne_ID);
+					TextView carneKcalTv = (TextView) convertView.findViewById(R.id.carneKcal);
+					aux = lunch.getCarne().replace("|", "#").split("#");
+					carneTv.setText(aux[0]);
+					carneKcalTv.setText(aux[1]+" Kcal");
 
-					TextView peixeLunchTv = (TextView) convertView.findViewById(R.id.peixe_ID);
-					peixeLunchTv.setText(lunch.getPeixe());
+					TextView peixeTv = (TextView) convertView.findViewById(R.id.peixe_ID);
+					TextView peixeKcalTv = (TextView) convertView.findViewById(R.id.peixeKcal);
+					aux = lunch.getPeixe().replace("|", "#").split("#");
+					peixeTv.setText(aux[0]);
+					peixeKcalTv.setText(aux[1]+" Kcal");
 				}
 
 				TextView priceTv = (TextView) convertView.findViewById(R.id.price_ID);

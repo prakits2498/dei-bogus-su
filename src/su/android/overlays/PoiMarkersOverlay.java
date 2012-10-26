@@ -72,6 +72,8 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			
 			Intent myIntent = new Intent(mainScreen.getApplicationContext(), InfoTabActivity.class);
 			
+			myIntent.putExtra("userID", mainScreen.getCurrentAppContext().getIdUser());
+			
 			myIntent.putExtra("poiID", poi.getId());
 			myIntent.putExtra("poiName", poi.getName());
 			myIntent.putExtra("poiAddress", poi.getAddress());
