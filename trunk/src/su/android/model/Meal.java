@@ -8,6 +8,9 @@ public class Meal
 	private String peixe;
 	private String price;
 	
+	private String day;
+	private String month;
+	
 	public String getId() {
 		return id;
 	}
@@ -46,6 +49,22 @@ public class Meal
 	
 	public void setPrice(String price) {
 		this.price = price;
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
 	}
 
 }
