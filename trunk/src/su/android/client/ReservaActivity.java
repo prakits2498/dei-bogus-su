@@ -4,8 +4,12 @@ package su.android.client;
 import greendroid.app.GDActivity;
 
 import java.util.HashMap;
+import java.util.List;
 
+import su.android.model.Meal;
 import su.android.model.MenuDetails;
+import su.android.model.Reserva;
+import su.android.model.Slot;
 import su.android.server.connection.ServerConnection;
 import android.os.Bundle;
 import android.widget.Button;
@@ -37,8 +41,6 @@ public class ReservaActivity extends GDActivity {
         
         getExtras();
 
-        loadReservaDetails();
-       
         TextView data = (TextView) findViewById(R.id.data);
         
         TextView sopaTv = (TextView) findViewById(R.id.sopaTv_ID);
@@ -47,17 +49,33 @@ public class ReservaActivity extends GDActivity {
         TextView price = (TextView) findViewById(R.id.reservaPrice);
         price.setText(reservaExtras.get("priceMeal")+" Û");
         
-        if(temSopa)
+        Meal meal = new Meal();
+        meal.setId(reservaExtras.get("idMeal"));
+        meal.setPrice(reservaExtras.get("priceMeal"));
+ 
+        if(temSopa) {
+        	meal.setSopa(reservaExtras.get("sopaTv"));
         	sopaTv.setText(reservaExtras.get("sopaTv"));
+        }
         
-        if(temCarne)
+        if(temCarne) {
+        	meal.setCarne(reservaExtras.get("carneTv"));
         	pratoTv.setText(reservaExtras.get("carneTv"));
-        else if(temPeixe)
+        }
+        else if(temPeixe) {
+        	meal.setPeixe(reservaExtras.get("peixeTv"));
         	pratoTv.setText(reservaExtras.get("peixeTv"));
+        }
         
-        Spinner slot = (Spinner) findViewById(R.id.slot);
+        Spinner slot_spin = (Spinner) findViewById(R.id.slot);
         
+        Reserva reserva = new Reserva();
+        reserva.setPoiID(reservaExtras.get("poiID"));
+        reserva.setUserID(reservaExtras.get("userID"));
+        reserva.setMeal(meal);
         
+        reserva = conn.getSlots(reserva);
+        List<Slot> slots = reserva.getSlots();
         
         Button confirmar = (Button) findViewById(R.id.confirmar);
         
@@ -70,7 +88,7 @@ public class ReservaActivity extends GDActivity {
         reservaExtras.put("userID", b.getString("userID"));
         reservaExtras.put("poiID", b.getString("poiID"));
         reservaExtras.put("idMeal", b.getString("idMeal"));
-        reservaExtras.put("typeOfMeal", b.getString("typeOfMeal"));
+        reservaExtras.put("typeOfMeal", b.getString("typeOfMeal")); //lunch ou dinner
         reservaExtras.put("priceMeal", b.getString("priceMeal"));
         reservaExtras.put("dayOfWeek", b.getString("dayOfWeek"));
         
@@ -81,10 +99,6 @@ public class ReservaActivity extends GDActivity {
         temSopa = b.getBoolean("sopa");
         temCarne = b.getBoolean("carne");
         temPeixe = b.getBoolean("peixe");
-    }
-    
-    private void loadReservaDetails() {
-    	
     }
     
 }
