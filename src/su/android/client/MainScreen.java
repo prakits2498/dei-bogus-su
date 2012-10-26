@@ -17,6 +17,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MyLocationOverlay;
@@ -56,7 +63,13 @@ public class MainScreen extends GDMapActivity
 		addActionBarItem(getActionBar()
 					.newActionBarItem(NormalActionBarItem.class)
 					.setDrawable(new ActionBarDrawable(this,
-								R.drawable.search_icon)),R.id.action_bar_search);		
+								R.drawable.search_icon)),R.id.action_bar_search);
+		addActionBarItem(getActionBar()
+				.newActionBarItem(NormalActionBarItem.class)
+				.setDrawable(new ActionBarDrawable(this,
+							R.drawable.euro_icon_03)),R.id.action_bar_credits);
+		
+		
 		/**
 		 * Map initialization
 		 */
@@ -173,7 +186,34 @@ public class MainScreen extends GDMapActivity
 				ii.putExtra("idUser", this.currentContext.getIdUser());
 				startActivity(ii);
 				//this.categoryGridView.onActivateCategory(item.getItemView()); 
-				return true;		
+				return true;
+			case R.id.action_bar_credits: //TODO meter a abrir uma nova activity das reservas
+				int creditos = conn.getCredits(this.currentContext.getIdUser());
+				Log.i("creditos",Integer.toString(creditos));
+				
+				// get your custom_toast.xml ayout
+				LayoutInflater inflater = getLayoutInflater();
+ 
+				View layout = inflater.inflate(R.layout.custom_toast,
+				  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
+				//layout.setBackgroundColor(R.color.white);
+ 
+				// set a dummy image
+				ImageView image = (ImageView) layout.findViewById(R.id.image);
+				image.setImageResource(R.drawable.euro_icon_03);
+ 
+				// set a message
+				TextView text = (TextView) layout.findViewById(R.id.text);
+				text.setText("Tem " + Integer.toString(creditos) + " creditos");
+				//text.setTextColor(R.color.myTurquesa);
+ 
+				// Toast...
+				Toast toast = new Toast(getApplicationContext());
+				toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+				toast.setDuration(Toast.LENGTH_SHORT);
+				toast.setView(layout);
+				toast.show();
+				return true;	
 			default:
 				return super.onHandleActionBarItemClick(item, position);
 		}
