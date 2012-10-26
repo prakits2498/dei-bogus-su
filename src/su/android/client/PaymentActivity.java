@@ -21,7 +21,7 @@ public class PaymentActivity extends GDActivity {
 	Uri u = Uri.parse(url);
 	Context context = this;
 	ConfirmationData confData = new ConfirmationData();
-//	Server connection
+
 	private ServerConnection conn;
 
 	@Override
