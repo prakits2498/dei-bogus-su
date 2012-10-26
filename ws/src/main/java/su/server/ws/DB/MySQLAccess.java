@@ -226,7 +226,7 @@ public class MySQLAccess {
 	public Reserva getSlots(Reserva reserva) throws Exception {
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT DAYOFMONTH(s.horario), MONTH(s.horario), HOUR(s.horario), MINUTE(s.horario), s.n_reservados, c.capacity FROM slots s, cantinas c, menu m WHERE s.id_cantina = c.id AND s.id_menu = m.id AND m.id = "+reserva.getMeal().getId());
+			preparedStatement = connect.prepareStatement("SELECT DAYOFMONTH(s.horario), MONTH(s.horario), HOUR(s.horario), MINUTE(s.horario), s.n_reservados, c.capacity FROM slots s, cantinas c, menu m WHERE s.id_cantina = c.id AND s.id_menu = m.id AND DAYOFMONTH(s.horario) = "+reserva.getDay()+" AND MONTH(s.horario) = "+reserva.getMonth()+"  AND c.id = "+reserva.getPoiID()+" AND m.id = "+reserva.getMeal().getId());
 			resultSet = preparedStatement.executeQuery();
 
 			List<Slot> slots = new ArrayList<Slot>();
