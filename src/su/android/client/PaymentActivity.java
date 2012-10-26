@@ -1,5 +1,7 @@
 package su.android.client;
 
+import su.android.model.ConfirmationData;
+import su.android.server.connection.ServerConnection;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +20,9 @@ public class PaymentActivity extends GDActivity {
 	Intent i = new Intent(Intent.ACTION_VIEW);
 	Uri u = Uri.parse(url);
 	Context context = this;
+	ConfirmationData confData = new ConfirmationData();
+//	Server connection
+	private ServerConnection conn;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -26,9 +31,13 @@ public class PaymentActivity extends GDActivity {
 
 		Bundle b = new Bundle();
 		b = getIntent().getExtras();
+		conn = new ServerConnection();
 
+		int idUser = b.getInt("idUser");
 		String metodo = b.getString("metodo");
 		int value = b.getInt("valor");
+		confData.setIdUser(value);
+		confData = conn.getConfirmationData(confData);
 
 		TextView titulo = (TextView) findViewById(R.id.metodo);
 		titulo.setText("metodo");
