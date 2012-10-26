@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import su.server.ws.model.ConfirmationData;
 import su.server.ws.model.DayEventsRequest;
 import su.server.ws.model.Login;
 import su.server.ws.model.Meal;
@@ -63,7 +64,30 @@ public class MySQLAccess {
 
 	}
 	
+	public ConfirmationData getConfirmationData (ConfirmationData data) throws Exception{
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT email,telemovel,name FROM utilizadores WHERE id=" + data.getIdUser());
+			resultSet = preparedStatement.executeQuery();
+
+			if(resultSet.next()){
+				data.setEmail(resultSet.getString(1));
+				data.setNumTlm(resultSet.getString(2));
+				data.setNomeUtilizador(resultSet.getString(3));
+				return data;
+			}
+			else{
+				return null;
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+
 	public boolean actualizaCreditos(String userID, String credits) throws Exception {
+
 		try {
 			// PreparedStatements can use variables and are more efficient
 			preparedStatement = connect.prepareStatement("UPDATE utilizadores SET credits = "+credits+" WHERE id = "+userID);

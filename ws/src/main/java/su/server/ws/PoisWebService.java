@@ -3,6 +3,7 @@ package su.server.ws;
 import javax.jws.WebService;
 
 import su.server.ws.DB.MySQLAccess;
+import su.server.ws.model.ConfirmationData;
 import su.server.ws.model.DayEventsRequest;
 import su.server.ws.model.Login;
 import su.server.ws.model.MenuDetails;
@@ -40,6 +41,19 @@ public class PoisWebService implements IPoisWebService
 		}
 
 		return gson.toJson(poiList);
+	}
+	
+	public String getConfirmationData(String request)
+	{			
+		Gson gson = new Gson();
+		ConfirmationData data = (ConfirmationData)gson.fromJson(request, ConfirmationData.class);;
+		try {
+			data = Db.getConfirmationData(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return gson.toJson(data);
 	}
 
 	public String verifyLogin(String request) {

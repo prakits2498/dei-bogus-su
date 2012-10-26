@@ -30,7 +30,10 @@ public interface IPoisWebService {
 	@WebMethod(operationName="makeReservation")
 	public String makeReservation(String request);
 	
+	@WebMethod(operationName="getConfirmationData")
+	public String getConfirmationData(String request);
+
 	@WebMethod(operationName="actualizaCreditos")
 	public String actualizaCreditos(String userID, String credits);
-	
+
 }
