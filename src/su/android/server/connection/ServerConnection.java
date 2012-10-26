@@ -284,6 +284,36 @@ public class ServerConnection
 
 		return res;
 	}
+	
+	public int getCredits(int idUser){
+		int res=-1;
+		String method = "getCredits";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		String request = gson.toJson(idUser);
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(request);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			res = (Integer)gson.fromJson(result, Integer.class);
+			Log.i("USER CREDITS", "[Result: " + res + " do user: " + idUser + "]");
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", ">>>> IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+
+		return res;
+	}
 
 	public DayEventsRequest getMenuFromReservations (DayEventsRequest context){
 		DayEventsRequest events = null;
