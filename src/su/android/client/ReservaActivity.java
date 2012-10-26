@@ -3,8 +3,11 @@ package su.android.client;
 
 import greendroid.app.GDActivity;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import su.android.model.Meal;
 import su.android.model.Reserva;
@@ -35,6 +38,8 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 	Reserva reserva;
 	String radioButtonSelected;
 	
+	double priceMeal;
+	
 	private HashMap<String, String> reservaExtras = new HashMap<String, String>();
 
 	public ReservaActivity() {
@@ -56,7 +61,18 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 		TextView pratoTv = (TextView) findViewById(R.id.prato_ID);
 
 		TextView price = (TextView) findViewById(R.id.reservaPrice);
-		price.setText(reservaExtras.get("priceMeal")+" Û");
+		
+		
+		try {
+			NumberFormat format = NumberFormat.getInstance(Locale.FRENCH);
+			Number number = format.parse(reservaExtras.get("priceMeal"));
+			priceMeal = number.doubleValue();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		price.setText(priceMeal+" Û");
 
 		Meal meal = new Meal();
 		meal.setId(reservaExtras.get("idMeal"));
@@ -82,6 +98,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 		reserva.setMeal(meal);
 		reserva.setDay(Integer.parseInt(reservaExtras.get("dayMeal")));
 		reserva.setMonth(Integer.parseInt(reservaExtras.get("monthMeal")));
+		reserva.setPriceMeal(reservaExtras.get("priceMeal"));
 		reserva = conn.getSlots(reserva);
 		Log.i("getSlots BD: ", "dia: "+reserva.getDay()+" mes: "+reserva.getMonth()+" cantina: "+reserva.getPoiID()+" mealID: "+reserva.getMeal().getId());
 		
@@ -108,20 +125,26 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 				String idSlotSelected = reserva.getSlots().get(indexSlotSelected).getIdSlot();
 				reserva.setSlotID(idSlotSelected);
 				
+				Log.i("indexSlotSelected ", indexSlotSelected+"");
+				
+				
 				RadioButton paypalButton = (RadioButton) findViewById(R.id.paypal);
 				RadioButton multibancoButton = (RadioButton) findViewById(R.id.multibanco);
 				RadioButton creditosButton = (RadioButton) findViewById(R.id.creditos);
 
 				if(creditosButton.isChecked()) {
-					int userCredits = conn.getCredits(Integer.parseInt(reserva.getUserID()));
-					int userCreditsA = userCredits - Integer.parseInt(reserva.getPriceMeal());
+					
+					double userCredits = conn.getCredits(Integer.parseInt(reserva.getUserID()));
+					double userCreditsA = userCredits - priceMeal;
 					
 					if(verifyCredits(userCredits)) {
 						reserva.setCreditos(true);						
 						reserva.setPaid(true);
 						reservado = true;
 						
-						conn.actualizaCreditos(reserva.getUserID(), Integer.toString(userCreditsA));
+						reserva.setUserCredits(Double.toString(userCreditsA));
+						
+						conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
 						conn.makeReservationSlots(reserva);
 					} else {
 						//TODO Avisar que n‹o tem creditos suficientes para pagar - ficar na mesma activity
@@ -154,8 +177,8 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 	
 	
 	
-	public boolean verifyCredits(int userCredits) {
-		int aux = userCredits - Integer.parseInt(reserva.getPriceMeal());
+	public boolean verifyCredits(double userCredits) {
+		double aux = userCredits - priceMeal;
 		if(aux >= 0)
 			return true;
 		else 

@@ -110,7 +110,7 @@ public class ServerConnection
 		{
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
-			menuDetails = (MenuDetails)gson.fromJson(result, MenuDetails.class);
+			menuDetails = (MenuDetails) gson.fromJson(result, MenuDetails.class);
 		} 
 		catch (IOException e) 
 		{
@@ -251,8 +251,8 @@ public class ServerConnection
 		return res;
 	}
 	
-	public int getCredits(int idUser){
-		int res=-1;
+	public double getCredits(int idUser){
+		double res=-1;
 		String method = "getCredits";
 		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
 		String request = gson.toJson(idUser);
@@ -266,7 +266,7 @@ public class ServerConnection
 		{
 			httpTransport.call(NAMESPACE+method, soapEnvelope);
 			String result = soapEnvelope.getResponse().toString();
-			res = (Integer)gson.fromJson(result, Integer.class);
+			res = (Double)gson.fromJson(result, Double.class);
 			Log.i("USER CREDITS", "[Result: " + res + " do user: " + idUser + "]");
 		} 
 		catch (IOException e) 

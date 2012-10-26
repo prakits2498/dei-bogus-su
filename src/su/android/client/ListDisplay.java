@@ -15,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+
 /**
  * Manages the display of the watch list.
  *  
@@ -123,7 +124,6 @@ public class ListDisplay<T> {
 
 			newRow.setFocusable(true);
 			newRow.setFocusableInTouchMode(true);
-			//newRow.setOnFocusChangeListener(new RowHighlighter(item));
 			newRow.setOnTouchListener(new RowSelector(item));
 
 			display.addView(newRow);
