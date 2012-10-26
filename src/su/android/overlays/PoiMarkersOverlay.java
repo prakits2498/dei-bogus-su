@@ -103,7 +103,7 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			GeoPoint point = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
 			// Balloon
 			PoiMarker overlayItem = new PoiMarker(point, poi.getName(),
-					"N checkins: " + poi.getCheckinsCount(), poi);
+					"Carregue para ver os menus" + poi.getCheckinsCount(), poi);
 			
 			String mainCat1 = mainScreen.getResources().getString(R.string.mainCat1);
 			String mainCat2 = mainScreen.getResources().getString(R.string.mainCat2);
