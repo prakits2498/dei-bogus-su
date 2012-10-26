@@ -38,7 +38,8 @@ public class LoginActivity extends Activity {
 					String text = "Missing input";
 
 					Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-					toast.show();
+					toast.show();	
+					
 					
 					return;
 					
@@ -47,7 +48,7 @@ public class LoginActivity extends Activity {
 				//Verify credentials on DB
 				Login login = new Login(emailEdit.getText().toString(),passEdit.getText().toString());
 				int id = conn.verifyLogin(login);
-				if(id != -1){
+				if(id == -1){
 					// Switching to Main Activity
 					Intent i = new Intent(getApplicationContext(), MainScreen.class);
 					i.putExtra("idUser", id);

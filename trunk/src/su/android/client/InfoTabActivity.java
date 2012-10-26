@@ -66,6 +66,8 @@ public class InfoTabActivity extends GDTabActivity {
     	Bundle b = new Bundle();
         b = getIntent().getExtras();
         
+        poiExtras.put("userID", b.getString("userID"));
+        
         poiExtras.put("poiID", b.getString("poiID"));
         poiExtras.put("poiName", b.getString("poiName"));
         poiExtras.put("poiAddress", b.getString("poiAddress"));
@@ -73,13 +75,6 @@ public class InfoTabActivity extends GDTabActivity {
         poiExtras.put("poiSubCategory", b.getString("poiSubCategory"));        
         poiExtras.put("poiCatIcon", b.getString("poiCatIcon"));
         poiExtras.put("poiPhoto01", b.getString("poiPhoto01"));
-        
-        
-        int x = (int) Math.round(b.getDouble("poiAffluence"));
-        if(x<10) 
-        	poiExtras.put("poiAffluence", " "+Integer.toString(x));
-        else
-        	poiExtras.put("poiAffluence", Integer.toString(x));
 
     }
     
