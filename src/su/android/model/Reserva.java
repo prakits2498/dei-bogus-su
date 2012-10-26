@@ -1,11 +1,13 @@
 package su.android.model;
 
+import java.util.List;
+
 public class Reserva {
 
 	private String userID;
 	private String poiID;
 	private String priceMeal;
-	private String slot;
+	private List<Slot> slots;
 	private Meal meal;
 	
 	public Reserva() {
@@ -36,12 +38,12 @@ public class Reserva {
 		this.priceMeal = priceMeal;
 	}
 
-	public String getSlot() {
-		return slot;
+	public List<Slot> getSlots() {
+		return slots;
 	}
 
-	public void setSlot(String slot) {
-		this.slot = slot;
+	public void setSlots(List<Slot> slots) {
+		this.slots = slots;
 	}
 
 	public Meal getMeal() {

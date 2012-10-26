@@ -1,6 +1,7 @@
 package su.android.model;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class MenuDetails {
 	private String poiID;
 	private List<Meal> menuLunch;
 	private List<Meal> menuDinner;
+	private String day;
+	private String month;
 	
 	public MenuDetails()
 	{		
@@ -59,5 +62,21 @@ public class MenuDetails {
 	public List<Meal> getMenuDinner()
 	{
 		return this.menuDinner;
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
 	}
 }

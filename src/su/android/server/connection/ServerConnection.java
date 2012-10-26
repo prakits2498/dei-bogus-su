@@ -17,6 +17,7 @@ import su.android.model.MenuDetails;
 import su.android.model.MonthlyEventsRequest;
 import su.android.model.POI;
 import su.android.model.POIList;
+import su.android.model.Reserva;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -52,134 +53,6 @@ public class ServerConnection
 		soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		gson = new Gson();
 	}
-
-	/*public List<POI> getPOIRecommendations(double lat, double lng, String dayOfWeek, int hour, double maxDistance, int limit)
-	{
-		POIList poiList = null;
-		String method = "getPOIRecommendations";
-		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
-		RecommendationRequest req = new RecommendationRequest();
-		req.setLat(lat);
-		req.setLng(lng);
-		req.setMaxDistance(maxDistance);
-		req.setLimit(limit);
-		req.setDayOfWeek(dayOfWeek);
-		req.setHour(hour);
-		String request = gson.toJson(req);
-		PropertyInfo param1 = new PropertyInfo();
-		param1.setName("arg0");
-		param1.setValue(request);
-		param1.setType(PropertyInfo.STRING_CLASS);
-		soapRequest.addProperty(param1);
-		soapEnvelope.setOutputSoapObject(soapRequest);
-		try 
-		{
-			httpTransport.call(NAMESPACE+method, soapEnvelope);
-			String result = soapEnvelope.getResponse().toString();
-			poiList = (POIList)gson.fromJson(result, POIList.class);
-			Log.i("SERVER REQUEST(RECOMMENDATION)", "[POIS: "+poiList.getPoiList().size()+"]");
-		} 
-		catch (IOException e) 
-		{
-			Log.e("error", "IOException!!"+e.getMessage());
-		} 
-		catch (XmlPullParserException e) 
-		{
-			Log.e("error", "XMLPullParserException!!"+e.getMessage());
-		}
-		if(poiList != null)
-		{
-			return poiList.getPoiList();
-		}
-		else
-		{
-			return new ArrayList<POI>();
-		}
-	}
-
-	public List<POI> getPOIRecommendations(double lat, double lng, double maxDistance, int limit)
-	{
-		POIList poiList = null;
-		String method = "getPOIRecommendations";
-		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
-		RecommendationRequest req = new RecommendationRequest();
-		req.setLat(lat);
-		req.setLng(lng);
-		req.setMaxDistance(maxDistance);
-		req.setLimit(limit);
-		String request = gson.toJson(req);
-		PropertyInfo param1 = new PropertyInfo();
-		param1.setName("arg0");
-		param1.setValue(request);
-		param1.setType(PropertyInfo.STRING_CLASS);
-		soapRequest.addProperty(param1);
-		soapEnvelope.setOutputSoapObject(soapRequest);
-		try 
-		{
-			httpTransport.call(NAMESPACE+method, soapEnvelope);
-			String result = soapEnvelope.getResponse().toString();
-			poiList = (POIList)gson.fromJson(result, POIList.class);
-			Log.i("SERVER REQUEST(RECOMMENDATION)", "[POIS: "+poiList.getPoiList().size()+"]");
-		} 
-		catch (IOException e) 
-		{
-			Log.e("error", "IOException!!"+e.getMessage());
-		} 
-		catch (XmlPullParserException e) 
-		{
-			Log.e("error", "XMLPullParserException!!"+e.getMessage());
-		}
-		if(poiList != null)
-		{			
-			return poiList.getPoiList();
-		}
-		else
-		{
-			return new ArrayList<POI>();
-		}
-	}
-
-
-
-	public List<POI> searchPOIS(String query)
-	{
-		POIList poiList = null;
-		String method = "searchPOIS";
-		SoapObject soapRequest = new SoapObject(NAMESPACE, method);		
-		PropertyInfo param1 = new PropertyInfo();
-		param1.setName("arg0");
-		param1.setValue(query);
-		param1.setType(PropertyInfo.STRING_CLASS);
-		soapRequest.addProperty(param1);
-		soapEnvelope.setOutputSoapObject(soapRequest);
-		try 
-		{
-			httpTransport.call(NAMESPACE+method, soapEnvelope);
-			String result = soapEnvelope.getResponse().toString();
-			poiList = (POIList)gson.fromJson(result, POIList.class);
-			Log.i("SERVER REQUEST(SEARCH)", "[POIS: "+poiList.getPoiList().size()+"]");
-		} 
-		catch (IOException e) 
-		{
-			Log.e("error", "IOException!!"+e.getMessage());
-		} 
-		catch (XmlPullParserException e) 
-		{
-			Log.e("error", "XMLPullParserException!!"+e.getMessage());
-		}
-		if(poiList != null)
-		{
-			for(POI poi: poiList.getPoiList())
-			{
-				Log.i("POI", poi.toString());
-			}
-			return poiList.getPoiList();
-		}
-		else
-		{
-			return new ArrayList<POI>();
-		}
-	}*/
 
 	public List<POI> getPOIRecommendations(String dayOfWeek, int hour, int limit)
 	{
@@ -251,8 +124,33 @@ public class ServerConnection
 		return menuDetails;		
 	}
 
-	public void getReservaDetails(String poiId, String userID) {
+	public Reserva getSlots(Reserva reserva) {
+		String method = "getSlots";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		String request = gson.toJson(reserva);
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(request);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
 		
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			reserva = (Reserva) gson.fromJson(result, Reserva.class);
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+
+		return reserva;		
 	}
 	
 	public int verifyLogin (Login login){
