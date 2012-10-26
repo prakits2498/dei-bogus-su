@@ -18,6 +18,8 @@ import su.server.ws.model.MenuDetails;
 import su.server.ws.model.MonthlyEventsRequest;
 import su.server.ws.model.POI;
 import su.server.ws.model.POIList;
+import su.server.ws.model.Reserva;
+import su.server.ws.model.Slot;
 
 
 public class MySQLAccess {
@@ -178,13 +180,15 @@ public class MySQLAccess {
 
 		try {
 			// PreparedStatements can use variables and are more efficient
-			preparedStatement = connect.prepareStatement("SELECT m.id, m.sopa, m.carne, m.peixe, m.price FROM menu m, cantinas c, slots s WHERE c.id = s.id_cantina AND m.id = s.id_menu AND c.id = "+poiID+" GROUP BY m.id");
+			preparedStatement = connect.prepareStatement("SELECT m.id, m.sopa, m.carne, m.peixe, m.price, DAYOFMONTH(s.horario), MONTH(s.horario) FROM menu m, cantinas c, slots s WHERE c.id = s.id_cantina AND m.id = s.id_menu AND c.id = "+poiID+" GROUP BY m.id");
 			resultSet = preparedStatement.executeQuery();
 
 			menuDetails = new MenuDetails();
 			List<Meal> lunch = new ArrayList<Meal>();
 			List<Meal> dinner = new ArrayList<Meal>();
 
+			String day="", month="";
+			
 			int i=0;
 			while(resultSet.next()) {
 				i++;
@@ -195,6 +199,9 @@ public class MySQLAccess {
 				meal.setCarne(resultSet.getString(3));
 				meal.setPeixe(resultSet.getString(4));
 				meal.setPrice(resultSet.getString(5));
+				
+				day = resultSet.getString(6);
+				month = resultSet.getString(7);
 
 				if(i%2 == 1) {
 					lunch.add(meal);
@@ -206,12 +213,53 @@ public class MySQLAccess {
 			menuDetails.setPOI(poiID);
 			menuDetails.setMenuLunch(lunch);
 			menuDetails.setMenuDinner(dinner);
+			menuDetails.setDay(day);
+			menuDetails.setMonth(month);
 
 		} catch(Exception e) {
 			throw e;
 		}
 
 		return menuDetails;
+	}
+	
+	public Reserva getSlots(Reserva reserva) throws Exception {
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT DAYOFMONTH(s.horario), MONTH(s.horario), HOUR(s.horario), MINUTE(s.horario), s.n_reservados, c.capacity FROM slots s, cantinas c, menu m WHERE s.id_cantina = c.id AND s.id_menu = m.id AND m.id = "+reserva.getMeal().getId());
+			resultSet = preparedStatement.executeQuery();
+
+			List<Slot> slots = new ArrayList<Slot>();
+			
+			while(resultSet.next()) {
+				Slot slot = new Slot();
+				slot.setDay(resultSet.getInt(1));
+				slot.setMonth(resultSet.getInt(2));
+				slot.setHour(resultSet.getInt(3));
+				slot.setMinute(resultSet.getInt(4));
+				
+				int reservados = resultSet.getInt(5);
+				int capacidade = resultSet.getInt(6);
+				int available = capacidade - reservados;
+				
+				slot.setReservados(reservados);
+				slot.setAvailability(available);
+				
+				if(available > 0)
+					slot.setAvailable(true);
+				else
+					slot.setAvailable(false);
+				
+				slots.add(slot);
+			}
+			
+			reserva.setSlots(slots);
+
+		} catch(Exception e) {
+			throw e;
+		}
+
+		return reserva;
 	}
 
 

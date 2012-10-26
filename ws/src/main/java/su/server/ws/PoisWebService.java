@@ -8,6 +8,7 @@ import su.server.ws.model.Login;
 import su.server.ws.model.MenuDetails;
 import su.server.ws.model.MonthlyEventsRequest;
 import su.server.ws.model.POIList;
+import su.server.ws.model.Reserva;
 
 import com.google.gson.Gson;
 
@@ -107,22 +108,17 @@ public class PoisWebService implements IPoisWebService
 		return gson.toJson(menuDetails);
 	}
 
-	/*
-	@Override
-	public String searchPois(String query) {
+	public String getSlots(String request) {
 		Gson gson = new Gson();
-		POIList poiList = this.server.search(query);				
-		return gson.toJson(poiList);
+		Reserva reserva = (Reserva) gson.fromJson(request, Reserva.class);
+		
+		try {
+			reserva = Db.getSlots(reserva);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gson.toJson(reserva);
+		
 	}
-
-	@Override
-	public String getPois(String request) {
-		Gson gson = new Gson();
-		RecommendationRequest recommendationReq = (RecommendationRequest)gson.fromJson(request, RecommendationRequest.class);
-		int hour = recommendationReq.getHour();
-		String dayOfWeek = recommendationReq.getDayOfWeek();
-		int limit = recommendationReq.getLimit();
-		POIList poiList = this.server.getPOIList(hour, dayOfWeek, limit);				
-		return gson.toJson(poiList);
-	}*/
+	
 }

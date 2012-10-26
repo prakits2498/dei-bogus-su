@@ -14,7 +14,6 @@ public interface IPoisWebService {
 
 	@WebMethod(operationName="verifyLogin")
 	public String verifyLogin(String request);
-
 	
 	@WebMethod(operationName="getMenuDetails")
 	public String getMenuDetails(String poiId);
@@ -25,11 +24,7 @@ public interface IPoisWebService {
 	@WebMethod(operationName="getCredits")
 	public String getCredits(String request);
 	
-	/*
-	@WebMethod(operationName="searchPOIS")
-	public String searchPois(String poiId);
-	
-	@WebMethod(operationName="getPOIS")
-	public String getPois(String request);*/
+	@WebMethod(operationName="getSlots")
+	public String getSlots(String request);
 	
 }
