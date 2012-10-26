@@ -75,7 +75,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 			e.printStackTrace();
 		}
 		
-		price.setText(priceMeal+" Û");
+		price.setText(priceMeal+" ï¿½");
 
 		Meal meal = new Meal();
 		meal.setId(reservaExtras.get("idMeal"));
@@ -148,14 +148,14 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
 						conn.makeReservationSlots(reserva);
 						
-						payment = "credits";
+						payment = "Creditos";
 					} else {
-						//TODO Avisar que n‹o tem creditos suficientes para pagar - ficar na mesma activity
+						//TODO Avisar que nï¿½o tem creditos suficientes para pagar - ficar na mesma activity
 						Toast toast = new Toast(getApplicationContext());
 						toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 						toast.setDuration(Toast.LENGTH_SHORT);
 						toast.setView(v);
-						toast.setText("N‹o tem crŽditos suficiente para efectuar pagamento.");
+						toast.setText("Nï¿½o tem crï¿½ditos suficiente para efectuar pagamento.");
 						toast.show();
 						
 						reservado = false;
