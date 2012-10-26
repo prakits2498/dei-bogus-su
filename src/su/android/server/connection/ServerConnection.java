@@ -11,6 +11,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.AndroidHttpTransport;
 import org.xmlpull.v1.XmlPullParserException;
 
+import su.android.model.ConfirmationData;
 import su.android.model.DayEventsRequest;
 import su.android.model.Login;
 import su.android.model.MenuDetails;
@@ -25,12 +26,14 @@ import com.google.gson.Gson;
 public class ServerConnection 
 {	
 	private static final String NAMESPACE = "http://iPois/";
-
+	//private static final String URL = "http://ipois.dei.uc.pt:8080/su-server/ws?wsdl";
+	//private static final String URL = "http://localhost:80/su-server/ws?wsdl";
 	//private static final String URL = "http://ipois.dei.uc.pt:8080/su-server/ws?wsdl";
 	//private static final String URL = "http://localhost:8083/su-server/ws?wsdl";
 	//private static final String URL = "http://193.136.207.29:8080/su-server/ws?wsdl";
 	private static final String URL = "http://10.16.0.3:8080/su-server/ws?wsdl"; //BB
 	//private static final String URL = "http://10.16.0.196:8080/su-server/ws?wsdl"; //DURVAS
+
 
 	private SoapSerializationEnvelope soapEnvelope;
 	private AndroidHttpTransport httpTransport;
@@ -151,6 +154,36 @@ public class ServerConnection
 		}
 
 		return reserva;		
+	}
+	
+	public ConfirmationData getConfirmationData(ConfirmationData data) {
+		ConfirmationData resultado=null;
+		String method = "getConfirmationData";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		String request = gson.toJson(data);
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(request);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			resultado = (ConfirmationData) gson.fromJson(result, ConfirmationData.class);
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+
+		return resultado;		
 	}
 	
 	public boolean makeReservationSlots(Reserva reserva) {
