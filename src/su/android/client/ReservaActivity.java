@@ -3,6 +3,9 @@ package su.android.client;
 
 import greendroid.app.GDActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -138,6 +141,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 				if(creditosButton.isChecked()) {
 					
 					double userCredits = conn.getCredits(Integer.parseInt(reserva.getUserID()));
+					
 					double userCreditsA = userCredits - priceMeal;
 					
 					if(verifyCredits(userCredits)) {
@@ -150,6 +154,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
 						conn.actualizaNumReservados(reserva.getSlotID());
 						conn.makeReservationSlots(reserva);
+						
 						
 						payment = "Creditos";
 					} else {
@@ -204,6 +209,33 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 				}
 				
 				if(reservado) {
+					try {
+						File myFile = new File("/sdcard/alacarte/reservas.txt");
+						boolean existe = myFile.createNewFile();
+						FileOutputStream fOut = new FileOutputStream(myFile);
+						OutputStreamWriter myOutWriter = 
+												new OutputStreamWriter(fOut);
+						
+						Slot temp = reserva.getSlots().get(indexSlotSelected);
+						String backup = conn.getNameCantina("Cantina: " + reserva.getPoiID()) + "\n" + "Slot: " + temp.getDay() + "/" + temp.getMonth() + " - " + temp.getHour() + "\n";
+						backup.concat("Menu: ");
+						if(temCarne)
+							backup.concat(reserva.getMeal().getCarne());
+						if(temSopa)
+							backup.concat(" - " + reserva.getMeal().getSopa());
+						if(temPeixe)
+							backup.concat(" - " + reserva.getMeal().getPeixe());
+						backup.concat("\nPreço: " + reserva.getPriceMeal() + "\n\n\n");
+						
+						myOutWriter.append(backup);
+						myOutWriter.close();
+						fOut.close();
+
+					} catch (Exception e) {
+						Toast.makeText(getBaseContext(), e.getMessage(),
+								Toast.LENGTH_SHORT).show();
+					}
+					
 					Intent i = new Intent(v.getContext(), PaymentActivity.class);
 					i.putExtra("userID", reserva.getUserID());
 					i.putExtra("payment", payment);
