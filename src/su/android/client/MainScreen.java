@@ -5,6 +5,7 @@ import greendroid.graphics.drawable.ActionBarDrawable;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.NormalActionBarItem;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import su.android.model.AppContext;
@@ -59,7 +60,7 @@ public class MainScreen extends GDMapActivity
 		addActionBarItem(getActionBar()
 				.newActionBarItem(NormalActionBarItem.class)
 				.setDrawable(new ActionBarDrawable(this,
-							R.drawable.search_cat_icon)), R.id.action_bar_category); //TODO mudar para icon de calendario
+							R.drawable.calendar_icon)), R.id.action_bar_category); //TODO mudar para icon de calendario
 		addActionBarItem(getActionBar()
 					.newActionBarItem(NormalActionBarItem.class)
 					.setDrawable(new ActionBarDrawable(this,
@@ -181,16 +182,17 @@ public class MainScreen extends GDMapActivity
 				i.putExtra("hour", this.currentContext.getHourOfDay());
 				startActivity(i);
 				return true;		
-			case R.id.action_bar_category: //TODO meter a abrir uma nova activity das reservas
+			case R.id.action_bar_category:
 				Intent ii = new Intent(getApplicationContext(), SimpleCalendarViewActivity.class);
 				ii.putExtra("idUser", this.currentContext.getIdUser());
 				startActivity(ii);
 				//this.categoryGridView.onActivateCategory(item.getItemView()); 
 				return true;
-			case R.id.action_bar_credits: //TODO meter a abrir uma nova activity das reservas
+			case R.id.action_bar_credits:
 				double creditos = conn.getCredits(this.currentContext.getIdUser());
-				Log.i("creditos",Double.toString(creditos));
-				
+
+		        DecimalFormat df = new DecimalFormat("#.##");
+		        
 				// get your custom_toast.xml ayout
 				LayoutInflater inflater = getLayoutInflater();
  
@@ -200,11 +202,13 @@ public class MainScreen extends GDMapActivity
  
 				// set a dummy image
 				ImageView image = (ImageView) layout.findViewById(R.id.image);
-				image.setImageResource(R.drawable.euro_icon_03);
+				image.setImageResource(R.drawable.euro_icon_blue_big_03);
+				
+				
  
 				// set a message
 				TextView text = (TextView) layout.findViewById(R.id.text);
-				text.setText("Tem " + Double.toString(creditos) + " creditos");
+				text.setText("Tem " + df.format(creditos) + "Û na sua conta");
 				//text.setTextColor(R.color.myTurquesa);
  
 				// Toast...

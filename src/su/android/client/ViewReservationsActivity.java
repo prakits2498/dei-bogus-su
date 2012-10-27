@@ -69,7 +69,6 @@ public class ViewReservationsActivity extends GDActivity {
 		req = conn.getMenuFromReservations(req);
 		
 		Log.i("dados da bd", "---- "+req.getLunchEvents().get("sopa"));
-		Toast.makeText(getApplicationContext(), "olaaaaaa", Toast.LENGTH_SHORT);
 		
 		HashMap<String, String> almoco = req.getLunchEvents();
 		HashMap<String, String> jantar = req.getDinnerEvents();
@@ -77,33 +76,58 @@ public class ViewReservationsActivity extends GDActivity {
 		
 		int i = 0; 	//flag para ver se ja foi inserido algum menu
 		
-		if(almoco.get("cantina") != null){
+		if(almoco.get("cantina") != null) {
 			i++;
 			TextView cantina = (TextView) findViewById(R.id.cantina_ID);
 			cantina.setText(almoco.get("cantina") + " - " + almoco.get("slot"));
-			TextView sopa = (TextView) findViewById(R.id.sopa_ID);
-			sopa.setText(almoco.get("sopa").substring(0, almoco.get("sopa").indexOf("|")));
-			TextView carne = (TextView) findViewById(R.id.carne_ID);
-			carne.setText(almoco.get("carne").substring(0, almoco.get("carne").indexOf("|")));
-			TextView peixe = (TextView) findViewById(R.id.peixe_ID);
-			peixe.setText(almoco.get("peixe").substring(0, almoco.get("peixe").indexOf("|")));
+			if(almoco.get("sopa") != null) {
+				TextView sopa = (TextView) findViewById(R.id.sopa_ID);
+				sopa.setText(almoco.get("sopa").substring(0, almoco.get("sopa").indexOf("|")));
+			}
+			
+			if(almoco.get("carne") != null) {
+				TextView carne = (TextView) findViewById(R.id.carne_ID);
+				
+				if(almoco.get("carne").contains("|"))
+					carne.setText(almoco.get("carne").substring(0, almoco.get("carne").indexOf("|")));
+				else
+					carne.setText(almoco.get("carne"));
+			} else if(almoco.get("peixe") != null) {
+				TextView peixe = (TextView) findViewById(R.id.peixe_ID);
+				peixe.setText(almoco.get("peixe").substring(0, almoco.get("peixe").indexOf("|")));
+			}
+			
 			TextView preco = (TextView) findViewById(R.id.price_ID);
 			preco.setText(almoco.get("preco"));
+			
 			TextView precoId = (TextView) findViewById(R.id.price_text_ID);
-			precoId.setText("Preço");
+			precoId.setText("Preo");
 		}
 		
 		if(jantar.get("cantina") != null){
 			if(i==0){
 				i++;
+				
 				TextView cantina = (TextView) findViewById(R.id.cantina_ID);
 				cantina.setText(jantar.get("cantina") + " - " + jantar.get("slot"));
-				TextView sopa = (TextView) findViewById(R.id.sopa_ID);
-				sopa.setText(almoco.get("sopa").substring(0, almoco.get("sopa").indexOf("|")));
-				TextView carne = (TextView) findViewById(R.id.carne_ID);
-				carne.setText(almoco.get("carne").substring(0, almoco.get("carne").indexOf("|")));
-				TextView peixe = (TextView) findViewById(R.id.peixe_ID);
-				peixe.setText(almoco.get("peixe").substring(0, almoco.get("peixe").indexOf("|")));
+				
+				if(almoco.get("sopa") != null) {
+					TextView sopa = (TextView) findViewById(R.id.sopa_ID);
+					sopa.setText(almoco.get("sopa").substring(0, almoco.get("sopa").indexOf("|")));
+				}
+				
+				if(almoco.get("carne") != null) {
+					TextView carne = (TextView) findViewById(R.id.carne_ID);
+
+					if(almoco.get("carne").contains("|"))
+						carne.setText(almoco.get("carne").substring(0, almoco.get("carne").indexOf("|")));
+					else
+						carne.setText(almoco.get("carne"));
+				} else if(almoco.get("peixe") != null) {
+					TextView peixe = (TextView) findViewById(R.id.peixe_ID);
+					peixe.setText(almoco.get("peixe").substring(0, almoco.get("peixe").indexOf("|")));
+				}
+				
 				TextView preco = (TextView) findViewById(R.id.price_ID);
 				preco.setText(jantar.get("preco"));
 				TextView precoId = (TextView) findViewById(R.id.price_text_ID);
@@ -113,21 +137,30 @@ public class ViewReservationsActivity extends GDActivity {
 				i++;
 				TextView cantina = (TextView) findViewById(R.id.cantina_ID2);
 				cantina.setText(jantar.get("cantina") + " - " + jantar.get("slot"));
-				TextView sopa = (TextView) findViewById(R.id.sopa_ID2);
-				sopa.setText(almoco.get("sopa").substring(0, almoco.get("sopa").indexOf("|")));
-				TextView carne = (TextView) findViewById(R.id.carne_ID2);
-				carne.setText(almoco.get("carne").substring(0, almoco.get("carne").indexOf("|")));
-				TextView peixe = (TextView) findViewById(R.id.peixe_ID2);
-				peixe.setText(almoco.get("peixe").substring(0, almoco.get("peixe").indexOf("|")));
+				
+				if(almoco.get("sopa") != null) {
+					TextView sopa = (TextView) findViewById(R.id.sopa_ID2);
+					sopa.setText(almoco.get("sopa").substring(0, almoco.get("sopa").indexOf("|")));
+				}
+				
+				if(almoco.get("carne") != null) {
+					TextView carne = (TextView) findViewById(R.id.carne_ID2);
+					
+					if(almoco.get("carne").contains("|"))
+						carne.setText(almoco.get("carne").substring(0, almoco.get("carne").indexOf("|")));
+					else
+						carne.setText(almoco.get("carne"));
+					
+				} else if(almoco.get("peixe") != null) {
+					TextView peixe = (TextView) findViewById(R.id.peixe_ID2);
+					peixe.setText(almoco.get("peixe").substring(0, almoco.get("peixe").indexOf("|")));
+				}
+				
 				TextView preco = (TextView) findViewById(R.id.price_ID2);
 				preco.setText(jantar.get("preco"));
 				TextView precoId = (TextView) findViewById(R.id.price_text_ID2);
 				precoId.setText("Preço");
 			}
-		}
-		
-		if(i>1){
-			Log.i("refeicoes","tem duaaaas");
 		}
 		
 	}

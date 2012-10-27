@@ -162,7 +162,7 @@ public class MenuLunchActivity extends GDActivity {
 			
 			if (menuDetails != null) {
 				if (!menuDetails.getMenuDinner().isEmpty()) {
-					lunch = menuDetails.getMenuLunch().get(position); //FIXME isto da bogus --> cantinas so com 1 menu
+					lunch = menuDetails.getMenuLunch().get(position);
 					idMeal = menuDetails.getMenuLunch().get(position).getId();
 				} else {
 					// CANTINAS COM MENU IGUAL TODOS OS DIAS --- BAGUETES E PIZZAS
@@ -179,8 +179,7 @@ public class MenuLunchActivity extends GDActivity {
 		public ArrayList<TestObject> createMenuTable(Meal lunch, ArrayList<TestObject> menuList) {
 			if(lunch != null) {
 	    		if(sameMenu) {
-	    			String[] aux = lunch.getCarne().replace("|", "#").split("#");
-	    			menuList.add(new TestObject(aux[0], aux[1], "carne", menuDetails, userID, idMeal, false));
+	    			menuList.add(new TestObject(lunch.getCarne(), "", "carne", menuDetails, userID, idMeal, false));
 	    		} else {
 	    			String[] sopa = lunch.getSopa().replace("|", "#").split("#");
 	    			String[] carne = lunch.getCarne().replace("|", "#").split("#");
