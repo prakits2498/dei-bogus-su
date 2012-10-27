@@ -12,9 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import su.android.model.Meal;
 import su.android.model.Reserva;
 import su.android.model.Slot;
+import su.android.server.connection.MailClient;
 import su.android.server.connection.ServerConnection;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,6 +50,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 	int indexSlotSelected;
 	Reserva reserva;
 	String radioButtonSelected;
+	String backup; //guardada no txt e enviada por mail
 	
 	double priceMeal;
 	
@@ -80,7 +85,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 			e.printStackTrace();
 		}
 		
-		price.setText(priceMeal+" €");
+		price.setText(priceMeal+" ÔøΩ");
 
 		Meal meal = new Meal();
 		meal.setId(reservaExtras.get("idMeal"));
@@ -170,13 +175,14 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 		 
 						// set a message
 						TextView text = (TextView) layout.findViewById(R.id.text);
-						text.setText("Não tem saldo suficiente para efectuar pagamento.");
+						text.setText("NÔøΩo tem saldo suficiente para efectuar pagamento.");
 		 
 						// Toast...
 						Toast toast = new Toast(getApplicationContext());
 						toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 						toast.setDuration(Toast.LENGTH_SHORT);
 						toast.setView(layout);
+
 						toast.show();
 						
 						reservado = false;
@@ -203,24 +209,28 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 					payment = "MB";
 				}
 				
+				
 				if(reservado) {
 					try {
-						File myFile = new File("/sdcard/alacarte/reservas.txt");
+						File myFile = new File("/sdcard/reservas.txt");
 						boolean existe = myFile.createNewFile();
-						FileOutputStream fOut = new FileOutputStream(myFile);
+						FileOutputStream fOut = new FileOutputStream(myFile,true);
 						OutputStreamWriter myOutWriter = 
 												new OutputStreamWriter(fOut);
 						
 						Slot temp = reserva.getSlots().get(indexSlotSelected);
-						String backup = conn.getNameCantina("Cantina: " + reserva.getPoiID()) + "\n" + "Slot: " + temp.getDay() + "/" + temp.getMonth() + " - " + temp.getHour() + "\n";
-						backup.concat("Menu: ");
+						String cantina = conn.getNameCantina(reserva.getPoiID());
+						
+						backup = ("Cantina: " + cantina) + "\n" + "Slot: " + temp.getDay() + "/" + temp.getMonth() + " - " + temp.getHour() + "\n";
+						backup = backup.concat("Menu: ");
 						if(temCarne)
-							backup.concat(reserva.getMeal().getCarne());
+							backup = backup.concat(reserva.getMeal().getCarne());
 						if(temSopa)
-							backup.concat(" - " + reserva.getMeal().getSopa());
+							backup = backup.concat(" - " + reserva.getMeal().getSopa());
 						if(temPeixe)
-							backup.concat(" - " + reserva.getMeal().getPeixe());
-						backup.concat("\nPre√ßo: " + reserva.getPriceMeal() + "\n\n\n");
+							backup = backup.concat(" - " + reserva.getMeal().getPeixe());
+						backup = backup.concat("\nPre√ßo: " + reserva.getPriceMeal() + "\n");
+						backup = backup.concat("Metodo de pagamento: " + payment + "\n\n\n");
 						
 						myOutWriter.append(backup);
 						myOutWriter.close();
@@ -229,6 +239,19 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 					} catch (Exception e) {
 						Toast.makeText(getBaseContext(), e.getMessage(),
 								Toast.LENGTH_SHORT).show();
+					}
+					
+					String email = conn.getEmail(reserva.getUserID());
+					
+					MailClient sender = new MailClient();
+					try {
+						sender.sendMail("deiBogus@gmail.com", "deiBogus1","smtp.gmail.com","durvalp1@gmail.com","Hist√≥rico de reservas",backup);
+					} catch (AddressException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 					
 					Intent i = new Intent(v.getContext(), PaymentActivity.class);
