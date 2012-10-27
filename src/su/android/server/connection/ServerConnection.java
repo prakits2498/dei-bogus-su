@@ -137,7 +137,36 @@ public class ServerConnection
 		param1.setType(PropertyInfo.STRING_CLASS);
 		soapRequest.addProperty(param1);
 		soapEnvelope.setOutputSoapObject(soapRequest);
-		MenuDetails menuDetails = null;
+		String result="";
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			result = soapEnvelope.getResponse().toString();
+			//menuDetails = (MenuDetails) gson.fromJson(result, MenuDetails.class);
+			result = (String) gson.fromJson(result, String.class);
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+
+		return result;		
+	}
+	
+	public String getEmail(String userId)
+	{
+		String method = "getEmail";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);		
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(userId);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		soapRequest.addProperty(param1);
+		soapEnvelope.setOutputSoapObject(soapRequest);
 		String result="";
 		try 
 		{
