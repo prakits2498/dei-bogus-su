@@ -67,4 +67,14 @@ public class MailClient{
         }
     }
     
+    public static void main(String[] args) {
+		// TODO Auto-generated method stub
+    	try {   
+    		MailClient sender = new MailClient();
+    		sender.sendMail("durvalp1@gmail.com", "Gozonatuacarinha","smtp.gmail.com","durvalp1@gmail.com","oioi","ioioia");   
+    	} catch (Exception e) {   
+    		System.out.println(e);   
+    	}
+    	
+    }
  } 
