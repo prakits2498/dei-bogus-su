@@ -14,7 +14,7 @@
   		<LinearLayout android:id="@+id/header"
   				android:layout_width="fill_parent"
   				android:layout_height="wrap_content"
-  				android:background="@layout/header_gradient" 
+  				android:background="@drawable/action_bar_background" 
   				android:paddingTop="5dip"
   				android:paddingBottom="5dip">
   				<!-- Logo Start-->
@@ -43,6 +43,14 @@
 		  android:padding="10dip"
 		  android:layout_below="@id/header">
 		  <!--  Email Label -->
+
+			<ImageView
+			    android:id="@+id/imageView1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="center"
+			    android:src="@drawable/logo_app_15" />
+
 		  <TextView android:layout_width="fill_parent"
 		  		android:layout_height="wrap_content"
 		  		android:textColor="#372c24"
