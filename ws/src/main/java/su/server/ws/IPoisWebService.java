@@ -35,5 +35,8 @@ public interface IPoisWebService {
 
 	@WebMethod(operationName="actualizaCreditos")
 	public String actualizaCreditos(String userID, String credits);
+	
+	@WebMethod(operationName="actualizaNumReservados")
+	public String actualizaNumReservados(String nSlots);
 
 }

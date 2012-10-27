@@ -109,7 +109,7 @@ public class MySQLAccess {
 			if(reserva.isCreditos())
 				actualizaCreditos(reserva.getUserID(), reserva.getUserCredits());
 			
-			//actualizaReservados(reserva.getPoiID()); //TODO
+			actualizaReservados(reserva.getSlotID());
 		
 			preparedStatement = connect.prepareStatement("INSERT INTO reservas (id_utilizador, id_cantina, date, id_slot, price) VALUES('" + reserva.getUserID() + "', '" + reserva.getPoiID() + "', NOW(), '" + reserva.getSlotID() + "', '" + reserva.getPriceMeal() + "')");
 			int num = preparedStatement.executeUpdate();
@@ -119,6 +119,38 @@ public class MySQLAccess {
 			}
 			else{
 				return false;
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public int  actualizaReservados(String slotID) throws Exception {
+		int res=0;
+		try {
+			int n_reservados = getNumReservados(slotID);
+			
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("UPDATE slots SET n_reservados = "+(n_reservados++)+" WHERE id = "+slotID);
+			res = preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			throw e;
+		}
+		
+		return res;
+	}
+	
+	public int getNumReservados(String slotID) throws Exception {
+		try {
+			preparedStatement = connect.prepareStatement("SELECT n_reservados FROM slots WHERE id=" + slotID);
+			resultSet = preparedStatement.executeQuery();
+
+			if(resultSet.next()){
+				return resultSet.getInt(1);
+			}
+			else{
+				return -1;
 			}
 
 		} catch (Exception e) {
