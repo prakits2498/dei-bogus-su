@@ -3,8 +3,12 @@ package su.android.client;
 import su.android.model.Login;
 import su.android.server.connection.ServerConnection;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,13 +28,46 @@ public class LoginActivity extends Activity {
 		//server interface
 		conn = new ServerConnection();
 		
-		
-		//ligaçoes com elementos do layout
+		//ligaï¿½oes com elementos do layout
 		loginButton = (Button) findViewById(R.id.btnLogin);
+		
+//		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//
+//		alert.setTitle("Title");
+//		alert.setMessage("Message");
+//
+//		// Set an EditText view to get user input 
+//		final EditText input = new EditText(this);
+//		alert.setView(input);
+//
+//		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//		public void onClick(DialogInterface dialog, int whichButton) {
+//		  String value = input.getText().toString();
+//		  // Do something with value!
+//		  }
+//		});
+//
+//		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//		  public void onClick(DialogInterface dialog, int whichButton) {
+//		    // Canceled.
+//		  }
+//		});
+
+//		alert.show();
 
 		//handle login button
 		loginButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+//				try {   
+//                    GMailSender sender = new GMailSender("deiBogus@gmail.com", "deiBogus1");
+//                    sender.sendMail("912894137",   
+//                            "Reserva confirmada",
+//                            "deiBogus@gmail.com",
+//                            "durvalp1@gmail.com");   
+//                } catch (Exception e) {   
+//                    Log.e("SendMail", e.getMessage(), e);   
+//                }
+				
 				emailEdit = (EditText) findViewById(R.id.emailInput);
 				passEdit = (EditText) findViewById(R.id.passwordlInput);
 				
@@ -49,7 +86,14 @@ public class LoginActivity extends Activity {
 				
 				//Verify credentials on DB
 				Login login = new Login(emailEdit.getText().toString(),passEdit.getText().toString());
-				int id = conn.verifyLogin(login);
+				
+				int id=-1;
+				try {
+					id = conn.verifyLogin(login);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(id != -1){
 					// Switching to Main Activity
 					Intent i = new Intent(getApplicationContext(), MainScreen.class);
