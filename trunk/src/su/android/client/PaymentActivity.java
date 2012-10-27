@@ -120,7 +120,7 @@ public class PaymentActivity extends GDActivity {
 		}
 
 		SmsManager smsManager = SmsManager.getDefault();
-		smsManager.sendTextMessage("912894137", null, "Reserva efectuada com sucesso", null, null); //FIXME questão da SMS
+		smsManager.sendTextMessage(confData.getNumTlm(), null, "Reserva efectuada com sucesso", null, null); //FIXME questão da SMS
 	}
 
 }
