@@ -1,7 +1,6 @@
 package su.android.client;
 
 import su.android.model.ConfirmationData;
-import su.android.server.connection.GMailSender;
 import su.android.server.connection.ServerConnection;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
