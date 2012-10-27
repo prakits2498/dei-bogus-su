@@ -11,7 +11,8 @@ public class Reserva {
 	private String priceMeal;
 	private List<Slot> slots;
 	private Meal meal;
-	
+
+
 	private int day;
 	private int month;
 	
