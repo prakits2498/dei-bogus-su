@@ -1,144 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
 
-    <RelativeLayout
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:padding="8dp" >
+
+    <AbsoluteLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pagamentoLayout"
+        android:id="@+id/poiInfoAbsoluteLayoutID"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/white"
-        android:clickable="true"
-        android:focusable="true" >
+        android:layout_height="466dp"
+        android:background="@color/white" >
+
+        <ImageView
+            android:id="@+id/pagamento_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="15dp"
+            android:layout_y="0dp"
+            android:padding="10dp"
+            android:src="@drawable/cozinheiro_blue_03" />
+
+        <TextView
+            android:id="@+id/campo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="190dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/campo1text"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_above="@+id/campo1"
+            android:layout_alignParentRight="true"
+            android:layout_x="120dp"
+            android:layout_y="190dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+        
+        <TextView
+            android:id="@+id/campo2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="220dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/campo2text"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_above="@+id/campo2"
+            android:layout_alignParentRight="true"
+            android:layout_x="120dp"
+            android:layout_y="220dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+        
+        <TextView
+            android:id="@+id/campo3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="250dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/campo3text"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_above="@+id/campo3"
+            android:layout_alignParentRight="true"
+            android:layout_x="120dp"
+            android:layout_y="250dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+        
+        <TextView
+            android:id="@+id/preco"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_x="20dp"
+            android:layout_y="290dp"
+            android:textColor="@color/myTurquesa"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/price_ID"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_above="@+id/preco"
+            android:layout_alignParentRight="true"
+            android:layout_x="120dp"
+            android:layout_y="290dp"
+            android:textColor="@color/myDarkGray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/reservaTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="103dp"
+            android:layout_y="58dp"
+            android:text="Bem Sucedida"
+            android:textColor="@color/myTurquesa"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/reservaTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_x="138dp"
+            android:layout_y="28dp"
+            android:text="Reserva"
+            android:textColor="@color/myTurquesa"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/metodo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="150sp"
+            android:layout_x="20dp"
+            android:layout_y="130dp"
+            android:text="Metodo"
             android:textColor="@color/myTurquesa"
-            android:text="teste"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/campo1"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/metodo"
-            android:layout_marginBottom="10sp"
-            android:layout_marginLeft="20sp"
-            android:layout_marginTop="10sp"
-            android:textColor="@color/myTurquesa"
-            android:visibility="gone"
-            android:text="teste"
-            android:textSize="13sp" />
-        
-        <TextView
-            android:id="@+id/campo1text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/campo1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10sp"
-            android:layout_toRightOf="@id/campo1"
-            android:textColor="@color/myDarkGray"
-            android:visibility="gone"
-            android:text="teste"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/campo2"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/campo1"
-            android:layout_marginBottom="10sp"
-            android:layout_marginLeft="20sp"
-            android:layout_marginTop="10sp"
-            android:textColor="@color/myTurquesa"
-            android:visibility="gone"
-            android:text="teste"
-            android:textSize="13sp" />
-        
-        <TextView
-            android:id="@+id/campo2text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/campo2"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10sp"
-            android:layout_toRightOf="@id/campo2"
-            android:textColor="@color/myDarkGray"
-            android:visibility="gone"
-            android:text="teste"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/campo3"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/campo2"
-            android:layout_marginBottom="10sp"
-            android:layout_marginLeft="20sp"
-            android:layout_marginTop="10sp"
-            android:textColor="@color/myTurquesa"
-            android:visibility="gone"
-            android:text="teste"
-            android:textSize="13sp" />
-        
-        <TextView
-            android:id="@+id/campo3text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/campo3"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10sp"
-            android:layout_toRightOf="@id/campo2"
-            android:textColor="@color/myDarkGray"
-            android:visibility="gone"
-            android:text="teste"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/preco"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/campo3"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5sp"
-            android:layout_marginBottom="10sp"
-            android:textColor="@color/myTurquesa"
-            android:text="Valor a pagar:"
-            android:visibility="gone"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/price_ID"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/campo3text"
-            android:layout_below="@+id/preco"
-            android:text="teste"
-            android:visibility="gone"
-            android:textColor="@color/myDarkGray"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/paypalimage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/campo2"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/metodo"
-            android:layout_marginRight="29dp"
-            android:visibility="gone"
-            android:src="@drawable/balloon_l_n" />
+            android:layout_x="64dp"
+            android:layout_y="155dp"
+            android:padding="10dp"
+            android:src="@drawable/paypal_03" />
 
-    </RelativeLayout>
+    </AbsoluteLayout>
 
-</LinearLayout>
+</ScrollView>
