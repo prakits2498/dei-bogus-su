@@ -1,6 +1,10 @@
 package su.android.client;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import su.android.model.ConfirmationData;
+import su.android.server.connection.MailClient;
 import su.android.server.connection.ServerConnection;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -122,6 +126,8 @@ public class PaymentActivity extends GDActivity {
 
 		SmsManager smsManager = SmsManager.getDefault();
 		smsManager.sendTextMessage(confData.getNumTlm(), null, "Reserva efectuada com sucesso", null, null); //FIXME questão da SMS
+		
+		
 	}
 
 }

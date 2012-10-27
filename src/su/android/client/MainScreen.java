@@ -82,6 +82,7 @@ public class MainScreen extends GDMapActivity
 		map.getOverlays().add(compass);		
 
 		//************* GPS *************
+		
 		// Set the map viewport to Coimbra
 		/*Criteria hdCrit = new Criteria();
 		hdCrit.setAccuracy(Criteria.ACCURACY_COARSE);
