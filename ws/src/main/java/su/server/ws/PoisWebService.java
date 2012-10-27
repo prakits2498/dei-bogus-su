@@ -43,6 +43,18 @@ public class PoisWebService implements IPoisWebService
 		return gson.toJson(poiList);
 	}
 	
+	public String getNameCantina (String request){
+		String data="";
+		Gson gson = new Gson();
+		try {
+			data = Db.getNameCantina(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return gson.toJson(data);
+	}
+	
 	public String getConfirmationData(String request)
 	{			
 		Gson gson = new Gson();
