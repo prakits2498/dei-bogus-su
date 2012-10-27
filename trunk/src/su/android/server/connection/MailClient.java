@@ -9,18 +9,15 @@ import javax.mail.internet.*;
 /**
  *  Nome: MailClient
  *  Finalidade: Esta classe tem como finalidade o envio de emails
- *  Data de criação: 30/04/2011 
- *  @author: Diogo Mestre
  *
  **/
+
 public class MailClient{
     
     /**
     * Envia um email ao user caso o target se encontre numa zona proibida.
     * 1- Receber os parametros user, pass, mailServer, to, subject e messageBody
     * 2- Enviar o email para o user
-    * Data de criacao: 30/04/2011
-    * @author: Diogo Mestre
     * @param user - string com o username 
     * @param pass - string com a password 
     * @param mailServer - string com o nome do servidor de email
@@ -40,6 +37,7 @@ public class MailClient{
 
         // Define a new mail message
         MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("deiBogus@gmail.com"));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         message.setSubject(subject, "utf-8");
         
@@ -66,15 +64,4 @@ public class MailClient{
             t.close();
         }
     }
-    
-    public static void main(String[] args) {
-		// TODO Auto-generated method stub
-    	try {   
-    		MailClient sender = new MailClient();
-    		sender.sendMail("durvalp1@gmail.com", "Gozonatuacarinha","smtp.gmail.com","durvalp1@gmail.com","oioi","ioioia");   
-    	} catch (Exception e) {   
-    		System.out.println(e);   
-    	}
-    	
-    }
- } 
+}
