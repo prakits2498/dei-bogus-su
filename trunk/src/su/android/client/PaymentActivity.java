@@ -5,6 +5,7 @@ import su.android.server.connection.ServerConnection;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -42,7 +43,10 @@ public class PaymentActivity extends GDActivity {
 		confData = conn.getConfirmationData(confData);
 
 		TextView titulo = (TextView) findViewById(R.id.metodo);
-		titulo.setText(metodo);
+		titulo.setText("Metodo de Pagamento: "+metodo);
+		
+		ImageView paypal = (ImageView) findViewById(R.id.paypalimage);
+		paypal.setVisibility(View.INVISIBLE);
 
 		if(metodo.equals("MB")){
 
@@ -55,7 +59,7 @@ public class PaymentActivity extends GDActivity {
 
 			TextView referencia = (TextView) findViewById(R.id.campo2);
 			referencia.setVisibility(View.VISIBLE);
-			referencia.setText("Referência:");
+			referencia.setText("Referencia:");
 			TextView referenciaValue = (TextView) findViewById(R.id.campo2text);
 			referenciaValue.setVisibility(View.VISIBLE);
 			referenciaValue.setText("47278237328");
@@ -65,26 +69,25 @@ public class PaymentActivity extends GDActivity {
 			valor.setText("Valor:");
 			TextView valorValue = (TextView) findViewById(R.id.campo3text);
 			valorValue.setVisibility(View.VISIBLE);
-			valorValue.setText(value);
+			valorValue.setText(value+" �");
 
 			TextView msg = (TextView) findViewById(R.id.preco);
 			msg.setVisibility(View.VISIBLE);
-			msg.setText("Não se esqueça de apresentar o talão no momento da refeição");
+			msg.setText("Nao se esqueca de apresentar o talao no momento da refeicao");
 			TextView msgValue = (TextView) findViewById(R.id.price_ID);
 			msgValue.setVisibility(View.VISIBLE);
-			msgValue.setText("Obrigado.");
+			msgValue.setText("");
 
 		}
 		else if(metodo.equals("PayPal")){
 
-			TextView entidade = (TextView) findViewById(R.id.campo1);
+			TextView entidade = (TextView) findViewById(R.id.campo2);
 			entidade.setVisibility(View.VISIBLE);
 			entidade.setText("Valor:");
-			TextView entidadeValue = (TextView) findViewById(R.id.campo1text);
+			TextView entidadeValue = (TextView) findViewById(R.id.campo2text);
 			entidadeValue.setVisibility(View.VISIBLE);
-			entidadeValue.setText(value);
-
-			ImageView paypal = (ImageView) findViewById(R.id.paypalimage);
+			entidadeValue.setText(value+" �");
+			
 			paypal.setVisibility(View.VISIBLE);
 			paypal.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
@@ -100,21 +103,21 @@ public class PaymentActivity extends GDActivity {
 			});
 
 		}
-		else{
+		else {
 
 			TextView entidade = (TextView) findViewById(R.id.campo1);
 			entidade.setVisibility(View.VISIBLE);
 			entidade.setText("Valor:");
 			TextView entidadeValue = (TextView) findViewById(R.id.campo1text);
 			entidadeValue.setVisibility(View.VISIBLE);
-			entidadeValue.setText(value);
+			entidadeValue.setText(value+" �");
 
 			TextView msg = (TextView) findViewById(R.id.preco);
 			msg.setVisibility(View.VISIBLE);
-			msg.setText("Reserva efectuada com sucesso");
+			msg.setText("");
 			TextView msgValue = (TextView) findViewById(R.id.price_ID);
 			msgValue.setVisibility(View.VISIBLE);
-			msgValue.setText("Obrigado.");
+			msgValue.setText("");
 		}
 
 		SmsManager smsManager = SmsManager.getDefault();

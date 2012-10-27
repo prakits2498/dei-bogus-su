@@ -60,7 +60,7 @@ public class MainScreen extends GDMapActivity
 		addActionBarItem(getActionBar()
 				.newActionBarItem(NormalActionBarItem.class)
 				.setDrawable(new ActionBarDrawable(this,
-							R.drawable.calendar_icon)), R.id.action_bar_category); //TODO mudar para icon de calendario
+							R.drawable.calendar_icon)), R.id.action_bar_category);
 		addActionBarItem(getActionBar()
 					.newActionBarItem(NormalActionBarItem.class)
 					.setDrawable(new ActionBarDrawable(this,
@@ -203,12 +203,10 @@ public class MainScreen extends GDMapActivity
 				// set a dummy image
 				ImageView image = (ImageView) layout.findViewById(R.id.image);
 				image.setImageResource(R.drawable.euro_icon_blue_big_03);
-				
-				
  
 				// set a message
 				TextView text = (TextView) layout.findViewById(R.id.text);
-				text.setText("Tem " + df.format(creditos) + "Û na sua conta");
+				text.setText("Tem " + df.format(creditos) + "Û de saldo");
 				//text.setTextColor(R.color.myTurquesa);
  
 				// Toast...
