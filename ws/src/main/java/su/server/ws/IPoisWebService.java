@@ -41,5 +41,8 @@ public interface IPoisWebService {
 	
 	@WebMethod(operationName="actualizaNumReservados")
 	public String actualizaNumReservados(String nSlots);
+	
+	@WebMethod(operationName="getEmail")
+	public String getEmail (String request);
 
 }
