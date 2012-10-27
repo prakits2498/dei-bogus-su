@@ -102,6 +102,21 @@ public class MySQLAccess {
 		}
 	}
 	
+	public String getNameCantina(String idPOI) throws Exception {
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT name from cantinas WHERE id=" + idPOI);
+			ResultSet res = preparedStatement.executeQuery();
+			if(res.next())
+				return res.getString(1);
+			else
+				return null;
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	
 	
 	public boolean makeReservation(Reserva reserva) throws Exception{
