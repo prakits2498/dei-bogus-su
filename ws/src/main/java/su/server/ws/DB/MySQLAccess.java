@@ -117,7 +117,20 @@ public class MySQLAccess {
 		}
 	}
 	
-	
+	public String getEmail(String idUser) throws Exception {
+		try {
+			// PreparedStatements can use variables and are more efficient
+			preparedStatement = connect.prepareStatement("SELECT email from utilizadores WHERE id=" + idUser);
+			ResultSet res = preparedStatement.executeQuery();
+			if(res.next())
+				return res.getString(1);
+			else
+				return null;
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 	
 	public boolean makeReservation(Reserva reserva) throws Exception{
 		try {
