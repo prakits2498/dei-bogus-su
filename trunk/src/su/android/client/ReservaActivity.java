@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -232,7 +233,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						backup = backup.concat("\nPreço: " + reserva.getPriceMeal() + "\n");
 						backup = backup.concat("Metodo de pagamento: " + payment + "\n\n\n");
 						
-						myOutWriter.append(backup);
+						myOutWriter.append(backup);						
 						myOutWriter.close();
 						fOut.close();
 
@@ -243,16 +244,13 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 					
 					String email = conn.getEmail(reserva.getUserID());
 					
-					MailClient sender = new MailClient();
-					try {
-						sender.sendMail("deiBogus@gmail.com", "deiBogus1","smtp.gmail.com","durvalp1@gmail.com","Histórico de reservas",backup);
-					} catch (AddressException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (MessagingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					
+					try {   
+			    		MailClient sender = new MailClient();
+			    		sender.sendMail("deiBogus@gmail.com", "deiBogus1","smtp.gmail.com",email,"Histórico de reservas",backup);   
+			    	} catch (Exception e) {   
+			    		System.out.println(e);   
+			    	}
 					
 					Intent i = new Intent(v.getContext(), PaymentActivity.class);
 					i.putExtra("userID", reserva.getUserID());
