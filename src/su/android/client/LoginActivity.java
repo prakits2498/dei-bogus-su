@@ -24,6 +24,7 @@ public class LoginActivity extends Activity {
 		//server interface
 		conn = new ServerConnection();
 		
+		
 		//ligaçoes com elementos do layout
 		loginButton = (Button) findViewById(R.id.btnLogin);
 

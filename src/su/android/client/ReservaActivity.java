@@ -80,7 +80,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 			e.printStackTrace();
 		}
 		
-		price.setText(priceMeal+" ï¿½");
+		price.setText(priceMeal+" Û");
 
 		Meal meal = new Meal();
 		meal.setId(reservaExtras.get("idMeal"));
@@ -154,34 +154,29 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
 						conn.actualizaNumReservados(reserva.getSlotID());
 						conn.makeReservationSlots(reserva);
-						
-						
-						payment = "Creditos";
+
+						payment = "Pre-Pagamento";
 					} else {
-						// get your custom_toast.xml ayout
+						// get your custom_toast.xml layout
 						LayoutInflater inflater = getLayoutInflater();
 		 
 						View layout = inflater.inflate(R.layout.custom_toast,
 						  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
-						//layout.setBackgroundColor(R.color.white);
+						layout.setBackgroundColor(v.getResources().getColor(R.color.darkgray));
 		 
 						// set a dummy image
 						ImageView image = (ImageView) layout.findViewById(R.id.image);
-						image.setImageResource(R.drawable.euro_icon_03);
+						image.setImageResource(R.drawable.euro_icon_blue_big_03);
 		 
 						// set a message
 						TextView text = (TextView) layout.findViewById(R.id.text);
-						text.setText("N‹o tem crŽditos suficientes.");
-						//text.setTextColor(R.color.myTurquesa);
+						text.setText("N‹o tem saldo suficiente para efectuar pagamento.");
 		 
 						// Toast...
 						Toast toast = new Toast(getApplicationContext());
 						toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 						toast.setDuration(Toast.LENGTH_SHORT);
 						toast.setView(layout);
-
-						toast.setView(v);
-						toast.setText("N‹o tem saldo suficiente para efectuar pagamento.");
 						toast.show();
 						
 						reservado = false;

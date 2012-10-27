@@ -1,40 +1,14 @@
 package su.android.client;
 
+import greendroid.app.GDActivity;
+
 import java.util.HashMap;
 
 import su.android.model.DayEventsRequest;
 import su.android.server.connection.ServerConnection;
-import greendroid.app.GDActivity;
-import greendroid.image.ChainImageProcessor;
-import greendroid.image.ImageProcessor;
-import greendroid.image.MaskImageProcessor;
-import greendroid.image.ScaleImageProcessor;
-import greendroid.widget.AsyncImageView;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView.ScaleType;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.app.ListActivity;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 
 
 public class ViewReservationsActivity extends GDActivity {
