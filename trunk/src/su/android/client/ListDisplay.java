@@ -139,7 +139,8 @@ public class ListDisplay<T> {
 				Log.i(">>>>> items ", ""+itemsSelected.size());
 				
 				// Switching to Reserva Activity
-				appContext.startActivity(createReservaIntent(itemsSelected));
+				if(!itemsSelected.isEmpty())
+					appContext.startActivity(createReservaIntent(itemsSelected));
 			}
 		});
 

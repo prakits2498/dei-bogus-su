@@ -17,10 +17,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -71,7 +74,6 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 			Number number = format.parse(reservaExtras.get("priceMeal"));
 			priceMeal = number.doubleValue();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -146,16 +148,35 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						reserva.setUserCredits(Double.toString(userCreditsA));
 						
 						conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
+						conn.actualizaNumReservados(reserva.getSlotID());
 						conn.makeReservationSlots(reserva);
 						
 						payment = "Creditos";
 					} else {
-						//TODO Avisar que nï¿½o tem creditos suficientes para pagar - ficar na mesma activity
+						// get your custom_toast.xml ayout
+						LayoutInflater inflater = getLayoutInflater();
+		 
+						View layout = inflater.inflate(R.layout.custom_toast,
+						  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
+						//layout.setBackgroundColor(R.color.white);
+		 
+						// set a dummy image
+						ImageView image = (ImageView) layout.findViewById(R.id.image);
+						image.setImageResource(R.drawable.euro_icon_03);
+		 
+						// set a message
+						TextView text = (TextView) layout.findViewById(R.id.text);
+						text.setText("N‹o tem crŽditos suficientes.");
+						//text.setTextColor(R.color.myTurquesa);
+		 
+						// Toast...
 						Toast toast = new Toast(getApplicationContext());
 						toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 						toast.setDuration(Toast.LENGTH_SHORT);
+						toast.setView(layout);
+
 						toast.setView(v);
-						toast.setText("Nï¿½o tem crï¿½ditos suficiente para efectuar pagamento.");
+						toast.setText("N‹o tem saldo suficiente para efectuar pagamento.");
 						toast.show();
 						
 						reservado = false;

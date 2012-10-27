@@ -24,7 +24,9 @@ import su.android.client.R;
 import su.android.model.POI;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 
+import com.fedorvlasov.lazylist.ImageLoader;
 import com.google.android.maps.GeoPoint;
 import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
 
@@ -112,74 +114,32 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			String mainCat5 = mainScreen.getResources().getString(R.string.mainCat5);
 			String mainCat6 = mainScreen.getResources().getString(R.string.mainCat6);
 			
-			//TODO mudar pins das categorias
 			if(poi.getCategory().equals("cantina")) {
 				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("bar")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.bar);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("vegetariano")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.vegetariano);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("grelhados")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.grelhados);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("pizza")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pizza);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("sandes")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.sandes);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			}
-			/*if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat1))
-			{
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_arts_entertainment);
-				boundCenter(drawable);
-				overlayItem.setMarker(drawable);				
-			}
-			else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat2))
-			{
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
-				boundCenter(drawable);
-				overlayItem.setMarker(drawable);
-			}
-			else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat3))
-			{
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_coffee);
-				boundCenter(drawable);
-				overlayItem.setMarker(drawable);
-			}
-			else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat4))
-			{
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_nightlife);
-				boundCenter(drawable);
-				overlayItem.setMarker(drawable);	
-			}
-			else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat5))
-			{
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_shops);
-				boundCenter(drawable);
-				overlayItem.setMarker(drawable);
-			}
-			else if(poi.getCategory() != null && poi.getCategory().equalsIgnoreCase(mainCat6))
-			{
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_outdoors);
-				boundCenter(drawable);
-				overlayItem.setMarker(drawable);
-			}
-			else
-			{
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_default);
-				boundCenter(drawable);
-				overlayItem.setMarker(drawable);
-			}*/
+
 			this.items.add(overlayItem);
 		}
 		onNotifyFilter(mainScreen.getCurrentAppContext().getCategory());

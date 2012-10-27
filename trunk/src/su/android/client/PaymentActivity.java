@@ -89,7 +89,6 @@ public class PaymentActivity extends GDActivity {
 			paypal.setVisibility(View.VISIBLE);
 			paypal.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					try {
 						// Start the activity
 						i.setData(u);
