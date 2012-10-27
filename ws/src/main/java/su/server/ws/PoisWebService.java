@@ -55,6 +55,18 @@ public class PoisWebService implements IPoisWebService
 		return gson.toJson(data);
 	}
 	
+	public String getEmail (String request){
+		String data="";
+		Gson gson = new Gson();
+		try {
+			data = Db.getEmail(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return gson.toJson(data);
+	}
+	
 	public String getConfirmationData(String request)
 	{			
 		Gson gson = new Gson();
