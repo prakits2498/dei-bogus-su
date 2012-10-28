@@ -69,13 +69,15 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 		Log.d(tag, "Calendar Instance:= " + "Month: " + month + " " + "Year: " + year);
 
 		//botão de cima que diz o dia seleccionado
-		selectedDayMonthYearButton = (Button) this.findViewById(R.id.selectedDayMonthYear);
-		selectedDayMonthYearButton.setText("Selected: ");
+		//selectedDayMonthYearButton = (Button) this.findViewById(R.id.selectedDayMonthYear);
+		//selectedDayMonthYearButton.setText("Selected: ");
+		
 
 		//setas e mês
 		prevMonth = (ImageView) this.findViewById(R.id.prevMonth);
 		prevMonth.setOnClickListener(this);
 		currentMonth = (Button) this.findViewById(R.id.currentMonth);
+
 		currentMonth.setText(DateFormat.format(dateTemplate, _calendar.getTime()));
 		nextMonth = (ImageView) this.findViewById(R.id.nextMonth);
 		nextMonth.setOnClickListener(this);
@@ -152,7 +154,7 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 
 		private final List<String> list;
 		private static final int DAY_OFFSET = 1;
-		private final String[] weekdays = new String[]{"Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"};
+		private final String[] weekdays = new String[]{"Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"};
 		private final String[] months = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
 		private final int[] daysOfMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 		private final int month, year;
@@ -404,11 +406,12 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 			}
 			if (day_color[1].equals("WHITE"))
 			{
-				gridcell.setTextColor(Color.WHITE);
+				gridcell.setTextColor(Color.GRAY);
 			}
 			if (day_color[1].equals("BLUE"))
 			{
-				gridcell.setTextColor(getResources().getColor(R.color.static_text_color));
+				gridcell.setTextColor(Color.GRAY);
+				gridcell.setBackgroundDrawable(row.getContext().getResources().getDrawable(R.drawable.calendar_current_day_06));
 			}
 			return row;
 		}
@@ -416,7 +419,7 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 		public void onClick(View view)
 		{
 			String date_month_year = (String) view.getTag();
-			selectedDayMonthYearButton.setText("Selected: " + date_month_year);
+			//selectedDayMonthYearButton.setText("Selected: " + date_month_year);
 			
 			Intent ii = new Intent(getApplicationContext(), ViewReservationsActivity.class);
 			ii.putExtra("idUser", getIntent().getExtras().getInt("idUser"));
@@ -425,18 +428,6 @@ public class SimpleCalendarViewActivity extends GDActivity implements OnClickLis
 			ii.putExtra("day", date_month_year.split("-")[0] );
 			Log.i("Eventos",date_month_year.split("-")[0]);
 			startActivity(ii);
-
-			try
-			{
-				Date parsedDate = dateFormatter.parse(date_month_year);
-
-				Log.d(tag, "Parsed Date: " + parsedDate.toString());
-
-			}
-			catch (ParseException e)
-			{
-				e.printStackTrace();
-			}
 		}
 
 		public int getCurrentDayOfMonth()
