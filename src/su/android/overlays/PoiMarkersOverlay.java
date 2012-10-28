@@ -81,11 +81,7 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			myIntent.putExtra("poiAddress", poi.getAddress());
 			myIntent.putExtra("poiCategory", poi.getCategory());
 			//myIntent.putExtra("poiCatIcon", poi.getDefaultCategoryIcon().replace(".png", "_64.png"));
-			myIntent.putExtra("poiCatIcon", "https://dl.dropbox.com/u/999549/Foursquare/"+poi.getCategory()+".png");
-			//TODO mudar icon (este icon Ž o que aparece nos detalhes do poi)
-			if(poi.getPhotos() != null)
-				if(!poi.getPhotos().isEmpty())
-					myIntent.putExtra("poiPhoto01", poi.getPhotos().get(0));
+			myIntent.putExtra("poiCatIcon", "https://dl.dropbox.com/u/999549/aLaCarteIcons/"+poi.getCategory()+".png");
 	
 			mainScreen.startActivity(myIntent);
 	
@@ -115,27 +111,27 @@ public class PoiMarkersOverlay extends BalloonItemizedOverlay<PoiMarker> {
 			String mainCat6 = mainScreen.getResources().getString(R.string.mainCat6);
 			
 			if(poi.getCategory().equals("cantina")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pin_food);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.map_pin_03);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("bar")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.bar);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.map_pin_baguetes_03);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("vegetariano")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.vegetariano);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.map_pin_veg_03);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("grelhados")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.grelhados);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.map_pin_bbq_03);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("pizza")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.pizza);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.map_pin_pizza_03);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			} else if(poi.getCategory().equals("sandes")) {
-				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.sandes);
+				Drawable drawable = mainScreen.getResources().getDrawable(R.drawable.map_pin_baguetes_03);
 				boundCenter(drawable);
 				overlayItem.setMarker(drawable);
 			}
