@@ -52,9 +52,8 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 	Reserva reserva;
 	String radioButtonSelected;
 	String backup; //guardada no txt e enviada por mail
-	
 	double priceMeal;
-	
+
 	private HashMap<String, String> reservaExtras = new HashMap<String, String>();
 
 	public ReservaActivity() {
@@ -76,8 +75,8 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 		TextView pratoTv = (TextView) findViewById(R.id.prato_ID);
 
 		TextView price = (TextView) findViewById(R.id.reservaPrice);
-		
-		
+
+
 		try {
 			NumberFormat format = NumberFormat.getInstance(Locale.FRENCH);
 			Number number = format.parse(reservaExtras.get("priceMeal"));
@@ -85,7 +84,7 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		price.setText(priceMeal+" ï¿½");
 
 		Meal meal = new Meal();
@@ -115,11 +114,11 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 		reserva.setPriceMeal(reservaExtras.get("priceMeal"));
 		reserva = conn.getSlots(reserva);
 		Log.i("getSlots BD: ", "dia: "+reserva.getDay()+" mes: "+reserva.getMonth()+" cantina: "+reserva.getPoiID()+" mealID: "+reserva.getMeal().getId());
-		
+
 		Log.i("n slots: ", ""+reserva.getSlots().size());
-		
+
 		data.setText(reserva.getDay()+"-"+reserva.getMonth()+"-2012");
-		
+
 		Spinner slotSpin = (Spinner) findViewById(R.id.slot);
 		slotSelectedTv = new TextView(this.getApplicationContext());
 		setSlots();
@@ -132,36 +131,81 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 
 		Button confirmar = (Button) findViewById(R.id.confirmar);
 		confirmar.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) {
 				boolean reservado = false;
 				String payment = "";
-				
+
 				String idSlotSelected = reserva.getSlots().get(indexSlotSelected).getIdSlot();
 				reserva.setSlotID(idSlotSelected);
-				
+
 				RadioButton paypalButton = (RadioButton) findViewById(R.id.paypal);
 				RadioButton multibancoButton = (RadioButton) findViewById(R.id.multibanco);
 				RadioButton creditosButton = (RadioButton) findViewById(R.id.creditos);
 
-				if(creditosButton.isChecked()) {
-					
-					double userCredits = conn.getCredits(Integer.parseInt(reserva.getUserID()));
-					
-					double userCreditsA = userCredits - priceMeal;
-					
-					if(verifyCredits(userCredits)) {
-						reserva.setCreditos(true);						
-						reserva.setPaid(true);
+				if(reserva.getSlots().get(indexSlotSelected).isAvailable()) {
+					if(creditosButton.isChecked()) {
+						double userCredits = conn.getCredits(Integer.parseInt(reserva.getUserID()));
+
+						double userCreditsA = userCredits - priceMeal;
+
+						if(verifyCredits(userCredits)) {
+							reserva.setCreditos(true);						
+							reserva.setPaid(true);
+							reservado = true;
+
+							reserva.setUserCredits(Double.toString(userCreditsA));
+
+							conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
+
+							conn.makeReservationSlots(reserva);
+
+							payment = "Pre-Pagamento";
+						} else {
+							// get your custom_toast.xml layout
+							LayoutInflater inflater = getLayoutInflater();
+
+							View layout = inflater.inflate(R.layout.custom_toast,
+									(ViewGroup) findViewById(R.id.custom_toast_layout_id));
+							layout.setBackgroundColor(v.getResources().getColor(R.color.darkgray));
+
+							// set a dummy image
+							ImageView image = (ImageView) layout.findViewById(R.id.image);
+							image.setImageResource(R.drawable.euro_icon_blue_big_03);
+
+							// set a message
+							TextView text = (TextView) layout.findViewById(R.id.text);
+							text.setText("N‹o tem saldo suficiente para efectuar pagamento.");
+
+							// Toast...
+							Toast toast = new Toast(getApplicationContext());
+							toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+							toast.setDuration(Toast.LENGTH_SHORT);
+							toast.setView(layout);
+							toast.show();
+
+							reservado = false;
+						}
+					} else if(paypalButton.isChecked()) {
+						//send to paypal 
+						reserva.setCreditos(false);
 						reservado = true;
-						
-						reserva.setUserCredits(Double.toString(userCreditsA));
-						
-						conn.actualizaCreditos(reserva.getUserID(), Double.toString(userCreditsA));
-						conn.actualizaNumReservados(reserva.getSlotID());
+						reserva.setPaid(false);
+
 						conn.makeReservationSlots(reserva);
 
-						payment = "Pre-Pagamento";
+						payment = "PayPal";
+					} else if(multibancoButton.isChecked()) {
+						String ent = "10664";
+						String ref = "124566788";
+						String valor = reserva.getPriceMeal();
+						reserva.setCreditos(false);
+						reservado = true;
+						reserva.setPaid(false);
+
+						conn.makeReservationSlots(reserva);
+
+						payment = "MB";
 					} else {
 						// get your custom_toast.xml layout
 						LayoutInflater inflater = getLayoutInflater();
@@ -188,37 +232,43 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						
 						reservado = false;
 					}
-				} else if(paypalButton.isChecked()) {
-					//send to paypal 
-					reserva.setCreditos(false);
-					reservado = true;
-					reserva.setPaid(false);
+				} else {
+					// get your custom_toast.xml layout
+					LayoutInflater inflater = getLayoutInflater();
+
+					View layout = inflater.inflate(R.layout.custom_toast,
+							(ViewGroup) findViewById(R.id.custom_toast_layout_id));
+					layout.setBackgroundColor(v.getResources().getColor(R.color.darkgray));
+
+					// set a dummy image
+					ImageView image = (ImageView) layout.findViewById(R.id.image);
+					image.setImageResource(R.drawable.icon_error_11);
+
+					// set a message
+					TextView text = (TextView) layout.findViewById(R.id.text);
+					text.setText("O slot escolhido n‹o est‡ disponivel.");
+
+					// Toast...
+					Toast toast = new Toast(getApplicationContext());
+					toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+					toast.setDuration(Toast.LENGTH_SHORT);
+					toast.setView(layout);
+					toast.show();
+
+					reservado = false;
 					
-					conn.makeReservationSlots(reserva);
-					
-					payment = "PayPal";
-				} else if(multibancoButton.isChecked()) {
-					String ent = "10664";
-					String ref = "124566788";
-					String valor = reserva.getPriceMeal();
-					reserva.setCreditos(false);
-					reservado = true;
-					reserva.setPaid(false);
-					
-					conn.makeReservationSlots(reserva);
-					
-					payment = "MB";
 				}
 				
 				
 				if(reservado) {
+					conn.actualizaNumReservados(reserva.getSlotID());
 					try {
 						File myFile = new File("/sdcard/reservas.txt");
 						boolean existe = myFile.createNewFile();
 						FileOutputStream fOut = new FileOutputStream(myFile,true);
 						OutputStreamWriter myOutWriter = 
-												new OutputStreamWriter(fOut);
-						
+								new OutputStreamWriter(fOut);
+
 						Slot temp = reserva.getSlots().get(indexSlotSelected);
 						String cantina = conn.getNameCantina(reserva.getPoiID());
 						
@@ -230,9 +280,10 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 							backup = backup.concat(" - " + reserva.getMeal().getSopa());
 						if(temPeixe)
 							backup = backup.concat(" - " + reserva.getMeal().getPeixe());
-						backup = backup.concat("\nPreÃ§o: " + reserva.getPriceMeal() + "\n");
-						backup = backup.concat("Metodo de pagamento: " + payment + "\n\n\n");
 						
+						backup = backup.concat("\nPreo: " + reserva.getPriceMeal() + "\n");
+						backup = backup.concat("Metodo de pagamento: " + payment + "\n\n\n");
+
 						myOutWriter.append(backup);						
 						myOutWriter.close();
 						fOut.close();
@@ -241,13 +292,13 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 						Toast.makeText(getBaseContext(), e.getMessage(),
 								Toast.LENGTH_SHORT).show();
 					}
-					
+
 					String email = conn.getEmail(reserva.getUserID());
 					
 					
 					try {   
 			    		MailClient sender = new MailClient();
-			    		sender.sendMail("deiBogus@gmail.com", "deiBogus1","smtp.gmail.com",email,"HistÃ³rico de reservas",backup);   
+			    		sender.sendMail("deiBogus@gmail.com", "deiBogus1","smtp.gmail.com",email,"Hist—rico de reservas",backup);   
 			    	} catch (Exception e) {   
 			    		System.out.println(e);   
 			    	}
@@ -256,15 +307,15 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 					i.putExtra("userID", reserva.getUserID());
 					i.putExtra("payment", payment);
 					i.putExtra("priceMeal", reserva.getPriceMeal());
-					
+
 					v.getContext().startActivity(i);
 				}
 			}
 		});
 	}
-	
-	
-	
+
+
+
 	public boolean verifyCredits(double userCredits) {
 		double aux = userCredits - priceMeal;
 		if(aux >= 0)
@@ -294,8 +345,8 @@ public class ReservaActivity extends GDActivity implements AdapterView.OnItemSel
 				else
 					slotsAux[i] = s.getDay()+"-"+s.getMonth()+"-2012 "+s.getHour()+":"+s.getMinute();
 			} else 
-				slotsAux[i] = "Nenhum slot disponivel";
-			
+				slotsAux[i] = "Slot indisponivel";
+
 			Log.i("slotsAux: ", slotsAux[i]);
 		}
 	}
