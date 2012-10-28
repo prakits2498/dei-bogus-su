@@ -42,6 +42,7 @@ public class ViewReservationsActivity extends GDActivity {
 		conn = new ServerConnection();
 		req = conn.getMenuFromReservations(req);
 		
+		Log.i("data: ", req.getDay()+" "+req.getMonth()+" "+req.getIdUser());
 		Log.i("dados da bd", "---- "+req.getLunchEvents().get("sopa"));
 		
 		HashMap<String, String> almoco = req.getLunchEvents();
@@ -72,7 +73,7 @@ public class ViewReservationsActivity extends GDActivity {
 			}
 			
 			TextView preco = (TextView) findViewById(R.id.price_ID);
-			preco.setText(almoco.get("preco"));
+			preco.setText(almoco.get("preco")+" €");
 			
 			TextView precoId = (TextView) findViewById(R.id.price_text_ID);
 			precoId.setText("Preço");
@@ -103,9 +104,9 @@ public class ViewReservationsActivity extends GDActivity {
 				}
 				
 				TextView preco = (TextView) findViewById(R.id.price_ID);
-				preco.setText(jantar.get("preco"));
+				preco.setText(jantar.get("preco")+" €");
 				TextView precoId = (TextView) findViewById(R.id.price_text_ID);
-				precoId.setText("PreÁo");
+				precoId.setText("Preço");
 			}
 			else{
 				i++;
@@ -131,9 +132,9 @@ public class ViewReservationsActivity extends GDActivity {
 				}
 				
 				TextView preco = (TextView) findViewById(R.id.price_ID2);
-				preco.setText(jantar.get("preco"));
+				preco.setText(jantar.get("preco")+" €");
 				TextView precoId = (TextView) findViewById(R.id.price_text_ID2);
-				precoId.setText("PreÁo");
+				precoId.setText("Preço");
 			}
 		}
 		

@@ -42,8 +42,7 @@ public class MainScreen extends GDMapActivity
 	private CustomMapView map;
 	
 	//	ActionBar viewers	
-	private CategoryGridView categoryGridView;
-	
+
 	//	Current Context 
 	private AppContext currentContext;
 
@@ -77,7 +76,8 @@ public class MainScreen extends GDMapActivity
 		map = (CustomMapView) findViewById(R.id.mvMain);
 		map.setBuiltInZoomControls(true);		
 		map.addZoomListenter();
-		map.setSatellite(true);
+		map.setSatellite(false);
+		map.setTraffic(true);
 		compass = new MyLocationOverlay(MainScreen.this, map);
 		map.getOverlays().add(compass);		
 
@@ -96,13 +96,7 @@ public class MainScreen extends GDMapActivity
 		map.getController().setZoom(14);
 		
 		// Capture the context
-		this.prepareContext();
-		
-		/**
-		 * Additional Views Initialization
-		 */
-		this.categoryGridView = new CategoryGridView(this);
-		
+		this.prepareContext();	
 		
 		/**
 		 * Overlays Initialization
@@ -116,7 +110,7 @@ public class MainScreen extends GDMapActivity
 		 */
 		handle();
 	}
-
+	
 	public void prepareContext() {
 		this.currentContext = new AppContext();
 

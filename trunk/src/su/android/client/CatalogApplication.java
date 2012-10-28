@@ -28,7 +28,7 @@ public class CatalogApplication extends GDApplication {
     
     @Override
     public Intent getMainApplicationIntent() {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.hello)));
+        return new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.uc.pt/sasuc/ServicosApoioEstudantes/Alimentacao/UnidadesAlimentares"));
     }
 
 }
