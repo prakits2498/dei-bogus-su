@@ -235,7 +235,7 @@ public class MySQLAccess {
 			resultSet = preparedStatement.executeQuery();
 
 			while(resultSet.next()){
-				if(resultSet.getInt(6) >= 19){
+				if(resultSet.getInt(6) <= 19){
 					System.out.println(resultSet.toString());
 					eventos_almoco.put("sopa", resultSet.getString(1));
 					eventos_almoco.put("carne", resultSet.getString(2));
