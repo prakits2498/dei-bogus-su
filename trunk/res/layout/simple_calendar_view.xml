@@ -4,18 +4,35 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:background="@drawable/bg">
+	android:background="@color/myLightGray">
 
-	<Button
-		android:id="@+id/selectedDayMonthYear"
-		android:textColor="#FFFFFF"
-		android:background="@color/myTurquesa"
+    <LinearLayout
 		android:layout_gravity="center"
-		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content">
-	</Button>
+		
+        <ImageView
+            android:id="@+id/calendar_icon"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:padding="5dp"
+            android:src="@drawable/calendar_icon_big_11" />
 
+		<TextView
+            android:id="@+id/tituloTv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Histórico de Reservas"
+            android:textColor="@color/myDarkGray"
+            android:textSize="20sp"
+            android:textStyle="bold" 
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp"/>
+		
+		
+	</LinearLayout>
+	
 	<LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="horizontal"
@@ -26,22 +43,23 @@
 			android:id="@+id/prevMonth"
 			android:src="@drawable/calendar_left_arrow_selector"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
+			android:layout_height="40dp">
 		</ImageView>
 		<Button
 			android:id="@+id/currentMonth"
-			android:layout_weight="0.6"
-			android:textColor="#FFFFFF"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:background="@drawable/calendar_bar"
+			android:layout_weight="4"
+			android:textColor="@color/myTurquesa"
+			android:textStyle="bold"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:background="@drawable/calendar_header1_06"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
+			android:layout_height="40dp">
 		</Button>
 		<ImageView
 			android:id="@+id/nextMonth"
 			android:src="@drawable/calendar_right_arrow_selector"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
+			android:layout_height="40dp">
 		</ImageView>
 	</LinearLayout>
 
@@ -51,9 +69,9 @@
 		android:layout_height="wrap_content">
 		<ImageView
 			android:id="@+id/calendarheader"
-			android:src="@drawable/blue_bg_with_text"
+			android:src="@drawable/calendar_weekdays_03"
 			android:layout_gravity="center"
-			android:layout_width="fill_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 		</ImageView>
 	</LinearLayout>

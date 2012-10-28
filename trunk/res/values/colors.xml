@@ -19,4 +19,5 @@
 <color name="journal_entry_listitem_text_color">#003366</color>
 <color name="note_text_disabled">#333333</color>
 <color name="orange">#ff9900</color>
+<color name="myLightGray">#e4e4e4</color>
 </resources>
