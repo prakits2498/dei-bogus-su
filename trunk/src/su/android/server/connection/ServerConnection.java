@@ -346,6 +346,38 @@ public class ServerConnection
 		return resultado;	
 	}
 	
+	public boolean verifySlot(String slotID) {
+		boolean resultado=false;
+		String method = "verifySlot";
+		SoapObject soapRequest = new SoapObject(NAMESPACE, method);
+		
+		PropertyInfo param1 = new PropertyInfo();
+		param1.setName("arg0");
+		param1.setValue(slotID);
+		param1.setType(PropertyInfo.STRING_CLASS);
+		
+		soapRequest.addProperty(param1);
+		
+		soapEnvelope.setOutputSoapObject(soapRequest);
+		
+		try 
+		{
+			httpTransport.call(NAMESPACE+method, soapEnvelope);
+			String result = soapEnvelope.getResponse().toString();
+			resultado = (Boolean) gson.fromJson(result, Boolean.class);
+		} 
+		catch (IOException e) 
+		{
+			Log.e("error", "IOException!!"+e.getMessage());
+		} 
+		catch (XmlPullParserException e) 
+		{
+			Log.e("error", "XMLPullParserException!!"+e.getMessage());
+		}
+
+		return resultado;	
+	}
+	
 	public int verifyLogin (Login login){
 		int res=-1;
 		String method = "verifyLogin";
