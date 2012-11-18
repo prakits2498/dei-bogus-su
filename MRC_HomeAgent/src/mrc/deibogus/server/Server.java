@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import mrc.deibogus.homeagent.HomeAgent;
+
 public class Server {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -18,8 +20,6 @@ public class Server {
 		System.out.println(">> Listening on port "+port+"...");
 		ServerSocket listenSocket = new ServerSocket(port);
 
-		//new HomeAgent();
-
 		while(true) {			
 			clientSocket = listenSocket.accept(); //bloqueante
 
@@ -27,7 +27,7 @@ public class Server {
 			outObject.flush();
 			inObject = new ObjectInputStream(clientSocket.getInputStream());
 
-			new Connection(clientSocket, inObject, outObject);
+			new HomeAgent(clientSocket, inObject, outObject);
 		}
 
 	}

@@ -1,52 +1,67 @@
 package mrc.deibogus.homeagent;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import mrc.deibogus.data.HomeAgentData;
-import mrc.deibogus.server.Connection;
+import mrc.deibogus.data.Request;
 
-public class HomeAgent {
+public class HomeAgent extends Thread {
 
-	private int id;
+	private ObjectInputStream inObject;
+	private ObjectOutputStream outObject;
+	private Socket clientSocket;
 	private boolean logged;
-	private Connection server;
 
 	//MBT: <home_address, care_of_address, association_lifetime>
 	private HashMap<String, HomeAgentData> mobilityBindingTable = new HashMap<String, HomeAgentData>();
 	private ArrayList networkNodes = new ArrayList();
 
-	public HomeAgent(int id) {
-		this.id = id;
-		this.logged = true;
-	}
-
-	public void setServer(Connection c) {
-		this.server = c;
+	public HomeAgent(Socket clientSocket, ObjectInputStream in, ObjectOutputStream out) throws ClassNotFoundException {
+		this.clientSocket = clientSocket;
+		this.outObject = out;
+		this.inObject = in;
+		this.start();
 	}
 
 	public void run() {
-		while(logged) {	
-			System.out.println(">>> HomeAgent ["+id+"] <<<");
+		while(logged) {
+			try {
+				outObject.flush();
 
-			//TODO faz o que tem a fazer
+				//read request from client
+				Request new_request = (Request) inObject.readObject();
 
-			//notifica o servidor
-			synchronized(server) {
-				if(server.getState().name().equals("WAITING")) {
-					server.notify();
+				if(new_request.getType().equals("requestPOIs")) {
+					System.out.println("> Request received");
+					//Context cont = (Context) new_request;
+
+					//TRATA DO PEDIDO E ENVIA RESPOSTA AO CLIENTE
+
+					//send response to client
+					//outObject.writeObject(r);
+					outObject.flush();
 				}
-			}
 
-			//e fica a espera que o servidor o acorde
-			synchronized (this) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			} catch (SocketException e2) {
+				System.err.println("Socket Closed!");
+				logged = false;
+				break;
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
-
 		}
+	}
+
+	//TODO funcao de broadcast para verificacao de presenca
+	void broadcast(){
+
 	}
 }
