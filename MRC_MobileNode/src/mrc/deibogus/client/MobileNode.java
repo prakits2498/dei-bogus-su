@@ -9,10 +9,9 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class MobileNode {
+public class MobileNode extends Thread {
 
 	private boolean logged = false;
-	private int myID;
 	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS
 	
 	public Socket s;
@@ -45,8 +44,7 @@ public class MobileNode {
 				System.out.println(">> Connected to server!");
 				
 				this.logged = true;
-				this.myID = 1; //TODO
-				cc = new ClientResponse(in,out,this.myID);
+				cc = new ClientResponse(in,out);
 				cc.start();
 				
 				return true;
@@ -68,17 +66,15 @@ class ClientResponse extends Thread {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private static boolean logged = true;
-	private int myID;
 	private FileWriter logger;
 
 	ClientResponse() {
 
 	}
 
-	ClientResponse(ObjectInputStream in, ObjectOutputStream out, int myID) {
+	ClientResponse(ObjectInputStream in, ObjectOutputStream out) {
 		this.in = in;
 		this.out = out;
-		this.myID = myID;
 	}
 
 	public void run() {
