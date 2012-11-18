@@ -9,11 +9,11 @@ public class HomeAgent {
 	private ArrayList networkNodes = new ArrayList();
 	
 	//TODO constructor
-	public HomeAgent(){
+	public HomeAgent() {
 		
 	}
 	
-	//TODO função de broadcast para verificação de presença
+	//TODO funcao de broadcast para verificacao de presenca
 	void broadcast(){
 		
 	}

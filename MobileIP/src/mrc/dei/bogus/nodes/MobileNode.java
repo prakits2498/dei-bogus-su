@@ -1,6 +1,6 @@
 package mrc.dei.bogus.nodes;
 
-public class Node {
+public class MobileNode {
 	private String name;
 	private String macAddress;
 	private int lifeTimeLeft;
