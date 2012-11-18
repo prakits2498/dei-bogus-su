@@ -37,7 +37,7 @@ public class HomeAgent extends Thread {
 				//read request from client
 				Request new_request = (Request) inObject.readObject();
 
-				if(new_request.getType().equals("requestPOIs")) {
+				if(new_request.getType().equals("pacoteCNtoMN")) { //1
 					System.out.println("> Request received");
 					//Context cont = (Context) new_request;
 
@@ -47,6 +47,40 @@ public class HomeAgent extends Thread {
 					//outObject.writeObject(r);
 					outObject.flush();
 				}
+				
+				if(new_request.getType().equals("pacoteEncapsulado")) { //2
+					System.out.println("> Request received");
+					//Context cont = (Context) new_request;
+
+					//TRATA DO PEDIDO E ENVIA RESPOSTA AO CLIENTE
+
+					//send response to client
+					//outObject.writeObject(r);
+					outObject.flush();
+				}
+				
+				if(new_request.getType().equals("pedidoRegisto")) { //3
+					System.out.println("> Request received");
+					//Context cont = (Context) new_request;
+
+					//TRATA DO PEDIDO E ENVIA RESPOSTA AO CLIENTE
+
+					//send response to client
+					//outObject.writeObject(r);
+					outObject.flush();
+				}
+				
+				if(new_request.getType().equals("cancelamentoRegisto")) { //4
+					System.out.println("> Request received");
+					//Context cont = (Context) new_request;
+
+					//TRATA DO PEDIDO E ENVIA RESPOSTA AO CLIENTE
+
+					//send response to client
+					//outObject.writeObject(r);
+					outObject.flush();
+				}
+				
 
 			} catch (SocketException e2) {
 				System.err.println("Socket Closed!");
@@ -59,9 +93,19 @@ public class HomeAgent extends Thread {
 			}
 		}
 	}
+	
+	//5
+	public void temporizadorTTL() {
+		
+	}
 
 	//TODO funcao de broadcast para verificacao de presenca
-	void broadcast(){
+	//6
+	void broadcast() {
 
 	}
+	
+	
+	
+	
 }
