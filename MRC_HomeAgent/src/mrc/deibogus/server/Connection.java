@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
+import mrc.deibogus.data.PacoteEncapsulado;
 import mrc.deibogus.data.Request;
 import mrc.deibogus.data.Response;
 import mrc.deibogus.homeagent.HomeAgent;
@@ -95,45 +96,39 @@ public class Connection extends Thread {
 							homeAgent.notify();
 						}
 					}
-
-					//send response to client
-					/*response.setResponse(true);
-					response.setType("pacote");
-					outObject.writeObject(response);
-					outObject.flush();*/
 				}
 				
 				if(request.getType().equals("pacoteEncapsulado")) { //2
-					System.out.println("> Request received");
-					//Context cont = (Context) new_request;
-
-					//TRATA DO PEDIDO E ENVIA RESPOSTA AO CLIENTE
-
-					//send response to client
-					//outObject.writeObject(r);
-					outObject.flush();
+					PacoteEncapsulado packetE = (PacoteEncapsulado) request;
+					
+					synchronized (homeAgent) {
+						if(homeAgent.getState().name().equals("WAITING")) {
+							homeAgent.receivePacket(packetE.getSource(), packetE);
+							homeAgent.notify();
+						}
+					}
 				}
 				
-				if(request.getType().equals("pedidoRegisto")) { //3
-					System.out.println("> Request received");
-					//Context cont = (Context) new_request;
-
-					//TRATA DO PEDIDO E ENVIA RESPOSTA AO CLIENTE
-
-					//send response to client
-					//outObject.writeObject(r);
-					outObject.flush();
+				if(request.getType().equals("pedidoRegistoFA")) { //3
+					MobileNodeData mb = (MobileNodeData) request;
+					
+					synchronized (homeAgent) {
+						if(homeAgent.getState().name().equals("WAITING")) {
+							homeAgent.registoFA(mb);
+							homeAgent.notify();
+						}
+					}
 				}
 				
 				if(request.getType().equals("cancelamentoRegisto")) { //4
-					System.out.println("> Request received");
-					//Context cont = (Context) new_request;
-
-					//TRATA DO PEDIDO E ENVIA RESPOSTA AO CLIENTE
-
-					//send response to client
-					//outObject.writeObject(r);
-					outObject.flush();
+					MobileNodeData mb = (MobileNodeData) request;
+					
+					synchronized (homeAgent) {
+						if(homeAgent.getState().name().equals("WAITING")) {
+							homeAgent.cancelamentoRegisto(mb);
+							homeAgent.notify();
+						}
+					}
 				}
 				
 			} catch(SocketException e2) {
