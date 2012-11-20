@@ -1,7 +1,9 @@
 package mrc.deibogus.client;
 
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -9,44 +11,78 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import mrc.deibogus.data.MobileNodeData;
+import mrc.deibogus.data.Pacote;
+import mrc.deibogus.data.Response;
+
 public class MobileNode extends Thread {
 
+	//TODO mapear o porto para um IP
+	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS 
+	public static int foreignAgentPort = 6000;
+
+	private final String homeAgentIP = "192.168.1.17"; //port = 7000
+	private final String foreignAgentIP = "192.168.1.16"; //port = 6000 
+
+	private final String myIP = "192.168.169.1";
+	private final String myMAC = "00:23:6c:8f:73:ab";
+
+	private final String destinationIP = "192.168.169.2";
+
 	private boolean logged = false;
-	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS
-	
+
 	public Socket s;
 	public ObjectOutputStream out;
 	public ObjectInputStream in;
-	
+
 	static ClientResponse cc;
-	
+
+	private InputStreamReader text_in = new InputStreamReader(System.in);
+	private BufferedReader text_buf = new BufferedReader(text_in);
+
 	public static void main (String args[]) {
-		System.out.println("MobileNode");
 		MobileNode mb = new MobileNode();
 
-		mb.connect(homeAgentPort);
-		//mb.mainMenu(mb);
+		System.out.println("MobileNode Started ["+mb.myIP+"]");
+
+		if(mb.connect(homeAgentPort)) {
+			mb.conectarRede();
+
+			mb.actions(mb);
+		}
 	}
-	
+
+	public synchronized void actions(MobileNode mb) {
+		while(logged) {
+			System.out.println("1 - Mudar de rede");
+			System.out.println("2 - Enviar pacote");
+			System.out.println("Option: ");
+			try {
+				int op = Integer.parseInt(text_buf.readLine());
+
+				switch(op) {
+				case 1: mb.changeNetwork(); break;
+				case 2: mb.sendPacket(); break;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public synchronized boolean connect(int port) {
 		int retry = 0;
 
 		do{
 			retry++;
 			try {
-				//System.out.println(">> Connecting to server! Attempting "+retry+"...");
-
 				s = new Socket("localhost", port);
 				out = new ObjectOutputStream( s.getOutputStream());
 				out.flush();
 				in = new ObjectInputStream( s.getInputStream());
 
-				System.out.println(">> Connected to server!");
-				
-				this.logged = true;
-				cc = new ClientResponse(in,out);
-				cc.start();
-				
+				System.out.println("MB["+myIP+"] > Conectado ao HA");
+
 				return true;
 			} catch (UnknownHostException e) {
 				//System.out.println(">> Warning: Server not available! Working on it...");
@@ -54,15 +90,76 @@ public class MobileNode extends Thread {
 				//System.out.println(">> Warning: Server not available! Working on it...");
 			}
 		} while(retry < 5);
-		System.out.println("Server not available! Please try again later...");
+		System.err.println("MB["+myIP+"] > HomeAgent nao esta disponivel.");
 		return false;
 	}
-	
-	
+
+
+	public synchronized boolean conectarRede() {
+		Response resp = null;
+
+		MobileNodeData data = new MobileNodeData();
+		data.setIP(myIP);
+		data.setMacAddress(myMAC);
+
+		data.setType("ConnectMN");
+
+		try {
+			out.writeObject(data);
+
+			resp = (Response) in.readObject();
+		} catch (IOException e) {
+			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+		} catch (ClassNotFoundException e) {
+			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+		}
+
+		if (resp.isResponse()) {
+			this.logged = true;
+
+			cc = new ClientResponse(in, out, myIP);
+			cc.start();
+			System.out.println("MB["+myIP+"] > Conectado a rede.");
+
+			return true;
+		} else {
+			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+		}
+
+		return false;
+	}
+
+	public synchronized boolean changeNetwork() {
+		//TODO faz logout do HA
+		//TODO conecta-se ao FA
+
+		return false;
+	}
+
+	public synchronized void sendPacket() {
+		Pacote packet = new Pacote();
+		packet.setSource(myIP); //IP ou MAC?
+		packet.setDestination(destinationIP);
+		packet.setProtocol("TCP");
+		packet.setData("Pacote de "+myIP+" para "+destinationIP);
+
+		packet.setType("pacoteCNtoMN");
+
+		System.out.println("MB["+myIP+"] > Pacote enviado");
+
+		try {
+			out.writeObject(packet);
+		} catch (IOException e) {
+			System.err.println("MB["+myIP+"] > Erro ao enviar pacote.");
+		}
+	}
+
 }
 
 
 class ClientResponse extends Thread {
+	private String myIP;
+
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private static boolean logged = true;
@@ -72,31 +169,32 @@ class ClientResponse extends Thread {
 
 	}
 
-	ClientResponse(ObjectInputStream in, ObjectOutputStream out) {
+	ClientResponse(ObjectInputStream in, ObjectOutputStream out, String myIP) {
 		this.in = in;
 		this.out = out;
+
+		this.myIP = myIP;
 	}
 
 	public void run() {
-		//Response new_response = null;
 
 		while(logged) {
-			//try {
-				System.out.println("Waiting for response...");
-				//new_response = (Response) in.readObject();
-			/*} catch (IOException e) {
+			try {
+				//System.out.println("MB["+myIP+"] > Waiting for response...");
+				Object response = in.readObject();
+
+				if(response instanceof Pacote) {
+					System.out.println("MB["+myIP+"] > Pacote recebido.");
+				}
+
+			} catch (IOException e) {
 				//e.printStackTrace();
-				System.err.println("Socket closed!");
+				System.err.println("MB["+myIP+"] > Socket closed!");
 				logged = false;
 				break;
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
-			}*/
-
-			/*if(new_response.getType().equals("recommendation")) {
-				
-			}*/
-			
+			}
 		}
 	}
 

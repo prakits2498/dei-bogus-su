@@ -1,18 +1,23 @@
 package mrc.deibogus.data;
 
-public class MobileNodeData {
-	private String name;
-	private String macAddress;
+import java.io.Serializable;
+
+public class MobileNodeData extends Request implements Serializable {
+	
+	private static final long serialVersionUID = -8267659253197207472L;
+	
+	private String IP;
+	private String macAddress; //00:23:6c:8f:73:ab
 	private int lifeTimeLeft;
 	private String homeAgentAddress;
 	private String careOfAddress;
 	
-	public String getName() {
-		return name;
+	public String getIP() {
+		return IP;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setIP(String IP) {
+		this.IP = IP;
 	}
 	
 	public String getMacAddress() {
