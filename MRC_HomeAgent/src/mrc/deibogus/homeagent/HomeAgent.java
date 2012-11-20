@@ -43,6 +43,8 @@ public class HomeAgent extends Thread {
 					e.printStackTrace();
 				}
 			}
+			
+			//TODO meter temporizador e chamar a funçao temporizadorTTL
 		}
 	}
 
