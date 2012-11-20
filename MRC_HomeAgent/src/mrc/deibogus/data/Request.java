@@ -7,10 +7,6 @@ public class Request implements Serializable {
 	private static final long serialVersionUID = 7923661429084687689L;
 	private String type;
 
-	public Request() {
-		this.type = "";
-	}
-
 	public void setType(String type) {
 		this.type = type;
 	}

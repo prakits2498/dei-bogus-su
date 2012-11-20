@@ -11,23 +11,25 @@ import mrc.deibogus.homeagent.HomeAgent;
 public class Server {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		int port = 7000;
-		Socket clientSocket;
+		int port = 7000; //HomeAgent Address: 192.168.1.17
+		
+		Socket socket;
+		ObjectInputStream in;
+		ObjectOutputStream out;
 
-		ObjectInputStream inObject;
-		ObjectOutputStream outObject;
-
-		System.out.println(">> Listening on port "+port+"...");
+		System.out.println(">> Home Agent listening on port "+port+"...");
 		ServerSocket listenSocket = new ServerSocket(port);
 
-		while(true) {			
-			clientSocket = listenSocket.accept(); //bloqueante
+		HomeAgent homeAgent = new HomeAgent("192.168.1.17");
 
-			outObject = new ObjectOutputStream(clientSocket.getOutputStream());
-			outObject.flush();
-			inObject = new ObjectInputStream(clientSocket.getInputStream());
+		while(true) {
+			socket = listenSocket.accept(); //bloqueante
 
-			new HomeAgent(clientSocket, inObject, outObject);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			out.flush();
+			in = new ObjectInputStream(socket.getInputStream());
+			
+			new Connection(homeAgent, socket, in, out);
 		}
 
 	}
