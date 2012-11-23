@@ -23,9 +23,10 @@ public class FlickrClient {
 		f.getPhotos(id);
 	}
 
-	public void getPhotos(String idUser){
+	public int getPhotos(String idUser){
 		URL u;
 		HttpURLConnection uc;
+		int numberPhotos=0;
 		
 		try {
 			u = new URL("http://api.flickr.com/services/rest/?method=flickr.people.getPublicPhotos&api_key=" + apiKey + "&user_id=" + idUser + "&format=json&extras=url_m");
@@ -49,9 +50,11 @@ public class FlickrClient {
 			JSONObject photos = (JSONObject) json.get("photos");
 			JSONArray menuitemArray = (JSONArray)photos.get("photo");
 			
+			//TODO Juntar urls e comparar String
 			for(int i=0;i<menuitemArray.size();i++){
 				JSONObject temp = (JSONObject) menuitemArray.get(i);
 				System.out.println(temp.get("url_m"));
+				numberPhotos++;
 			}
 			
 		} catch (MalformedURLException e) {
@@ -62,7 +65,7 @@ public class FlickrClient {
 			e.printStackTrace();
 		}
 		
-
+		return numberPhotos;
 
 	}
 
