@@ -131,6 +131,7 @@ public class MobileNode extends Thread {
 
 	public synchronized boolean changeNetwork() {
 		//TODO faz logout do HA
+		
 		//TODO conecta-se ao FA
 
 		return false;
