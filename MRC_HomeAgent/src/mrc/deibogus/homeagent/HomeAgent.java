@@ -22,7 +22,7 @@ public class HomeAgent extends Thread {
 	//MBT: <home_address, care_of_address, association_lifetime>
 	private HashMap<String, HomeAgentData> mobilityBindingTable = new HashMap<String, HomeAgentData>();
 
-	private HashMap<String, String> networkNodes = new HashMap<String, String>(); //IP - MAC
+	//private HashMap<String, String> networkNodes = new HashMap<String, String>(); //IP - MAC
 
 	public HomeAgent(String myIP) {
 		this.myIP = myIP;
@@ -44,7 +44,7 @@ public class HomeAgent extends Thread {
 				}
 			}
 			
-			//TODO meter temporizador e chamar a funçao temporizadorTTL
+			//TODO meter temporizador e chamar a funÔøΩao temporizadorTTL
 		}
 	}
 
