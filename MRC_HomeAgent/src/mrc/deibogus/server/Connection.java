@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
 
+import mrc.deibogus.data.CorrespondentNodeData;
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
 import mrc.deibogus.data.PacoteEncapsulado;
@@ -77,6 +78,25 @@ public class Connection extends Thread {
 					synchronized (homeAgent) {
 						if(homeAgent.getState().name().equals("WAITING")) {
 							homeAgent.addMN(data, communication);
+							homeAgent.notify();
+						}
+					}
+
+					//send response to client
+					response.setResponse(true);
+					outObject.writeObject(response);
+					outObject.flush();
+				}
+				
+				if(request.getType().equals("ConnectCN")) {
+					CorrespondentNodeData data = (CorrespondentNodeData) request;
+					System.out.println("> HomeAgent vai guardar o contacto de um CorrespondentNode ["+data.getIP()+"]");
+
+					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
+					
+					synchronized (homeAgent) {
+						if(homeAgent.getState().name().equals("WAITING")) {
+							homeAgent.addSocket(data.getIP(), communication);
 							homeAgent.notify();
 						}
 					}

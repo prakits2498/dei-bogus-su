@@ -269,4 +269,8 @@ public class HomeAgent extends Thread {
 		return false;
 	}
 
+	public void addSocket(String IP, Communication com) {
+		this.nodesSockets.put(IP, com);
+	}
+
 }
