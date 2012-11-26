@@ -36,7 +36,10 @@ public class Server {
 		Communication communication = new Communication(haIP, in, out, s);
 		
 		foreignAgent = new ForeignAgent(myIP, haIP);
-		foreignAgent.registoHA(in, out,communication);
+		
+		synchronized (foreignAgent) {
+			foreignAgent.registoHA(in, out,communication);
+		}
 		new Connection(foreignAgent, s, in, out);
 		
 		ServerSocket listenSocket = new ServerSocket(port);

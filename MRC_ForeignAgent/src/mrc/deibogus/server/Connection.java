@@ -71,7 +71,7 @@ public class Connection extends Thread {
 //					outObject.writeObject(response);
 //					outObject.flush();
 //				}
-				
+				//1 - Recebe pedido de registo
 				if(request.getType().equals("ConnectMN")) {
 					MobileNodeData data = (MobileNodeData) request;
 					System.out.println("> Pedido de registo na rede de um Mobile Node ["+data.getIP()+"]");
@@ -91,7 +91,7 @@ public class Connection extends Thread {
 					outObject.flush();
 				}
 				
-				if(request.getType().equals("pacoteCNtoMN")) { //1
+				if(request.getType().equals("pacoteMNtoCN")) { //1
 					Pacote packet = (Pacote) request;
 					
 					synchronized (foreignAgent) {
@@ -107,7 +107,7 @@ public class Connection extends Thread {
 					
 					synchronized (foreignAgent) {
 						if(foreignAgent.getState().name().equals("WAITING")) {
-							foreignAgent.receivePacket(packetE.getSource(), packetE);
+							foreignAgent.receivePacketFromHa(packetE.getSource(), packetE);
 							foreignAgent.notify();
 						}
 					}
