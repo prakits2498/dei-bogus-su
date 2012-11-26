@@ -6,28 +6,48 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import mrc.deibogus.data.MobileNodeData;
+import mrc.deibogus.data.Pacote;
+import mrc.deibogus.data.Response;
 import mrc.deibogus.foreignagent.ForeignAgent;
+import mrc.deibogus.foreignagent.ForeignAgent;
+import mrc.deibogus.simulator.Communication;
 
 public class Server {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		int port = 7000;
-		Socket clientSocket;
+		int port = 6000; //ForeignAgent Address: 192.168.1.16
+		int portHA = 7000; // HomeAgent Address: 192.168.1.17
+		String myIP = "192.168.1.16";
+		String haIP = "192.168.1.17";
+		
+		ObjectInputStream in;
+		ObjectOutputStream out;
+		
+		ForeignAgent foreignAgent;
 
-		ObjectInputStream inObject;
-		ObjectOutputStream outObject;
-
-		System.out.println(">> Listening on port "+port+"...");
+		System.out.println(">> Foreign Agent connecting to Home Agent on port "+portHA+"...");
+		//ServerSocket listenSocket = new ServerSocket(port);
+		
+		Socket s = new Socket("localhost", portHA);
+		out = new ObjectOutputStream( s.getOutputStream());
+		out.flush();
+		in = new ObjectInputStream( s.getInputStream());
+		Communication communication = new Communication(haIP, in, out, s);
+		
+		foreignAgent = new ForeignAgent(myIP, haIP);
+		foreignAgent.registoHA(in, out,communication);
+		new Connection(foreignAgent, s, in, out);
+		
 		ServerSocket listenSocket = new ServerSocket(port);
+		while(true) {
+			Socket socket = listenSocket.accept(); //bloqueante
 
-		while(true) {			
-			clientSocket = listenSocket.accept(); //bloqueante
-
-			outObject = new ObjectOutputStream(clientSocket.getOutputStream());
-			outObject.flush();
-			inObject = new ObjectInputStream(clientSocket.getInputStream());
-
-			new ForeignAgent(clientSocket, inObject, outObject);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			out.flush();
+			in = new ObjectInputStream(socket.getInputStream());
+			
+			new Connection(foreignAgent, socket, in, out);
 		}
 
 	}
