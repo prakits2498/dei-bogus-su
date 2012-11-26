@@ -18,6 +18,7 @@ public class HomeAgent extends Thread {
 	private HashMap<String,	Communication> nodesSockets = new HashMap<String, Communication>();
 
 	private HashMap<String, MobileNodeData> mobileNodes = new HashMap<String, MobileNodeData>();
+	private HashMap<String, CorrespondentNodeData> correspondentNodes = new HashMap<String, CorrespondentNodeData>();
 
 	//MBT: <home_address, care_of_address, association_lifetime>
 	private HashMap<String, HomeAgentData> mobilityBindingTable = new HashMap<String, HomeAgentData>();
