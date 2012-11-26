@@ -97,11 +97,11 @@ public class ForeignAgent extends Thread{
 
 	}
 
-	//1 - Recebe pacote vindo de CN destinado a MN
+	//1 - Recebe pacote vindo de HA destinado a MN
 	public void sendPacket(Pacote packet) {
 		/*
-		 * Consulta MBT
-		 * Se MN nao esta na MBT entao
+		 * Consulta VLT
+		 * Se MN nao esta na VLT entao
 		 *   Entrega pacote ao MN
 		 * Senao
 		 *   Determina CoA
