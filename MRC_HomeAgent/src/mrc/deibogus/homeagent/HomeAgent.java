@@ -3,6 +3,7 @@ package mrc.deibogus.homeagent;
 import java.io.IOException;
 import java.util.HashMap;
 
+import mrc.deibogus.data.CorrespondentNodeData;
 import mrc.deibogus.data.HomeAgentData;
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
@@ -17,13 +18,13 @@ public class HomeAgent extends Thread {
 	private HashMap<String, Communication> FAsockets = new HashMap<String, Communication>();
 	private HashMap<String,	Communication> nodesSockets = new HashMap<String, Communication>();
 
-	private HashMap<String, MobileNodeData> mobileNodes = new HashMap<String, MobileNodeData>();
+	private HashMap<String, MobileNodeData> mobileNodes = new HashMap<String, MobileNodeData>(); //nodes que se conectaram na HN
 	private HashMap<String, CorrespondentNodeData> correspondentNodes = new HashMap<String, CorrespondentNodeData>();
 
 	//MBT: <home_address, care_of_address, association_lifetime>
 	private HashMap<String, HomeAgentData> mobilityBindingTable = new HashMap<String, HomeAgentData>();
 
-	//private HashMap<String, String> networkNodes = new HashMap<String, String>(); //IP - MAC
+	private HashMap<String, String> networkNodes = new HashMap<String, String>(); //IP - MAC -> nodes da HN
 
 	public HomeAgent(String myIP) {
 		this.myIP = myIP;
