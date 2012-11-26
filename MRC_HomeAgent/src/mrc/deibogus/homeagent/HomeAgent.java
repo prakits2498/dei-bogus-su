@@ -19,7 +19,7 @@ public class HomeAgent extends Thread {
 	private HashMap<String,	Communication> nodesSockets = new HashMap<String, Communication>();
 
 	private HashMap<String, MobileNodeData> mobileNodes = new HashMap<String, MobileNodeData>(); //nodes que se conectaram na HN
-	private HashMap<String, CorrespondentNodeData> correspondentNodes = new HashMap<String, CorrespondentNodeData>();
+	//private HashMap<String, CorrespondentNodeData> correspondentNodes = new HashMap<String, CorrespondentNodeData>();
 
 	//MBT: <home_address, care_of_address, association_lifetime>
 	private HashMap<String, HomeAgentData> mobilityBindingTable = new HashMap<String, HomeAgentData>();
@@ -202,7 +202,7 @@ public class HomeAgent extends Thread {
 		}
 	}
 
-	//5 - Temporizador de TTL
+	//5 - Temporizador de TTL ------------ACHO QUE TA ALI UM BOGUS
 	public void temporizadorTTL() {
 		/*
 		 * Para cada entrada da MBT
