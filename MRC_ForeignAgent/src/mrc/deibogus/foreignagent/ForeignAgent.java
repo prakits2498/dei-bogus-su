@@ -3,16 +3,12 @@ package mrc.deibogus.foreignagent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import mrc.deibogus.data.ForeignAgentData;
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
 import mrc.deibogus.data.PacoteEncapsulado;
-import mrc.deibogus.data.Request;
 import mrc.deibogus.data.Response;
 import mrc.deibogus.simulator.Communication;
 
@@ -39,7 +35,6 @@ public class ForeignAgent extends Thread{
 		this.myIP = myIP;
 		this.connected = true;
 
-		this.loadNetworkNodes();
 		this.start();
 	}
 
@@ -90,11 +85,6 @@ public class ForeignAgent extends Thread{
 	public void addMN(MobileNodeData data, Communication communication) {
 		this.nodesSockets.put(data.getIP(), communication);
 		this.mobileNodes.put(data.getIP(), data);
-	}
-
-	private void loadNetworkNodes() {
-		//TODO carregar networkNodes do ficheiro 
-
 	}
 
 	//1 - Recebe pacote vindo de HA destinado a MN
