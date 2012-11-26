@@ -6,7 +6,8 @@ public class CorrespondentNodeData extends Request implements Serializable {
 private static final long serialVersionUID = -8267659253197207472L;
 	
 	private String IP;
-	private String macAddress; //00:23:6c:8f:73:ab
+	//private String macAddress; //00:23:6c:8f:73:ab
+	
 	
 	public String getIP() {
 		return IP;
@@ -16,13 +17,13 @@ private static final long serialVersionUID = -8267659253197207472L;
 		this.IP = IP;
 	}
 	
-	public String getMacAddress() {
-		return macAddress;
-	}
-	
-	public void setMacAddress(String macAddress) {
-		this.macAddress = macAddress;
-	}
+//	public String getMacAddress() {
+//		return macAddress;
+//	}
+//	
+//	public void setMacAddress(String macAddress) {
+//		this.macAddress = macAddress;
+//	}
 	
 	
 	

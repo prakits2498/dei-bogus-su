@@ -22,7 +22,7 @@ public class CorrespondentNode extends Thread {
 
 	private final String homeAgentIP = "192.168.1.17"; //port = 7000
 
-	private final String myIP = "192.168.169.10";
+	private final String myIP = "192.168.169.2";
 	private final String myMAC = "00:23:6c:8f:73:ac";
 
 	private final String destinationIP = "192.168.169.1";
@@ -52,15 +52,13 @@ public class CorrespondentNode extends Thread {
 
 	public synchronized void actions(CorrespondentNode mb) {
 		while(logged) {
-			System.out.println("1 - Mudar de rede");
-			System.out.println("2 - Enviar pacote");
+			System.out.println("1 - Enviar pacote");
 			System.out.println("Option: ");
 			try {
 				int op = Integer.parseInt(text_buf.readLine());
 
 				switch(op) {
-				case 1: mb.changeNetwork(); break;
-				case 2: mb.sendPacket(); break;
+				case 1: mb.sendPacket(); break;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -98,9 +96,9 @@ public class CorrespondentNode extends Thread {
 
 		CorrespondentNodeData data = new CorrespondentNodeData();
 		data.setIP(myIP);
-		data.setMacAddress(myMAC);
+		//data.setMacAddress(myMAC);
 
-		data.setType("ConnectMN");
+		data.setType("ConnectCN");
 
 		try {
 			out.writeObject(data);
@@ -117,19 +115,12 @@ public class CorrespondentNode extends Thread {
 
 			cc = new ClientResponse(in, out, myIP);
 			cc.start();
-			System.out.println("MB["+myIP+"] > Conectado a rede.");
+			System.out.println("CN["+myIP+"] > guardado pelo HA.");
 
 			return true;
 		} else {
 			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
 		}
-
-		return false;
-	}
-
-	public synchronized boolean changeNetwork() {
-		//TODO faz logout do HA
-		//TODO conecta-se ao FA
 
 		return false;
 	}
@@ -179,10 +170,11 @@ class ClientResponse extends Thread {
 		while(logged) {
 			try {
 				//System.out.println("MB["+myIP+"] > Waiting for response...");
-				Object response = in.readObject();
+				Pacote response = (Pacote) in.readObject();
 
 				if(response instanceof Pacote) {
-					System.out.println("MB["+myIP+"] > Pacote recebido.");
+					System.out.println("CN["+myIP+"] > Pacote recebido.");
+					System.out.println("CN["+myIP+"] > Mensage: " + response.getData());
 				}
 
 			} catch (IOException e) {
