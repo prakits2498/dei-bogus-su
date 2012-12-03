@@ -20,6 +20,8 @@ public class MobileNode extends Thread {
 	//TODO mapear o porto para um IP
 	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS 
 	public static int foreignAgentPort = 6000;
+	
+	private static String currentNetwork = "hn";
 
 	private final String homeAgentIP = "192.168.1.17"; //port = 7000
 	private final String foreignAgentIP = "192.168.1.16"; //port = 6000 
@@ -35,7 +37,7 @@ public class MobileNode extends Thread {
 	public ObjectOutputStream out;
 	public ObjectInputStream in;
 
-	static ClientResponse cc;
+	static ClientResponse cc; //Pq static?
 
 	private InputStreamReader text_in = new InputStreamReader(System.in);
 	private BufferedReader text_buf = new BufferedReader(text_in);
@@ -56,6 +58,7 @@ public class MobileNode extends Thread {
 		while(logged) {
 			System.out.println("1 - Mudar de rede");
 			System.out.println("2 - Enviar pacote");
+			System.out.println("3 - Mostrar rede");
 			System.out.println("Option: ");
 			try {
 				int op = Integer.parseInt(text_buf.readLine());
@@ -63,11 +66,16 @@ public class MobileNode extends Thread {
 				switch(op) {
 				case 1: mb.changeNetwork(); break;
 				case 2: mb.sendPacket(); break;
+				case 3: mb.printNetwork();break;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public synchronized void  printNetwork(){
+		System.out.println("O Mobile Node " + myIP + " está na rede " + currentNetwork);
 	}
 
 	public synchronized boolean connect(int port) {
@@ -128,11 +136,65 @@ public class MobileNode extends Thread {
 
 		return false;
 	}
+	
+	public synchronized boolean conectarRedeFA() {
+		Response resp = null;
+
+		MobileNodeData data = new MobileNodeData();
+		data.setIP(myIP);
+		data.setMacAddress(myMAC);
+		data.setHomeAgentAddress(homeAgentIP);
+		data.setCareOfAddress(foreignAgentIP);
+
+		data.setType("ConnectMN");
+
+		try {
+			out.writeObject(data);
+
+			resp = (Response) in.readObject();
+		} catch (IOException e) {
+			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+		} catch (ClassNotFoundException e) {
+			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+		}
+
+		if (resp.isResponse()) {
+			this.logged = true;
+
+			cc = new ClientResponse(in, out, myIP);
+			cc.start();
+			System.out.println("MB["+myIP+"] > Conectado a rede.");
+
+			return true;
+		} else {
+			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+		}
+
+		return false;
+	}
 
 	public synchronized boolean changeNetwork() {
 		//TODO faz logout do HA
 		
 		//TODO conecta-se ao FA
+		try {
+			this.s.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(currentNetwork.equals("hn")){
+			if(this.connect(foreignAgentPort)) {
+				this.conectarRedeFA();
+			}
+			this.currentNetwork = "fn";
+		}
+		else{
+			if(this.connect(homeAgentPort)) {
+				this.conectarRede();
+			}
+			this.currentNetwork = "hn";
+		}
 
 		return false;
 	}
