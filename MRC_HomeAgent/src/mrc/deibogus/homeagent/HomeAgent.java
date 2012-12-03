@@ -139,6 +139,10 @@ public class HomeAgent extends Thread {
 		 *   Cria entrada na MBT
 		 *   Envia Confirmacao (pos/neg) ao FA
 		 */
+		
+		Response resp = new Response();
+		resp.setType("RespRegistoFA");
+		resp.setIP(mb.getIP());
 
 		System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA");
 		
@@ -148,12 +152,12 @@ public class HomeAgent extends Thread {
 			data.setLifeTime(mb.getLifeTimeLeft());
 			mobilityBindingTable.put(mb.getIP(), data);
 			
+			resp.setResponse(true);
+			
 			System.out.println("HA["+myIP+"] > MN ja existe na MBT - registo actualizado");
 		} else {
-			Response resp = new Response();
-			resp.setType("RespRegistoFA");
 
-			if(!networkNodes.containsKey(mb.getIP())) {
+			if(!mobileNodes.containsKey(mb.getIP())) {
 				resp.setResponse(false);
 				
 				System.out.println("HA["+myIP+"] > MN nao pertence a HN");
@@ -168,12 +172,13 @@ public class HomeAgent extends Thread {
 				System.out.println("HA["+myIP+"] > MN registado");
 			}
 
-			try {
-				FAsockets.get(mb.getCareOfAddress()).getOut().writeObject(resp);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
+		}
+		System.out.println("AI U CAREILANS");
+		try {
+			FAsockets.get(mb.getCareOfAddress()).getOut().writeObject(resp);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -249,13 +254,13 @@ public class HomeAgent extends Thread {
 		packetE.setDestination(d.getCareOfAddress());
 		packetE.setProtocol("IP in IP");
 		packetE.setData(packet);
+		packetE.setType("pacoteEncapsulado");
 
 		return packetE;
 	}
 
 	private Pacote desencapsulaPacote(PacoteEncapsulado packetE) {
 		System.out.println("HA["+myIP+"] > A desencapsular pacote");
-
 		return packetE.getData();
 	}
 
