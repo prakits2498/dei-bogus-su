@@ -90,6 +90,7 @@ public class ForeignAgent extends Thread{
 		if(!visitorListTable.containsKey(data.getIP())){
 			this.nodesSockets.put(data.getIP(), communication);
 			this.visitorListTable.put(data.getIP(), data);
+			data.setType("pedidoRegistoFA");
 			try {
 				com.getOut().writeObject(data);
 			} catch (IOException e) {
@@ -102,6 +103,7 @@ public class ForeignAgent extends Thread{
 			MobileNodeData temp = visitorListTable.get(data.getIP());
 			temp.setLifeTimeLeft(temp.getLifeTimeLeft()+10); //AQUI COLOCAR O TEMPO QUE FOR PARA AUMENTAR
 			visitorListTable.put(data.getIP(), temp);
+			data.setType("pedidoRegistoFA");
 			try {
 				com.getOut().writeObject(temp);
 			} catch (IOException e) {
@@ -110,29 +112,20 @@ public class ForeignAgent extends Thread{
 			}
 		}
 		
-		Response resp=null;
-		try {
-			resp = (Response) com.getIn().readObject();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	}
+	
+	public void nodeRegisterResponse(Response resp){
 		if(!resp.isResponse()){
-			visitorListTable.remove(data.getIP());
-			nodesSockets.remove(data.getIP());
+			visitorListTable.remove(resp.getIP());
+			nodesSockets.remove(resp.getIP());
 		}
 		
 		try {
-			communication.getOut().writeObject(resp);
+			nodesSockets.get(resp.getIP()).getOut().writeObject(resp);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	//4 - Recebe pacote vindo de MN, destinado a CN
@@ -152,7 +145,7 @@ public class ForeignAgent extends Thread{
 		if(!visitorListTable.containsKey(packet.getSource())) {
 			System.out.println("FA["+myIP+"] > Ignora pacote para CN["+packet.getDestination()+"] porque MN[" + packet.getSource() + "] nao esta na VLT");
 		} else {
-			MobileNodeData d = visitorListTable.get(packet.getDestination());
+			MobileNodeData d = visitorListTable.get(packet.getSource());
 			if(existHAA(d.getHomeAgentAddress())){
 				PacoteEncapsulado packetE = this.encapsulaPacote(packet);
 
@@ -258,12 +251,13 @@ public class ForeignAgent extends Thread{
 	private PacoteEncapsulado encapsulaPacote(Pacote packet) {
 		System.out.println("FA["+myIP+"] > A encapsular pacote");
 
-		MobileNodeData d = visitorListTable.get(packet.getDestination());
+		MobileNodeData d = visitorListTable.get(packet.getSource());
 		PacoteEncapsulado packetE = new PacoteEncapsulado();
 		packetE.setSource(myIP);
 		packetE.setDestination(d.getHomeAgentAddress());
 		packetE.setProtocol("IP in IP");
 		packetE.setData(packet);
+		packetE.setType("pacoteEncapsulado");
 
 		return packetE;
 	}

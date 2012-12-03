@@ -85,13 +85,13 @@ public class Connection extends Thread {
 						}
 					}
 
-					//send response to client
-					response.setResponse(true);
-					outObject.writeObject(response);
-					outObject.flush();
+//					//send response to client É A THREAD QUE ESCUTA O HOMEAGENT Q RECEBE A RESPOSTA E A DÁ AO MOBILE NODE NA FUNÇÃO RESPREGISTOFA
+//					response.setResponse(true);
+//					outObject.writeObject(response);
+//					outObject.flush();
 				}
 				
-				if(request.getType().equals("pacoteMNtoCN")) { //1
+				if(request.getType().equals("pacoteCNtoMN")) { //1
 					Pacote packet = (Pacote) request;
 					
 					synchronized (foreignAgent) {
@@ -130,6 +130,17 @@ public class Connection extends Thread {
 					synchronized (foreignAgent) {
 						if(foreignAgent.getState().name().equals("WAITING")) {
 							foreignAgent.cancelamentoRegisto(mb);
+							foreignAgent.notify();
+						}
+					}
+				}
+				
+				if(request.getType().equals("RespRegistoFA")) {
+					Response resp = (Response) request;
+					
+					synchronized (foreignAgent) {
+						if(foreignAgent.getState().name().equals("WAITING")) {
+							foreignAgent.nodeRegisterResponse(resp);
 							foreignAgent.notify();
 						}
 					}

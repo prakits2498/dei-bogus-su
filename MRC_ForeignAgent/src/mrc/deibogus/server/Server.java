@@ -44,6 +44,7 @@ public class Server {
 		
 		ServerSocket listenSocket = new ServerSocket(port);
 		while(true) {
+			
 			Socket socket = listenSocket.accept(); //bloqueante
 
 			out = new ObjectOutputStream(socket.getOutputStream());
