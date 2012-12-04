@@ -10,7 +10,6 @@ public class ForeignAgentData extends Request implements Serializable {
 	private String macAddress; //00:23:6c:8f:73:ab
 	private int lifeTimeLeft;
 	private String homeAgentAddress;
-	private String careOfAddress;
 	
 	public String getIP() {
 		return IP;
@@ -43,14 +42,5 @@ public class ForeignAgentData extends Request implements Serializable {
 	public void setHomeAgentAddress(String homeAgentAddress) {
 		this.homeAgentAddress = homeAgentAddress;
 	}
-
-	public String getCareOfAddress() {
-		return careOfAddress;
-	}
-
-	public void setCareOfAddress(String careOfAddress) {
-		this.careOfAddress = careOfAddress;
-	}
-
 	
 }

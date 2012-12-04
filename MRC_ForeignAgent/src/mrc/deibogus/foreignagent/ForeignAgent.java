@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
-import mrc.deibogus.data.ForeignAgentData;
+import mrc.deibogus.data.AgentAdvertisementMessage;
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
 import mrc.deibogus.data.PacoteEncapsulado;
@@ -226,34 +226,76 @@ public void temporizadorTTL() {
 	 *   Se TTL chegou a zero
 	 *     elimina entrada correspondente da VTL
 	 */
-
-	System.out.println("FA["+myIP+"] > temporizador TTL");
+	
+	System.out.println("FA["+myIP+"] > a enviar TTL");
 
 	HashMap<String, MobileNodeData> mbtAux = new HashMap<String, MobileNodeData>(visitorListTable);
 	for(String key : mbtAux.keySet()) {
 		MobileNodeData data = mbtAux.get(key);
 
-		data.setLifeTimeLeft(data.getLifeTimeLeft()-1);
-		visitorListTable.put(key, data);
-		if(data.getLifeTimeLeft() == 0) {
+		int ttl = data.getLifeTimeLeft();
+		ttl--;
+
+		if(ttl == 0) {
 			visitorListTable.remove(key);
+			System.out.println("FA["+myIP+"] > TTL: "+key+" eliminado da VLT");
+		} else {
+			data.setLifeTimeLeft(ttl);
+			visitorListTable.put(key, data);
 		}
+
 	}
 }
 
-//6 - Arranque, ou temporizador de anuncio de FA
-public void broadcast() {
-	/*
-	 * Se Arranque entao
-	 *   Sequence number = [0...255]
-	 * Senao
-	 *   Sequence number = [256...65635]
-	 *   Incrementa Sequence number
-	 * Envia anuncio por broadcast
-	 */
+//6 - Arranque, ou temporizador de anuncio de HA/FA
+	public void broadcast(boolean arranque) {
+		/*
+		 * Se Arranque entao
+		 *   Sequence number = [0...255]
+		 * Senao
+		 *   Sequence number = [256...65635]
+		 *   Incrementa Sequence number
+		 * Envia anuncio por broadcast
+		 */
 
-	//TODO funcao de broadcast para verificacao de presenca
-}
+		int sequenceNumber = 0; //TODO perguntar pra k serve o sequence number
+		if(arranque) {
+			sequenceNumber = generateRandomInteger(0, 255);
+		} else {
+			sequenceNumber = generateRandomInteger(256, 65635);
+		}
+
+		sendAdvertisementMessage();
+	}
+
+	private void sendAdvertisementMessage() {
+		System.out.println("FA["+myIP+"] > A enviar advertisement message");
+		
+		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage();
+		advertisementMessage.setHomeAgent(true);
+		
+		for(String key : visitorListTable.keySet()) {
+			MobileNodeData data = visitorListTable.get(key);
+			advertisementMessage.addCareOfAddress(myIP); //AQUI MUDEI POR SER FA MAS TENHO ALGUMAS DUVIDAS. ATENCIONE
+		}
+		
+		HashMap<String, Communication> aux = new HashMap<String, Communication>(nodesSockets);
+		for(String ip : aux.keySet()) {
+			try {
+				Communication c = aux.get(ip);
+				c.getOut().writeObject(advertisementMessage);
+			} catch (IOException e) {
+				//e.printStackTrace();
+				System.err.println("HA["+myIP+"] > socket removido");
+				nodesSockets.remove(ip);
+			}
+		}
+	}
+
+	private int generateRandomInteger(int aStart, int aEnd) {
+		double randomInt = aStart + (Math.random() * (aEnd - aStart));
+		return (int) randomInt;
+	}
 
 private PacoteEncapsulado encapsulaPacote(Pacote packet) {
 	System.out.println("FA["+myIP+"] > A encapsular pacote");
