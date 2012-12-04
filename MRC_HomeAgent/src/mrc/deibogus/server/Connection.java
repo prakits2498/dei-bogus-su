@@ -25,10 +25,7 @@ public class Connection extends Thread {
 	private boolean connected;
 	
 	private HomeAgent homeAgent;
-	
-	private HashMap<String, Communication> FAsockets = new HashMap<String, Communication>();
-	private HashMap<String,	Communication> nodesSockets = new HashMap<String, Communication>();
-	
+
 	public Connection(HomeAgent homeAgent, Socket clientSocket, ObjectInputStream in, ObjectOutputStream out) {
 		this.inObject = in;
 		this.outObject = out;
