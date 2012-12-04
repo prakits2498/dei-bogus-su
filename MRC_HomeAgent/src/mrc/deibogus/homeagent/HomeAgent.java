@@ -3,7 +3,7 @@ package mrc.deibogus.homeagent;
 import java.io.IOException;
 import java.util.HashMap;
 
-import mrc.deibogus.data.CorrespondentNodeData;
+import mrc.deibogus.data.AgentAdvertisementMessage;
 import mrc.deibogus.data.HomeAgentData;
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
@@ -25,13 +25,15 @@ public class HomeAgent extends Thread {
 	private HashMap<String, HomeAgentData> mobilityBindingTable = new HashMap<String, HomeAgentData>();
 
 	private HashMap<String, String> networkNodes = new HashMap<String, String>(); //IP - MAC -> nodes da HN
-
+	
+	private AgentAdvertisementMessage advertisementMessage;
+	
 	public HomeAgent(String myIP) {
 		this.myIP = myIP;
 		this.connected = true;
 
 		this.loadNetworkNodes();
-
+		
 		this.start();
 	}
 
@@ -40,13 +42,15 @@ public class HomeAgent extends Thread {
 		while(connected) {
 			synchronized(this) {
 				try {
-					this.wait();
+					this.wait(20000);
+					//Thread.sleep(20000);
+					temporizadorTTL();
+					
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			
-			//TODO meter temporizador e chamar a fun�ao temporizadorTTL
+
 		}
 	}
 
@@ -139,27 +143,27 @@ public class HomeAgent extends Thread {
 		 *   Cria entrada na MBT
 		 *   Envia Confirmacao (pos/neg) ao FA
 		 */
-		
+
 		Response resp = new Response();
 		resp.setType("RespRegistoFA");
 		resp.setIP(mb.getIP());
 
 		System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA");
-		
+
 		if(mobilityBindingTable.containsKey(mb.getIP())) {
 			HomeAgentData data = mobilityBindingTable.get(mb.getIP());
 			data.setCareOfAddress(mb.getCareOfAddress());
 			data.setLifeTime(mb.getLifeTimeLeft());
 			mobilityBindingTable.put(mb.getIP(), data);
-			
+
 			resp.setResponse(true);
-			
+
 			System.out.println("HA["+myIP+"] > MN ja existe na MBT - registo actualizado");
 		} else {
 
 			if(!mobileNodes.containsKey(mb.getIP())) {
 				resp.setResponse(false);
-				
+
 				System.out.println("HA["+myIP+"] > MN nao pertence a HN");
 			} else {
 				HomeAgentData data = new HomeAgentData();
@@ -168,7 +172,7 @@ public class HomeAgent extends Thread {
 				mobilityBindingTable.put(mb.getIP(), data);
 
 				resp.setResponse(true);
-				
+
 				System.out.println("HA["+myIP+"] > MN registado");
 			}
 
@@ -177,7 +181,6 @@ public class HomeAgent extends Thread {
 		try {
 			FAsockets.get(mb.getCareOfAddress()).getOut().writeObject(resp);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -198,12 +201,12 @@ public class HomeAgent extends Thread {
 		} else {
 			if(networkNodes.containsKey(mb.getIP())) {
 				mobilityBindingTable.remove(mb.getIP());
-				
+
 				System.out.println("HA["+myIP+"] > registo cancelado");
 			} else {
 				System.out.println("HA["+myIP+"] > MN nao pertence a HN");
 			}
-			
+
 		}
 	}
 
@@ -215,16 +218,16 @@ public class HomeAgent extends Thread {
 		 *   Se TTL chegou a zero
 		 *     elimina entrada correspondente da MBT
 		 */
-		
+
 		System.out.println("HA["+myIP+"] > temporizador TTL");
-		
+
 		HashMap<String, HomeAgentData> mbtAux = new HashMap<String, HomeAgentData>(mobilityBindingTable);
 		for(String key : mbtAux.keySet()) {
 			HomeAgentData data = mbtAux.get(key);
-			
+
 			int ttl = data.getLifeTime();
 			ttl--;
-			
+
 			if(ttl == 0) {
 				mobilityBindingTable.remove(key);
 			}
@@ -241,8 +244,9 @@ public class HomeAgent extends Thread {
 		 *   Incrementa Sequence number
 		 * Envia anuncio por broadcast
 		 */
-		
+
 		//TODO funcao de broadcast para verificacao de presenca
+		
 	}
 
 	private PacoteEncapsulado encapsulaPacote(Pacote packet) {
