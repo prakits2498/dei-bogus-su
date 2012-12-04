@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import mrc.deibogus.data.AgentAdvertisementMessage;
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
 import mrc.deibogus.data.Response;
@@ -248,6 +249,10 @@ class ClientResponse extends Thread {
 
 				if(response instanceof Pacote) {
 					System.out.println("MB["+myIP+"] > Pacote recebido.");
+				}
+				
+				if(response instanceof AgentAdvertisementMessage) {
+					System.out.println("MB["+myIP+"] > Advertisement message recebida.");
 				}
 
 			} catch (IOException e) {
