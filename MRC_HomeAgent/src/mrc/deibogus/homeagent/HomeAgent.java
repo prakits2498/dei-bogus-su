@@ -28,15 +28,14 @@ public class HomeAgent extends Thread {
 	private HashMap<String, HomeAgentData> mobilityBindingTable = new HashMap<String, HomeAgentData>();
 
 	private HashMap<String, String> networkNodes = new HashMap<String, String>(); //IP - MAC -> nodes da HN
-	
-	private AgentAdvertisementMessage advertisementMessage;
-	
+
 	public HomeAgent(String myIP) {
 		this.myIP = myIP;
 		this.connected = true;
 
 		this.loadNetworkNodes();
-		
+		this.broadcast(true);
+
 		this.start();
 	}
 
@@ -48,6 +47,7 @@ public class HomeAgent extends Thread {
 					this.wait(20000);
 					//Thread.sleep(20000);
 					temporizadorTTL();
+					broadcast(false);
 					
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -83,7 +83,7 @@ public class HomeAgent extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	//1 - Recebe pacote vindo de CN destinado a MN
@@ -253,12 +253,12 @@ public class HomeAgent extends Thread {
 				data.setLifeTime(ttl);
 				mobilityBindingTable.put(key, data);
 			}
-			
+
 		}
 	}
 
 	//6 - Arranque, ou temporizador de anuncio de HA/FA
-	public void broadcast() {
+	public void broadcast(boolean arranque) {
 		/*
 		 * Se Arranque entao
 		 *   Sequence number = [0...255]
@@ -268,8 +268,39 @@ public class HomeAgent extends Thread {
 		 * Envia anuncio por broadcast
 		 */
 
-		//TODO funcao de broadcast para verificacao de presenca
-		
+		int sequenceNumber = 0; //TODO perguntar pra k serve o sequence number
+		if(arranque) {
+			sequenceNumber = generateRandomInteger(0, 255);
+		} else {
+			sequenceNumber = generateRandomInteger(256, 65635);
+		}
+
+		sendAdvertisementMessage();
+	}
+
+	private void sendAdvertisementMessage() {
+		for(String ip : nodesSockets.keySet()) {
+			try {
+				Communication c = nodesSockets.get(ip);
+
+				AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage();
+				advertisementMessage.setHomeAgent(true);
+
+				for(String key : mobilityBindingTable.keySet()) {
+					HomeAgentData data = mobilityBindingTable.get(key);
+					advertisementMessage.addCareOfAddress(data.getCareOfAddress());
+				}
+
+				c.getOut().writeObject(advertisementMessage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private int generateRandomInteger(int aStart, int aEnd) {
+		double randomInt = aStart + (Math.random() * (aEnd - aStart));
+		return (int) randomInt;
 	}
 
 	private PacoteEncapsulado encapsulaPacote(Pacote packet) {
