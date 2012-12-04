@@ -1,9 +1,12 @@
 package mrc.deibogus.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AgentAdvertisementMessage {
+public class AgentAdvertisementMessage implements Serializable {
 
+	private static final long serialVersionUID = -3881154186501067881L;
+	
 	private ArrayList<String> careOfAddresses;
 	private boolean homeAgent;
 	
