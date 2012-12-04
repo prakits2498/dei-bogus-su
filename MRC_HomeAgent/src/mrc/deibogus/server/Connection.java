@@ -77,6 +77,7 @@ public class Connection extends Thread {
 					
 					synchronized (homeAgent) {
 						homeAgent.addMN(data, communication);
+						homeAgent.cancelamentoRegisto(data);
 						if(homeAgent.getState().name().equals("WAITING")) {
 							homeAgent.notify();
 						}
