@@ -145,7 +145,7 @@ public class MobileNode extends Thread {
 		data.setMacAddress(myMAC);
 		data.setHomeAgentAddress(homeAgentIP);
 		data.setCareOfAddress(foreignAgentIP);
-
+		data.setLifeTimeLeft(10);
 		data.setType("ConnectMN");
 
 		try {
