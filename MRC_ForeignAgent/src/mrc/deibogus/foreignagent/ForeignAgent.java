@@ -38,15 +38,13 @@ public class ForeignAgent extends Thread{
 			synchronized(this) {
 				try {
 					this.wait(10000);
-					//Thread.sleep(20000);
+					
 					temporizadorTTL();
 					broadcast(false);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-
-			//TODO meter temporizador e chamar a fun�ao temporizadorTTL
 		}
 	}
 
@@ -72,7 +70,6 @@ public class ForeignAgent extends Thread{
 		} catch (IOException e) {
 			System.err.println("FA["+myIP+"] > Erro ao registar-se no HA " + haIP);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -93,7 +90,6 @@ public class ForeignAgent extends Thread{
 			try {
 				com.getOut().writeObject(data);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -103,14 +99,13 @@ public class ForeignAgent extends Thread{
 		else
 		{
 			MobileNodeData temp = visitorListTable.get(data.getIP());
-			temp.setLifeTimeLeft(temp.getLifeTimeLeft()+10); //AQUI COLOCAR O TEMPO QUE FOR PARA AUMENTAR
+			temp.setLifeTimeLeft(data.getLifeTimeLeft());
 			visitorListTable.put(data.getIP(), temp);
 			
 			data.setType("pedidoRegistoFA");
 			try {
 				com.getOut().writeObject(temp);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

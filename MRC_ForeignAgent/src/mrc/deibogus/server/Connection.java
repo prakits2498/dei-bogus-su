@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
 
 import mrc.deibogus.data.MobileNodeData;
 import mrc.deibogus.data.Pacote;
@@ -49,8 +48,8 @@ public class Connection extends Thread {
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
 					synchronized (foreignAgent) {
+						foreignAgent.addMN(data, communication);
 						if(foreignAgent.getState().name().equals("WAITING")) {
-							foreignAgent.addMN(data, communication);
 							foreignAgent.notify();
 						}
 					}
@@ -61,8 +60,8 @@ public class Connection extends Thread {
 					
 					System.out.println("FA recebeu pacote para encapsular e enviar");
 					synchronized (foreignAgent) {
+						foreignAgent.sendPacket(packet);
 						if(foreignAgent.getState().name().equals("WAITING")) {
-							foreignAgent.sendPacket(packet);
 							foreignAgent.notify();
 						}
 					}
@@ -73,8 +72,8 @@ public class Connection extends Thread {
 					
 					System.out.println("FA recebeu pacote encapsulado");
 					synchronized (foreignAgent) {
+						foreignAgent.receivePacketFromHa(packetE.getSource(), packetE);
 						if(foreignAgent.getState().name().equals("WAITING")) {
-							foreignAgent.receivePacketFromHa(packetE.getSource(), packetE);
 							foreignAgent.notify();
 						}
 					}
@@ -85,8 +84,8 @@ public class Connection extends Thread {
 					
 					System.out.println("FA recebeu cancelamento de registo");
 					synchronized (foreignAgent) {
+						foreignAgent.cancelamentoRegisto(mb);
 						if(foreignAgent.getState().name().equals("WAITING")) {
-							foreignAgent.cancelamentoRegisto(mb);
 							foreignAgent.notify();
 						}
 					}
@@ -97,8 +96,8 @@ public class Connection extends Thread {
 					
 					System.out.println("FA recebeu resposta de registo");
 					synchronized (foreignAgent) {
+						foreignAgent.nodeRegisterResponse(resp);
 						if(foreignAgent.getState().name().equals("WAITING")) {
-							foreignAgent.nodeRegisterResponse(resp);
 							foreignAgent.notify();
 						}
 					}
