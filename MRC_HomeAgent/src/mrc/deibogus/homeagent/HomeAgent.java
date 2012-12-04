@@ -280,6 +280,8 @@ public class HomeAgent extends Thread {
 	}
 
 	private void sendAdvertisementMessage() {
+		System.out.println("HA["+myIP+"] > A enviar advertisement message");
+		
 		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage();
 		advertisementMessage.setHomeAgent(true);
 		
@@ -288,12 +290,15 @@ public class HomeAgent extends Thread {
 			advertisementMessage.addCareOfAddress(data.getCareOfAddress());
 		}
 		
-		for(String ip : nodesSockets.keySet()) {
+		HashMap<String, Communication> aux = new HashMap<String, Communication>(nodesSockets);
+		for(String ip : aux.keySet()) {
 			try {
-				Communication c = nodesSockets.get(ip);
+				Communication c = aux.get(ip);
 				c.getOut().writeObject(advertisementMessage);
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.err.println("HA["+myIP+"] > socket removido");
+				nodesSockets.remove(ip);
 			}
 		}
 	}
