@@ -25,52 +25,22 @@ public class Connection extends Thread {
 	
 	private ForeignAgent foreignAgent;
 	
-	private HashMap<String, Communication> HAsockets = new HashMap<String, Communication>();
-	private HashMap<String,	Communication> nodesSockets = new HashMap<String, Communication>();
-	
 	public Connection(ForeignAgent foreignAgent, Socket clientSocket, ObjectInputStream in, ObjectOutputStream out) {
 		this.inObject = in;
 		this.outObject = out;
 		this.clientSocket = clientSocket;
-		
 		this.foreignAgent = foreignAgent;
-		//this.homeAgent.setServer(this);
-		
 		connected = true;
-		
-		
-		
 		this.start();
 	}
-	
 	
 	public void run() {
 		while(connected) {
 			try {
 				outObject.flush();
-				
 				//read request from client
 				Request request = (Request) inObject.readObject();
-				Response response = new Response();
 				
-//				if(request.getType().equals("ConnectFA")) {
-//					MobileNodeData data = (MobileNodeData) request;
-//					System.out.println("> Pedido de conexao na rede de um Foreign Agent ["+data.getIP()+"]");
-//
-//					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
-//					
-//					synchronized (foreignAgent) {
-//						if(foreignAgent.getState().name().equals("WAITING")) {
-//							foreignAgent.addFA(data, communication);
-//							foreignAgent.notify();
-//						}
-//					}
-//
-//					//send response to client
-//					response.setResponse(true);
-//					outObject.writeObject(response);
-//					outObject.flush();
-//				}
 				//1 - Recebe pedido de registo
 				if(request.getType().equals("ConnectMN")) {
 					MobileNodeData data = (MobileNodeData) request;
@@ -84,16 +54,12 @@ public class Connection extends Thread {
 							foreignAgent.notify();
 						}
 					}
-
-//					//send response to client É A THREAD QUE ESCUTA O HOMEAGENT Q RECEBE A RESPOSTA E A DÁ AO MOBILE NODE NA FUNÇÃO RESPREGISTOFA
-//					response.setResponse(true);
-//					outObject.writeObject(response);
-//					outObject.flush();
 				}
 				
-				if(request.getType().equals("pacoteCNtoMN")) { //1
+				if(request.getType().equals("pacoteCNtoMN")) { //4 O NOME ENGANA, USEI ESTE PARA FICAR UNIFORME COM O HA, MAS ISTO É MN TO CN
 					Pacote packet = (Pacote) request;
 					
+					System.out.println("FA recebeu pacote para encapsular e enviar");
 					synchronized (foreignAgent) {
 						if(foreignAgent.getState().name().equals("WAITING")) {
 							foreignAgent.sendPacket(packet);
@@ -102,9 +68,10 @@ public class Connection extends Thread {
 					}
 				}
 				
-				if(request.getType().equals("pacoteEncapsulado")) { //2
+				if(request.getType().equals("pacoteEncapsulado")) { //3
 					PacoteEncapsulado packetE = (PacoteEncapsulado) request;
 					
+					System.out.println("FA recebeu pacote encapsulado");
 					synchronized (foreignAgent) {
 						if(foreignAgent.getState().name().equals("WAITING")) {
 							foreignAgent.receivePacketFromHa(packetE.getSource(), packetE);
@@ -113,20 +80,10 @@ public class Connection extends Thread {
 					}
 				}
 				
-//				if(request.getType().equals("pedidoRegistoFA")) { //3
-//					MobileNodeData mb = (MobileNodeData) request;
-//					
-//					synchronized (foreignAgent) {
-//						if(homeAgent.getState().name().equals("WAITING")) {
-//							homeAgent.registoFA(mb);
-//							homeAgent.notify();
-//						}
-//					}
-//				}
-				
-				if(request.getType().equals("cancelamentoRegisto")) { //4
+				if(request.getType().equals("cancelamentoRegisto")) { //Este nem ta na folha.. somos bwe a frente
 					MobileNodeData mb = (MobileNodeData) request;
 					
+					System.out.println("FA recebeu cancelamento de registo");
 					synchronized (foreignAgent) {
 						if(foreignAgent.getState().name().equals("WAITING")) {
 							foreignAgent.cancelamentoRegisto(mb);
@@ -134,10 +91,11 @@ public class Connection extends Thread {
 						}
 					}
 				}
-				
+				//2 - Resposta de Registo
 				if(request.getType().equals("RespRegistoFA")) {
 					Response resp = (Response) request;
 					
+					System.out.println("FA recebeu resposta de registo");
 					synchronized (foreignAgent) {
 						if(foreignAgent.getState().name().equals("WAITING")) {
 							foreignAgent.nodeRegisterResponse(resp);

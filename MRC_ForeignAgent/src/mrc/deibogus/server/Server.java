@@ -27,26 +27,22 @@ public class Server {
 		ForeignAgent foreignAgent;
 
 		System.out.println(">> Foreign Agent connecting to Home Agent on port "+portHA+"...");
-		//ServerSocket listenSocket = new ServerSocket(port);
 		
 		Socket s = new Socket("localhost", portHA);
 		out = new ObjectOutputStream( s.getOutputStream());
-		out.flush();
 		in = new ObjectInputStream( s.getInputStream());
+		out.flush();
+		
 		Communication communication = new Communication(haIP, in, out, s);
-		
 		foreignAgent = new ForeignAgent(myIP, haIP);
-		
-		synchronized (foreignAgent) {
-			foreignAgent.registoHA(in, out,communication);
-		}
+		foreignAgent.registoHA(in, out,communication);
+
 		new Connection(foreignAgent, s, in, out);
 		
 		ServerSocket listenSocket = new ServerSocket(port);
 		while(true) {
 			
 			Socket socket = listenSocket.accept(); //bloqueante
-
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			in = new ObjectInputStream(socket.getInputStream());
