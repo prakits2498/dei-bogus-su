@@ -3,7 +3,7 @@ package mrc.deibogus.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AgentAdvertisementMessage implements Serializable {
+public class AgentAdvertisementMessage extends Request implements Serializable {
 
 	private static final long serialVersionUID = -3881154186501067881L;
 	
