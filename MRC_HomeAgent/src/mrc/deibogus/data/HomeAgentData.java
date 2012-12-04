@@ -4,6 +4,10 @@ public class HomeAgentData {
 	private String careOfAddress;
 	private int lifeTime;
 	
+	public HomeAgentData() {
+		this.lifeTime = 10;
+	}
+	
 	public String getCareOfAddress() {
 		return careOfAddress;
 	}
