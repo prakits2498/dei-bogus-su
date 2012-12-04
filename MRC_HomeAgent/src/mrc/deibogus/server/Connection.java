@@ -57,8 +57,8 @@ public class Connection extends Thread {
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
 					synchronized (homeAgent) {
+						homeAgent.addFA(data, communication);
 						if(homeAgent.getState().name().equals("WAITING")) {
-							homeAgent.addFA(data, communication);
 							homeAgent.notify();
 						}
 					}
@@ -76,8 +76,8 @@ public class Connection extends Thread {
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
 					synchronized (homeAgent) {
+						homeAgent.addMN(data, communication);
 						if(homeAgent.getState().name().equals("WAITING")) {
-							homeAgent.addMN(data, communication);
 							homeAgent.notify();
 						}
 					}
@@ -95,8 +95,8 @@ public class Connection extends Thread {
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
 					synchronized (homeAgent) {
+						homeAgent.addSocket(data.getIP(), communication);
 						if(homeAgent.getState().name().equals("WAITING")) {
-							homeAgent.addSocket(data.getIP(), communication);
 							homeAgent.notify();
 						}
 					}
@@ -111,8 +111,8 @@ public class Connection extends Thread {
 					Pacote packet = (Pacote) request;
 					
 					synchronized (homeAgent) {
+						homeAgent.sendPacket(packet); //TODO testar isto. pus isto fora do if pk pus timeout no wait da thread
 						if(homeAgent.getState().name().equals("WAITING")) {
-							homeAgent.sendPacket(packet);
 							homeAgent.notify();
 						}
 					}
@@ -122,8 +122,8 @@ public class Connection extends Thread {
 					PacoteEncapsulado packetE = (PacoteEncapsulado) request;
 					
 					synchronized (homeAgent) {
+						homeAgent.receivePacket(packetE.getSource(), packetE);
 						if(homeAgent.getState().name().equals("WAITING")) {
-							homeAgent.receivePacket(packetE.getSource(), packetE);
 							homeAgent.notify();
 						}
 					}
@@ -133,8 +133,8 @@ public class Connection extends Thread {
 					MobileNodeData mb = (MobileNodeData) request;
 					
 					synchronized (homeAgent) {
+						homeAgent.registoFA(mb);
 						if(homeAgent.getState().name().equals("WAITING")) {
-							homeAgent.registoFA(mb);
 							homeAgent.notify();
 						}
 					}
@@ -144,8 +144,8 @@ public class Connection extends Thread {
 					MobileNodeData mb = (MobileNodeData) request;
 					
 					synchronized (homeAgent) {
+						homeAgent.cancelamentoRegisto(mb);
 						if(homeAgent.getState().name().equals("WAITING")) {
-							homeAgent.cancelamentoRegisto(mb);
 							homeAgent.notify();
 						}
 					}
