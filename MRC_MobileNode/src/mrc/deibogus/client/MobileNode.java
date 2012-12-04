@@ -8,8 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import mrc.deibogus.data.AgentAdvertisementMessage;
 import mrc.deibogus.data.MobileNodeData;
@@ -21,7 +21,7 @@ public class MobileNode extends Thread {
 	//TODO mapear o porto para um IP
 	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS 
 	public static int foreignAgentPort = 6000;
-	
+
 	private static String currentNetwork = "hn";
 
 	private final String homeAgentIP = "192.168.1.17"; //port = 7000
@@ -29,6 +29,7 @@ public class MobileNode extends Thread {
 
 	private final String myIP = "192.168.169.1";
 	private final String myMAC = "00:23:6c:8f:73:ab";
+	private final int LIFETIME = 10;
 
 	private final String destinationIP = "192.168.169.2";
 
@@ -43,7 +44,11 @@ public class MobileNode extends Thread {
 	private InputStreamReader text_in = new InputStreamReader(System.in);
 	private BufferedReader text_buf = new BufferedReader(text_in);
 
+	private static Timer timer  = new Timer();
+	private int ttl = LIFETIME;
+	
 	public static void main (String args[]) {
+
 		MobileNode mb = new MobileNode();
 
 		System.out.println("MobileNode Started ["+mb.myIP+"]");
@@ -53,6 +58,7 @@ public class MobileNode extends Thread {
 
 			mb.actions(mb);
 		}
+
 	}
 
 	public synchronized void actions(MobileNode mb) {
@@ -60,6 +66,7 @@ public class MobileNode extends Thread {
 			System.out.println("1 - Mudar de rede");
 			System.out.println("2 - Enviar pacote");
 			System.out.println("3 - Mostrar rede");
+			System.out.println("4 - Desconectar");
 			System.out.println("Option: ");
 			try {
 				int op = Integer.parseInt(text_buf.readLine());
@@ -68,15 +75,16 @@ public class MobileNode extends Thread {
 				case 1: mb.changeNetwork(); break;
 				case 2: mb.sendPacket(); break;
 				case 3: mb.printNetwork();break;
+				//case 4: break; //TODO
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public synchronized void  printNetwork(){
-		System.out.println("O Mobile Node " + myIP + " está na rede " + currentNetwork);
+		System.out.println("O Mobile Node " + myIP + " esta na rede " + currentNetwork);
 	}
 
 	public synchronized boolean connect(int port) {
@@ -137,7 +145,7 @@ public class MobileNode extends Thread {
 
 		return false;
 	}
-	
+
 	public synchronized boolean conectarRedeFA() {
 		Response resp = null;
 
@@ -146,9 +154,10 @@ public class MobileNode extends Thread {
 		data.setMacAddress(myMAC);
 		data.setHomeAgentAddress(homeAgentIP);
 		data.setCareOfAddress(foreignAgentIP);
-		data.setLifeTimeLeft(10);
+		data.setLifeTimeLeft(LIFETIME);
 		data.setType("ConnectMN");
 
+		System.out.println("MB["+myIP+"] > a conectar ao FA");
 		try {
 			out.writeObject(data);
 
@@ -175,28 +184,68 @@ public class MobileNode extends Thread {
 	}
 
 	public synchronized boolean changeNetwork() {
-		//TODO faz logout do HA
-		
-		//TODO conecta-se ao FA
+
 		try {
 			this.s.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(currentNetwork.equals("hn")){
 			if(this.connect(foreignAgentPort)) {
 				this.conectarRedeFA();
+				
+				timer.scheduleAtFixedRate(new TimerTask() {
+					@Override
+					public void run() {
+						ttl--;
+						System.out.println("MB["+myIP+"] > TTL: "+ttl);
+						if(ttl == 0) {
+							sendSolicitationMessage();
+							ttl = LIFETIME;
+							System.out.println("MB["+myIP+"] > Solicitation message enviada ao FA");
+						}
+					}
+				}, 2000, 2000);
 			}
 			this.currentNetwork = "fn";
 		}
 		else{
 			if(this.connect(homeAgentPort)) {
 				this.conectarRede();
+				
+				timer.cancel();
 			}
 			this.currentNetwork = "hn";
 		}
 
+		return false;
+	}
+	
+	private boolean sendSolicitationMessage() {
+		Response resp = null;
+
+		MobileNodeData data = new MobileNodeData();
+		data.setIP(myIP);
+		data.setMacAddress(myMAC);
+		data.setHomeAgentAddress(homeAgentIP);
+		data.setCareOfAddress(foreignAgentIP);
+		data.setLifeTimeLeft(LIFETIME);
+		data.setType("ConnectMN");
+
+		System.out.println("MB["+myIP+"] > a enviar solicitation message ao FA");
+		try {
+			out.writeObject(data);
+
+			resp = (Response) in.readObject();
+		} catch (IOException e) {
+			System.err.println("MB["+myIP+"] > Erro ao enviar solicitation message.");
+		} catch (ClassNotFoundException e) {
+			System.err.println("MB["+myIP+"] > Erro ao enviar solicitation message.");
+		}
+		
+		if(resp.isResponse())
+			return true;
+		
 		return false;
 	}
 
@@ -250,7 +299,7 @@ class ClientResponse extends Thread {
 				if(response instanceof Pacote) {
 					System.out.println("MB["+myIP+"] > Pacote recebido.");
 				}
-				
+
 				if(response instanceof AgentAdvertisementMessage) {
 					System.out.println("MB["+myIP+"] > Advertisement message recebida.");
 				}
@@ -264,14 +313,6 @@ class ClientResponse extends Thread {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private String currentTime() {
-		Calendar currentDate = Calendar.getInstance();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		String dateNow = formatter.format(currentDate.getTime());
-		//System.out.println("Now the date is :=>  " + dateNow);
-		return dateNow;
 	}
 
 }
