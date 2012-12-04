@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 
 import mrc.deibogus.data.AgentAdvertisementMessage;
@@ -219,7 +220,7 @@ public class HomeAgent extends Thread {
 		} else {
 			if(networkNodes.containsKey(mb.getIP())) {
 				mobilityBindingTable.remove(mb.getIP());
-
+				
 				System.out.println("HA["+myIP+"] > registo cancelado");
 			} else {
 				System.out.println("HA["+myIP+"] > MN nao pertence a HN");
@@ -334,6 +335,16 @@ public class HomeAgent extends Thread {
 
 	public void addSocket(String IP, Communication com) {
 		this.nodesSockets.put(IP, com);
+	}
+	
+	public void removeSocket(Socket socket) {
+		HashMap<String, Communication> aux = new HashMap<String, Communication>(nodesSockets);
+		for(String ip : aux.keySet()) {
+			Communication c = aux.get(ip);
+			if(c.getSocket() == socket)
+				this.nodesSockets.remove(ip);
+		}
+		
 	}
 
 }
