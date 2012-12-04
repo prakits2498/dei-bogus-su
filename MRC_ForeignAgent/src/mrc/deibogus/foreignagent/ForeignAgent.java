@@ -28,6 +28,7 @@ public class ForeignAgent extends Thread{
 		this.haIP = haIP;
 		this.myIP = myIP;
 		this.connected = true;
+		broadcast(true);
 		this.start();
 	}
 
@@ -36,7 +37,10 @@ public class ForeignAgent extends Thread{
 		while(connected) {
 			synchronized(this) {
 				try {
-					this.wait();
+					this.wait(10000);
+					//Thread.sleep(20000);
+					temporizadorTTL();
+					broadcast(false);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
