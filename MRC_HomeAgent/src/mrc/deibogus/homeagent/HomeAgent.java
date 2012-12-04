@@ -1,5 +1,8 @@
 package mrc.deibogus.homeagent;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -64,8 +67,23 @@ public class HomeAgent extends Thread {
 	}
 
 	private void loadNetworkNodes() {
-		//TODO carregar networkNodes do ficheiro 
+		try {
+			FileReader fr = new FileReader("data/networkNodes.txt");
+			BufferedReader reader = new BufferedReader(fr);
 
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] l = line.split(" ");
+				networkNodes.put(l[0], l[1]);
+			}
+			reader.close();
+			fr.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	//1 - Recebe pacote vindo de CN destinado a MN
@@ -210,7 +228,7 @@ public class HomeAgent extends Thread {
 		}
 	}
 
-	//5 - Temporizador de TTL ------------ACHO QUE TA ALI UM BOGUS
+	//5 - Temporizador de TTL
 	public void temporizadorTTL() {
 		/*
 		 * Para cada entrada da MBT
@@ -219,7 +237,7 @@ public class HomeAgent extends Thread {
 		 *     elimina entrada correspondente da MBT
 		 */
 
-		System.out.println("HA["+myIP+"] > temporizador TTL");
+		System.out.println("HA["+myIP+"] > a enviar TTL");
 
 		HashMap<String, HomeAgentData> mbtAux = new HashMap<String, HomeAgentData>(mobilityBindingTable);
 		for(String key : mbtAux.keySet()) {
@@ -230,7 +248,12 @@ public class HomeAgent extends Thread {
 
 			if(ttl == 0) {
 				mobilityBindingTable.remove(key);
+				System.out.println("HA["+myIP+"] > TTL: "+key+" eliminado da MBT");
+			} else {
+				data.setLifeTime(ttl);
+				mobilityBindingTable.put(key, data);
 			}
+			
 		}
 	}
 
