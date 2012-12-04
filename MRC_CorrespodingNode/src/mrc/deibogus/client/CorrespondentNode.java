@@ -19,7 +19,6 @@ public class CorrespondentNode extends Thread {
 
 	//TODO mapear o porto para um IP
 	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS 
-
 	private final String homeAgentIP = "192.168.1.17"; //port = 7000
 
 	private final String myIP = "192.168.169.2";
@@ -32,12 +31,13 @@ public class CorrespondentNode extends Thread {
 	public Socket s;
 	public ObjectOutputStream out;
 	public ObjectInputStream in;
-
-	static ClientResponse cc;
-
+	
 	private InputStreamReader text_in = new InputStreamReader(System.in);
 	private BufferedReader text_buf = new BufferedReader(text_in);
 
+	static ClientResponse cc;
+
+	
 	public static void main (String args[]) {
 		CorrespondentNode mb = new CorrespondentNode();
 
@@ -81,9 +81,9 @@ public class CorrespondentNode extends Thread {
 
 				return true;
 			} catch (UnknownHostException e) {
-				//System.out.println(">> Warning: Server not available! Working on it...");
+				System.out.println(">> Warning: Server not available! Working on it...");
 			} catch (IOException e) {
-				//System.out.println(">> Warning: Server not available! Working on it...");
+				System.out.println(">> Warning: Server not available! Working on it...");
 			}
 		} while(retry < 5);
 		System.err.println("CN["+myIP+"] > HomeAgent " + homeAgentIP + " nao esta disponivel.");
@@ -96,18 +96,17 @@ public class CorrespondentNode extends Thread {
 
 		CorrespondentNodeData data = new CorrespondentNodeData();
 		data.setIP(myIP);
-		//data.setMacAddress(myMAC);
-
 		data.setType("ConnectCN");
 
 		try {
+			
 			out.writeObject(data);
-
 			resp = (Response) in.readObject();
+			
 		} catch (IOException e) {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("CN["+myIP+"] > Erro ao conectar na rede.");
 		} catch (ClassNotFoundException e) {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("CN["+myIP+"] > Erro ao conectar na rede.");
 		}
 
 		if (resp.isResponse()) {
@@ -115,11 +114,12 @@ public class CorrespondentNode extends Thread {
 
 			cc = new ClientResponse(in, out, myIP);
 			cc.start();
-			System.out.println("CN["+myIP+"] > guardado pelo HA.");
+			
+			System.out.println("CN["+myIP+"] > guardado pelo HA[" + homeAgentIP + "].");
 
 			return true;
 		} else {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("CN["+myIP+"] > Erro ao conectar na rede.");
 		}
 
 		return false;
@@ -131,15 +131,14 @@ public class CorrespondentNode extends Thread {
 		packet.setDestination(destinationIP);
 		packet.setProtocol("TCP");
 		packet.setData("Pacote de "+myIP+" para "+destinationIP);
-
 		packet.setType("pacoteCNtoMN");
 
-		System.out.println("MB["+myIP+"] > Pacote enviado");
+		System.out.println("CN["+myIP+"] > Pacote vai ser enviado para MN[" + destinationIP + "].");
 
 		try {
 			out.writeObject(packet);
 		} catch (IOException e) {
-			System.err.println("MB["+myIP+"] > Erro ao enviar pacote.");
+			System.err.println("CN["+myIP+"] > Erro ao enviar pacote para [" + destinationIP + "].");
 		}
 	}
 
@@ -151,7 +150,9 @@ class ClientResponse extends Thread {
 
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+	
 	private static boolean logged = true;
+	
 	private FileWriter logger;
 
 	ClientResponse() {
@@ -161,7 +162,6 @@ class ClientResponse extends Thread {
 	ClientResponse(ObjectInputStream in, ObjectOutputStream out, String myIP) {
 		this.in = in;
 		this.out = out;
-
 		this.myIP = myIP;
 	}
 
@@ -169,17 +169,17 @@ class ClientResponse extends Thread {
 
 		while(logged) {
 			try {
-				//System.out.println("MB["+myIP+"] > Waiting for response...");
+				System.out.println("CN["+myIP+"] > ClientResponse Waiting for messages...");
 				Pacote response = (Pacote) in.readObject();
 
 				if(response instanceof Pacote) {
-					System.out.println("CN["+myIP+"] > Pacote recebido.");
-					System.out.println("CN["+myIP+"] > Mensage: " + response.getData());
+					System.out.println("CN["+myIP+"] > Pacote recebido do Mobile Node [" + response.getSource() + "].");
+					System.out.println("CN["+myIP+"] > Mensagem: " + response.getData());
 				}
 
 			} catch (IOException e) {
 				//e.printStackTrace();
-				System.err.println("MB["+myIP+"] > Socket closed!");
+				System.err.println("CN["+myIP+"] > Socket closed!");
 				logged = false;
 				break;
 			} catch (ClassNotFoundException e) {
