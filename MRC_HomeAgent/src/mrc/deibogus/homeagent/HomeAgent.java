@@ -341,8 +341,10 @@ public class HomeAgent extends Thread {
 		HashMap<String, Communication> aux = new HashMap<String, Communication>(nodesSockets);
 		for(String ip : aux.keySet()) {
 			Communication c = aux.get(ip);
-			if(c.getSocket() == socket)
+			if(c.getSocket() == socket) {
 				this.nodesSockets.remove(ip);
+				break;
+			}
 		}
 		
 	}
