@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
 
 import mrc.deibogus.data.CorrespondentNodeData;
 import mrc.deibogus.data.MobileNodeData;
