@@ -45,8 +45,8 @@ public class HomeAgent extends Thread {
 		while(connected) {
 			synchronized(this) {
 				try {
-					this.wait(20000);
-					//Thread.sleep(20000);
+					this.wait(10000);
+					
 					temporizadorTTL();
 					broadcast(false);
 					
