@@ -154,6 +154,14 @@ public class Connection extends Thread {
 			} catch(SocketException e2) {
 				System.err.println("Socket Closed!");
 				connected = false;
+				
+				synchronized (homeAgent) {
+					homeAgent.removeSocket(clientSocket);
+					if(homeAgent.getState().name().equals("WAITING")) {
+						homeAgent.notify();
+					}
+				}
+				
 				break;
 			} catch (IOException e) {
 				System.err.println("Socket Closed!");
