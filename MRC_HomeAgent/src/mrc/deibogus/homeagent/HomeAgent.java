@@ -280,18 +280,17 @@ public class HomeAgent extends Thread {
 	}
 
 	private void sendAdvertisementMessage() {
+		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage();
+		advertisementMessage.setHomeAgent(true);
+		
+		for(String key : mobilityBindingTable.keySet()) {
+			HomeAgentData data = mobilityBindingTable.get(key);
+			advertisementMessage.addCareOfAddress(data.getCareOfAddress());
+		}
+		
 		for(String ip : nodesSockets.keySet()) {
 			try {
 				Communication c = nodesSockets.get(ip);
-
-				AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage();
-				advertisementMessage.setHomeAgent(true);
-
-				for(String key : mobilityBindingTable.keySet()) {
-					HomeAgentData data = mobilityBindingTable.get(key);
-					advertisementMessage.addCareOfAddress(data.getCareOfAddress());
-				}
-
 				c.getOut().writeObject(advertisementMessage);
 			} catch (IOException e) {
 				e.printStackTrace();
