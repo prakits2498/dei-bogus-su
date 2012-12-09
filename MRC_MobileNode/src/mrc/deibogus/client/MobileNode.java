@@ -22,7 +22,7 @@ public class MobileNode extends Thread {
 	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS 
 	public static int foreignAgentPort = 6000;
 
-	private static String currentNetwork = "hn";
+	private String currentNetwork = "hn";
 
 	private final String homeAgentIP = "192.168.1.17"; //port = 7000
 	private final String foreignAgentIP = "192.168.1.16"; //port = 6000 
@@ -98,7 +98,7 @@ public class MobileNode extends Thread {
 				out.flush();
 				in = new ObjectInputStream( s.getInputStream());
 
-				System.out.println("MB["+myIP+"] > Conectado ao HA");
+				System.out.println("MB["+myIP+"] > Conectado a nova rede");
 
 				return true;
 			} catch (UnknownHostException e) {
@@ -107,7 +107,7 @@ public class MobileNode extends Thread {
 				//System.out.println(">> Warning: Server not available! Working on it...");
 			}
 		} while(retry < 5);
-		System.err.println("MB["+myIP+"] > HomeAgent nao esta disponivel.");
+		System.err.println("MB["+myIP+"] > Agent nao esta disponivel.");
 		return false;
 	}
 
