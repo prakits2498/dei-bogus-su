@@ -202,7 +202,7 @@ public class MobileNode extends Thread {
 							sendSolicitationMessage();
 							
 							try {
-								this.wait(1000);
+								Thread.sleep(1000);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
