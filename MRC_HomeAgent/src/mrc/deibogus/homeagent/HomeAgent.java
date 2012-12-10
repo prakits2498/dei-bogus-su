@@ -162,16 +162,25 @@ public class HomeAgent extends Thread {
 		 *   Envia Confirmacao (pos/neg) ao FA
 		 */
 
+		int lifetime = 30;
 		Response resp = new Response();
 		resp.setType("RespRegistoFA");
 		resp.setIP(mb.getIP());
 
 		System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA");
+		
+		if(mb.getLifeTimeLeft() < 50) {
+			lifetime = mb.getLifeTimeLeft();
+		} else {
+			lifetime = 30;
+		}
+		
+		resp.setTTL(lifetime);
 
 		if(mobilityBindingTable.containsKey(mb.getIP())) {
 			HomeAgentData data = mobilityBindingTable.get(mb.getIP());
 			data.setCareOfAddress(mb.getCareOfAddress());
-			data.setLifeTime(mb.getLifeTimeLeft());
+			data.setLifeTime(lifetime);
 			mobilityBindingTable.put(mb.getIP(), data);
 
 			resp.setResponse(true);
@@ -186,7 +195,7 @@ public class HomeAgent extends Thread {
 			} else {
 				HomeAgentData data = new HomeAgentData();
 				data.setCareOfAddress(mb.getCareOfAddress());
-				data.setLifeTime(mb.getLifeTimeLeft());
+				data.setLifeTime(lifetime);
 				mobilityBindingTable.put(mb.getIP(), data);
 
 				resp.setResponse(true);
@@ -195,7 +204,7 @@ public class HomeAgent extends Thread {
 			}
 
 		}
-		System.out.println("AI U CAREILANS");
+		
 		try {
 			FAsockets.get(mb.getCareOfAddress()).getOut().writeObject(resp);
 		} catch (IOException e) {
