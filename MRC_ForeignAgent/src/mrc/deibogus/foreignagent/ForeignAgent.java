@@ -78,7 +78,7 @@ public class ForeignAgent extends Thread{
 		this.HAsockets.put(IP, communication);
 	}
 
-	//1 - Recebe pedido de registo --------------- qt tempo mete no lft?
+	//1 - Recebe pedido de registo
 	public void addMN(MobileNodeData data, Communication communication) {
 		Communication com = HAsockets.get(data.getHomeAgentAddress());
 
@@ -103,6 +103,7 @@ public class ForeignAgent extends Thread{
 			visitorListTable.put(data.getIP(), temp);
 			
 			data.setType("pedidoRegistoFA");
+
 			try {
 				com.getOut().writeObject(temp);
 			} catch (IOException e) {
@@ -116,21 +117,22 @@ public class ForeignAgent extends Thread{
 
 	//2 - Recebe resposta de HA a pedido de registo
 	public void nodeRegisterResponse(Response resp){
+		try {
+			nodesSockets.get(resp.getIP()).getOut().writeObject(resp);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		if(!resp.isResponse()){
 			visitorListTable.remove(resp.getIP());
 			nodesSockets.remove(resp.getIP());
 			
 			System.out.println("Registo do MN " + resp.getIP() + "no FA " + myIP + "efectuado SEM sucesso");
 		}
-		else{
+		else {
 			System.out.println("Registo do MN " + resp.getIP() + "no FA " + myIP + "efectuado com sucesso");
-		}
-
-		try {
-			nodesSockets.get(resp.getIP()).getOut().writeObject(resp);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			visitorListTable.get(resp.getIP()).setLifeTimeLeft(resp.getTTL());
 		}
 	}
 
