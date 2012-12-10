@@ -301,7 +301,7 @@ class ClientResponse extends Thread {
 				}
 
 				if(response instanceof AgentAdvertisementMessage) {
-					System.out.println("MB["+myIP+"] > Advertisement message recebida do Agente " + response);
+					System.out.println("MB["+myIP+"] > Advertisement message recebida do Agente: " + ((AgentAdvertisementMessage) response).getSequenceNumber());
 				}
 				
 				if(response instanceof Response) {
