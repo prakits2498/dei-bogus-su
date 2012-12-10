@@ -28,7 +28,7 @@ public class MobileNode extends Thread {
 
 	private final String myIP = "192.168.169.1";
 	private final String myMAC = "00:23:6c:8f:73:ab";
-	public int LIFETIME = 10;
+	public int LIFETIME = 100;
 
 	private final String destinationIP = "192.168.169.2";
 
