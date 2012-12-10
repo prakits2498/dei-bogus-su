@@ -29,7 +29,7 @@ public class MobileNode extends Thread {
 
 	private final String myIP = "192.168.169.1";
 	private final String myMAC = "00:23:6c:8f:73:ab";
-	private int LIFETIME = 10;
+	public int LIFETIME = 10;
 
 	private final String destinationIP = "192.168.169.2";
 
@@ -134,7 +134,7 @@ public class MobileNode extends Thread {
 		if (resp.isResponse()) {
 			this.logged = true;
 
-			cc = new ClientResponse(in, out, myIP);
+			cc = new ClientResponse(in, out, myIP, this, timer);
 			cc.start();
 			System.out.println("MB["+myIP+"] > Conectado a rede.");
 
@@ -171,7 +171,7 @@ public class MobileNode extends Thread {
 		if (resp.isResponse()) {
 			this.logged = true;
 
-			cc = new ClientResponse(in, out, myIP);
+			cc = new ClientResponse(in, out, myIP, this, timer);
 			cc.start();
 			System.out.println("MB["+myIP+"] > Conectado a rede.");
 
@@ -193,7 +193,7 @@ public class MobileNode extends Thread {
 		if(currentNetwork.equals("hn")){
 			if(this.connect(foreignAgentPort)) {
 				this.conectarRedeFA();
-
+				
 				timer.scheduleAtFixedRate(new TimerTask() {
 					@Override
 					public void run() {
@@ -201,6 +201,13 @@ public class MobileNode extends Thread {
 						System.out.println("MB["+myIP+"] > TTL: "+ttl);
 						if(ttl == 0) {
 							sendSolicitationMessage();
+							
+							try {
+								timer.wait();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							
 							ttl = LIFETIME;
 
 							System.out.println("MB["+myIP+"] > Solicitation message enviada ao FA");
@@ -222,9 +229,7 @@ public class MobileNode extends Thread {
 		return false;
 	}
 
-	private boolean sendSolicitationMessage() {
-		Response resp = null;
-
+	private void sendSolicitationMessage() {
 		MobileNodeData data = new MobileNodeData();
 		data.setIP(myIP);
 		data.setMacAddress(myMAC);
@@ -236,20 +241,9 @@ public class MobileNode extends Thread {
 		System.out.println("MB["+myIP+"] > a enviar solicitation message ao FA");
 		try {
 			out.writeObject(data);
-
-			resp = (Response) in.readObject();
 		} catch (IOException e) {
 			System.err.println("MB["+myIP+"] > Erro ao enviar solicitation message.");
-		} catch (ClassNotFoundException e) {
-			System.err.println("MB["+myIP+"] > Erro ao enviar solicitation message.");
-		}
-		
-		LIFETIME = resp.getTTL();
-
-		if(resp.isResponse())
-			return true;
-
-		return false;
+		} 
 	}
 
 	public synchronized void sendPacket() {
@@ -279,17 +273,21 @@ class ClientResponse extends Thread {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private static boolean logged = true;
-	private FileWriter logger;
 
+	private MobileNode mb;
+	private Timer timer;
+	
 	ClientResponse() {
 
 	}
 
-	ClientResponse(ObjectInputStream in, ObjectOutputStream out, String myIP) {
+	ClientResponse(ObjectInputStream in, ObjectOutputStream out, String myIP, MobileNode mb, Timer timer) {
 		this.in = in;
 		this.out = out;
 
 		this.myIP = myIP;
+		this.mb = mb;
+		this.timer = timer;
 	}
 
 	public void run() {
@@ -305,6 +303,14 @@ class ClientResponse extends Thread {
 
 				if(response instanceof AgentAdvertisementMessage) {
 					System.out.println("MB["+myIP+"] > Advertisement message recebida do Agente " + response);
+				}
+				
+				if(response instanceof Response) {
+					synchronized (mb) {
+						mb.LIFETIME = ((Response) response).getTTL();
+						
+						timer.notify();
+					}
 				}
 
 			} catch (IOException e) {
