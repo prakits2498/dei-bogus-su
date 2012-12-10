@@ -29,7 +29,7 @@ public class MobileNode extends Thread {
 
 	private final String myIP = "192.168.169.1";
 	private final String myMAC = "00:23:6c:8f:73:ab";
-	private final int LIFETIME = 10;
+	private int LIFETIME = 10;
 
 	private final String destinationIP = "192.168.169.2";
 
@@ -46,7 +46,7 @@ public class MobileNode extends Thread {
 
 	private static Timer timer  = new Timer();
 	private int ttl = LIFETIME;
-	
+
 	public static void main (String args[]) {
 
 		MobileNode mb = new MobileNode();
@@ -193,7 +193,7 @@ public class MobileNode extends Thread {
 		if(currentNetwork.equals("hn")){
 			if(this.connect(foreignAgentPort)) {
 				this.conectarRedeFA();
-				
+
 				timer.scheduleAtFixedRate(new TimerTask() {
 					@Override
 					public void run() {
@@ -202,6 +202,7 @@ public class MobileNode extends Thread {
 						if(ttl == 0) {
 							sendSolicitationMessage();
 							ttl = LIFETIME;
+
 							System.out.println("MB["+myIP+"] > Solicitation message enviada ao FA");
 						}
 					}
@@ -212,7 +213,7 @@ public class MobileNode extends Thread {
 		else{
 			if(this.connect(homeAgentPort)) {
 				this.conectarRede();
-				
+
 				timer.cancel();
 			}
 			this.currentNetwork = "hn";
@@ -220,7 +221,7 @@ public class MobileNode extends Thread {
 
 		return false;
 	}
-	
+
 	private boolean sendSolicitationMessage() {
 		Response resp = null;
 
@@ -243,9 +244,11 @@ public class MobileNode extends Thread {
 			System.err.println("MB["+myIP+"] > Erro ao enviar solicitation message.");
 		}
 		
+		LIFETIME = resp.getTTL();
+
 		if(resp.isResponse())
 			return true;
-		
+
 		return false;
 	}
 
