@@ -202,7 +202,7 @@ public class MobileNode extends Thread {
 							sendSolicitationMessage();
 							
 							try {
-								timer.wait();
+								this.wait(1000);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
@@ -307,8 +307,6 @@ class ClientResponse extends Thread {
 				if(response instanceof Response) {
 					synchronized (mb) {
 						mb.LIFETIME = ((Response) response).getTTL();
-						
-						timer.notify();
 					}
 				}
 
