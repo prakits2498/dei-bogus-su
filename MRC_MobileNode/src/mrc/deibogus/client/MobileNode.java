@@ -301,7 +301,7 @@ class ClientResponse extends Thread {
 				}
 
 				if(response instanceof AgentAdvertisementMessage) {
-					System.out.println("MB["+myIP+"] > Advertisement message recebida.");
+					System.out.println("MB["+myIP+"] > Advertisement message recebida do Agente " + response);
 				}
 
 			} catch (IOException e) {
