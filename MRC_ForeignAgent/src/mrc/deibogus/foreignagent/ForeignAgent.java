@@ -266,13 +266,13 @@ public void temporizadorTTL() {
 			sequenceNumber = generateRandomInteger(256, 65635);
 		}
 
-		sendAdvertisementMessage();
+		sendAdvertisementMessage(sequenceNumber);
 	}
 
-	private void sendAdvertisementMessage() {
+	private void sendAdvertisementMessage(int sequenceNumber) {
 		System.out.println("FA["+myIP+"] > A enviar advertisement message");
 		
-		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage();
+		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage(sequenceNumber);
 		advertisementMessage.setHomeAgent(true);
 		
 		for(String key : visitorListTable.keySet()) {
