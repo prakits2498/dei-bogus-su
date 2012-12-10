@@ -9,8 +9,10 @@ public class AgentAdvertisementMessage extends Request implements Serializable {
 	
 	private ArrayList<String> careOfAddresses;
 	private boolean homeAgent;
+	private int sequenceNumber;
 	
-	public AgentAdvertisementMessage() {
+	public AgentAdvertisementMessage(int sequenceNumber) {
+		this.setSequenceNumber(sequenceNumber);
 		this.homeAgent = true;
 		this.careOfAddresses = new ArrayList<String>();
 	}
@@ -33,6 +35,14 @@ public class AgentAdvertisementMessage extends Request implements Serializable {
 	
 	public void addCareOfAddress(String careOfAddress) {
 		this.careOfAddresses.add(careOfAddress);
+	}
+
+	public int getSequenceNumber() {
+		return sequenceNumber;
+	}
+
+	public void setSequenceNumber(int sequenceNumber) {
+		this.sequenceNumber = sequenceNumber;
 	}
 
 }

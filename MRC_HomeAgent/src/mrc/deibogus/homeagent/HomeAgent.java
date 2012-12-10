@@ -268,20 +268,20 @@ public class HomeAgent extends Thread {
 		 * Envia anuncio por broadcast
 		 */
 
-		int sequenceNumber = 0; //TODO perguntar pra k serve o sequence number
+		int sequenceNumber = 0;
 		if(arranque) {
 			sequenceNumber = generateRandomInteger(0, 255);
 		} else {
 			sequenceNumber = generateRandomInteger(256, 65635);
 		}
 
-		sendAdvertisementMessage();
+		sendAdvertisementMessage(sequenceNumber);
 	}
 
-	private void sendAdvertisementMessage() {
+	private void sendAdvertisementMessage(int sequenceNumber) {
 		System.out.println("HA["+myIP+"] > A enviar advertisement message");
 		
-		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage();
+		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage(sequenceNumber);
 		advertisementMessage.setHomeAgent(true);
 		
 		for(String key : mobilityBindingTable.keySet()) {
