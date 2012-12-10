@@ -38,7 +38,7 @@ public class MobileNode extends Thread {
 	public ObjectOutputStream out;
 	public ObjectInputStream in;
 
-	static ClientResponse cc; //Pq static?
+	ClientResponse cc;
 
 	private InputStreamReader text_in = new InputStreamReader(System.in);
 	private BufferedReader text_buf = new BufferedReader(text_in);
