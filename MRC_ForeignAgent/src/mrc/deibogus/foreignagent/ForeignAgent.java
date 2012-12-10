@@ -184,8 +184,10 @@ public class ForeignAgent extends Thread{
 		}
 		else {
 			try { //TODO AQUI FALTA POR O GAJO A PROCURAR POR MAC ADDRESS
-				System.out.println("FA["+myIP+"] > A enviar pacote para MN["+packet.getDestination()+"]");
-				nodesSockets.get(packet.getDestination()).getOut().writeObject(packet);
+				String ipDestination = packet.getDestination();
+				String macDestination = visitorListTable.get(ipDestination).getMacAddress();
+				System.out.println("FA["+myIP+"] > A enviar pacote para MN com o MacAddress["+macDestination+"]");
+				nodesSockets.get(ipDestination).getOut().writeObject(packet);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
