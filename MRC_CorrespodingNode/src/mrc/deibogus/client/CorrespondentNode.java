@@ -1,15 +1,12 @@
 package mrc.deibogus.client;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import mrc.deibogus.data.CorrespondentNodeData;
 import mrc.deibogus.data.Pacote;
@@ -152,8 +149,6 @@ class ClientResponse extends Thread {
 	private ObjectOutputStream out;
 	
 	private static boolean logged = true;
-	
-	private FileWriter logger;
 
 	ClientResponse() {
 
@@ -170,11 +165,11 @@ class ClientResponse extends Thread {
 		while(logged) {
 			try {
 				System.out.println("CN["+myIP+"] > ClientResponse Waiting for messages...");
-				Pacote response = (Pacote) in.readObject();
+				Object response = in.readObject();
 
 				if(response instanceof Pacote) {
-					System.out.println("CN["+myIP+"] > Pacote recebido do Mobile Node [" + response.getSource() + "].");
-					System.out.println("CN["+myIP+"] > Mensagem: " + response.getData());
+					System.out.println("CN["+myIP+"] > Pacote recebido do Mobile Node [" + ((Pacote) response).getSource() + "].");
+					System.out.println("CN["+myIP+"] > Mensagem: " + ((Pacote) response).getData());
 				}
 
 			} catch (IOException e) {
@@ -186,14 +181,6 @@ class ClientResponse extends Thread {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private String currentTime() {
-		Calendar currentDate = Calendar.getInstance();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		String dateNow = formatter.format(currentDate.getTime());
-		//System.out.println("Now the date is :=>  " + dateNow);
-		return dateNow;
 	}
 
 }
