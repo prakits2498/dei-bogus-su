@@ -38,7 +38,7 @@ public class ForeignAgent extends Thread{
 			synchronized(this) {
 				try {
 					this.wait(10000);
-					
+
 					temporizadorTTL();
 					broadcast(false);
 				} catch (InterruptedException e) {
@@ -54,19 +54,19 @@ public class ForeignAgent extends Thread{
 		data.setIP(myIP);
 		data.setMacAddress(myMAC);
 		data.setType("ConnectFA");
-		System.out.println("Pedido de registo do FA "+myIP+" para o HA "+haIP);
+		//System.out.println("Pedido de registo do FA "+myIP+" para o HA "+haIP);
 
 		try {
 			out.writeObject(data);
 			Response response = (Response) in.readObject();
-			
+
 			if(response.isResponse()){
 				this.addHA(haIP,com);
-				System.out.println("Registo do FA "+myIP+" noo HA "+haIP + " efectuado com sucesso.");
+				//System.out.println("Registo do FA "+myIP+" noo HA "+haIP + " efectuado com sucesso.");
 			}
-			else
-				System.out.println("Registo do FA "+myIP+" noo HA "+haIP + " efectuado sem sucesso.");
-			
+			//else
+			//System.out.println("Registo do FA "+myIP+" noo HA "+haIP + " efectuado sem sucesso.");
+
 		} catch (IOException e) {
 			System.err.println("FA["+myIP+"] > Erro ao registar-se no HA " + haIP);
 		} catch (ClassNotFoundException e) {
@@ -80,67 +80,104 @@ public class ForeignAgent extends Thread{
 
 	//1 - Recebe pedido de registo
 	public void addMN(MobileNodeData data, Communication communication) {
-		Communication com = HAsockets.get(data.getHomeAgentAddress());
+		/*
+		 * Consulta VL
+		 * Se MN existe na VL ent‹o
+		 *    Actualiza entrada (TTL)
+		 * Sen‹o
+		 *    Cria entrada tempor‡ria
+		 * Envia pedido de registo ao HA
+		 */
 
-		if(!visitorListTable.containsKey(data.getIP())){
-			this.nodesSockets.put(data.getIP(), communication);
-			this.visitorListTable.put(data.getIP(), data);
-			
-			data.setType("pedidoRegistoFA");
-			try {
-				com.getOut().writeObject(data);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			System.out.println("Pedido de registo do MN " + data.getIP() + " enviado pelo FA " + myIP + " ao HA "+ data.getHomeAgentAddress());
-			
-		}
-		else
-		{
+		if(visitorListTable.containsKey(data.getIP())){
 			MobileNodeData temp = visitorListTable.get(data.getIP());
 			temp.setLifeTimeLeft(data.getLifeTimeLeft());
 			visitorListTable.put(data.getIP(), temp);
-			
+
 			data.setType("pedidoRegistoFA");
 
-			try {
-				com.getOut().writeObject(temp);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			System.out.println("Renovacao de registo do MN " + data.getIP() + " enviado pelo FA " + myIP + " ao HA "+ data.getHomeAgentAddress());
+			System.out.println("FA["+myIP+"] > Pedido de registo do MN[" + data.getIP() + "] - TTL actualizado");
 		}
+		else
+		{
+			this.nodesSockets.put(data.getIP(), communication);
+			this.visitorListTable.put(data.getIP(), data);
 
+			data.setType("pedidoRegistoFA");
+			System.out.println("FA["+myIP+"] > Pedido de registo do MN[" + data.getIP() + "] - criada entrada tempor‡ria");
+		}
+		
+		Communication com = HAsockets.get(data.getHomeAgentAddress());
+		try {
+			System.out.println("FA["+myIP+"] > Pedido de registo do MN[" + data.getIP() + "] enviado ao HA["+ data.getHomeAgentAddress()+"]");
+			com.getOut().writeObject(data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//2 - Recebe resposta de HA a pedido de registo
 	public void nodeRegisterResponse(Response resp){
+		/*
+		 * Se Resposta positiva ent‹o
+		 *    Marca entrada como confirmada
+		 * Sen‹o
+		 *    Elimina entrada tempor‡ria
+		 * Envia resultado do pedido ao MN
+		 */
+
+		if(resp.isResponse()){
+			System.out.println("FA["+myIP+"] > Resposta de HA positiva: MN[" + resp.getIP() + "] registado com sucesso");
+			visitorListTable.get(resp.getIP()).setLifeTimeLeft(resp.getTTL());
+		}
+		else {
+			visitorListTable.remove(resp.getIP());
+			nodesSockets.remove(resp.getIP());
+			System.out.println("FA["+myIP+"] > Resposta de HA negativa: MN[" + resp.getIP() + "] nao registado.");
+		}
+		
 		try {
+			System.out.println("FA["+myIP+"] > Resposta de HA enviada a MN[" + resp.getIP() + "]");
 			nodesSockets.get(resp.getIP()).getOut().writeObject(resp);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		if(!resp.isResponse()){
-			visitorListTable.remove(resp.getIP());
-			nodesSockets.remove(resp.getIP());
-			
-			System.out.println("Registo do MN " + resp.getIP() + "no FA " + myIP + "efectuado SEM sucesso");
+	}
+
+	//3 - Recebe pacote encapsulado, vindo de HA
+	public void receivePacketFromHa(String HAA, PacoteEncapsulado packetE) {
+		/*
+		 * Desencapsula pacote
+		 * Consulta VL
+		 * Se MN nao existe entao
+		 *   ignora pacote
+		 * Senao 
+		 *   entrega pacote ao MAC address correspondente (MN)
+		 */
+
+		Pacote packet = this.desencapsulaPacote(packetE);
+		if(!visitorListTable.containsKey(packet.getDestination())){
+			System.out.println("FA["+myIP+"] > MN[" + packet.getDestination() + "] nao existe na VL - pacote ignorado");
 		}
 		else {
-			System.out.println("Registo do MN " + resp.getIP() + "no FA " + myIP + "efectuado com sucesso");
-			
-			visitorListTable.get(resp.getIP()).setLifeTimeLeft(resp.getTTL());
+			try { 
+				String ipDestination = packet.getDestination();
+				String macDestination = visitorListTable.get(ipDestination).getMacAddress();
+				System.out.println("FA["+myIP+"] > A enviar pacote para MN[" + ipDestination + "] com o MacAddress["+macDestination+"]");
+				
+				nodesSockets.get(ipDestination).getOut().writeObject(packet);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+
 	}
 
 	//4 - Recebe pacote vindo de MN, destinado a CN
 	public void sendPacket(Pacote packet) {
 		/*
-		 * Consulta VLT
-		 * Se MN nao esta na VLT entao
+		 * Consulta VL
+		 * Se MN nao esta na VL entao
 		 *   ignora pacote
 		 * Senao
 		 *   Determina HA
@@ -151,7 +188,7 @@ public class ForeignAgent extends Thread{
 		System.out.println("FA["+myIP+"] > Pacote recebido de "+packet.getSource()+" para "+packet.getDestination());
 
 		if(!visitorListTable.containsKey(packet.getSource())) {
-			System.out.println("FA["+myIP+"] > Ignora pacote para CN["+packet.getDestination()+"] porque MN[" + packet.getSource() + "] nao esta na VLT");
+			System.out.println("FA["+myIP+"] > Ignora pacote para CN["+packet.getDestination()+"] porque MN[" + packet.getSource() + "] nao esta na VL");
 		} else {
 			MobileNodeData d = visitorListTable.get(packet.getSource());
 			if(existHAA(d.getHomeAgentAddress())){
@@ -163,43 +200,17 @@ public class ForeignAgent extends Thread{
 					e.printStackTrace();
 				}
 			}
-			
-			System.out.println("FA["+myIP+"] > Enviou pacote para HA["+d.getHomeAgentAddress()+"] para este enviar para " + packet.getDestination());
+
+			System.out.println("FA["+myIP+"] > Pacote enviado para HA["+d.getHomeAgentAddress()+"] para este enviar ao MN[" + packet.getDestination()+"]");
 
 		}
 	}
 
-	//3 - Recebe pacote encapsulado, vindo de HA
-	public void receivePacketFromHa(String HAA, PacoteEncapsulado packetE) {
-		/*
-		 * Desencapsula pacote
-		 * Consulta VLT
-		 * Se MN nao existe entao
-		 *   ignora pacote
-		 * Senao 
-		 *   entrega pacote ao MAC address correspondente (MN)
-		 */
-
-		Pacote packet = this.desencapsulaPacote(packetE);
-		if(!visitorListTable.containsKey(packet.getDestination())){
-			System.out.println("FA["+myIP+"] > MN " + packet.getDestination() + " nao existe na VLT - pacote ignorado");
-		}
-		else {
-			try { //TODO AQUI FALTA POR O GAJO A PROCURAR POR MAC ADDRESS
-				String ipDestination = packet.getDestination();
-				String macDestination = visitorListTable.get(ipDestination).getMacAddress();
-				System.out.println("FA["+myIP+"] > A enviar pacote para MN com o MacAddress["+macDestination+"]");
-				nodesSockets.get(ipDestination).getOut().writeObject(packet);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
 
 
-	//4 - Recebe pedido de cancelamento de registo
-	public void cancelamentoRegisto(MobileNodeData mb) {
+
+	//4 - Recebe pedido de cancelamento de registo --> ISTO FOI INVENTADO DURVAL PIRES?
+	/*public void cancelamentoRegisto(MobileNodeData mb) {
 		/*
 		 * Consulta MBT
 		 * Se MN nao existe na MBT entao
@@ -207,7 +218,7 @@ public class ForeignAgent extends Thread{
 		 * Senao
 		 *   verifica credenciais
 		 *   elimina entrada correspondente na MBT
-		 */
+		 *
 
 		if(!visitorListTable.containsKey(mb.getIP())) {
 			System.out.println("FA["+myIP+"] > MN nao existe na VLT - pedido ignorado");
@@ -215,42 +226,39 @@ public class ForeignAgent extends Thread{
 			visitorListTable.remove(mb.getIP());
 			System.out.println("FA["+myIP+"] > registo do MN[" + mb.getIP() + "] cancelado");
 		}
-		
-		//TODO comunicar isso ao HA? Secaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-	}
+	}*/
 
 
-//5 - Temporizador de TTL
-public void temporizadorTTL() {
-	/*
-	 * Para cada entrada da VLT
-	 *   decrementa TTL
-	 *   Se TTL chegou a zero
-	 *     elimina entrada correspondente da VTL
-	 */
-	
-	System.out.println("FA["+myIP+"] > a enviar TTL");
+	//5 - Temporizador de TTL
+	public void temporizadorTTL() {
+		/*
+		 * Para cada entrada da VL
+		 *   decrementa TTL
+		 *   Se TTL chegou a zero
+		 *     elimina entrada correspondente da VT
+		 */
 
-	HashMap<String, MobileNodeData> mbtAux = new HashMap<String, MobileNodeData>(visitorListTable);
-	for(String key : mbtAux.keySet()) {
-		MobileNodeData data = mbtAux.get(key);
+		//System.out.println("FA["+myIP+"] > a enviar TTL");
 
-		int ttl = data.getLifeTimeLeft();
-		ttl--;
+		HashMap<String, MobileNodeData> mbtAux = new HashMap<String, MobileNodeData>(visitorListTable);
+		for(String key : mbtAux.keySet()) {
+			MobileNodeData data = mbtAux.get(key);
 
-		if(ttl == 0) {
-			visitorListTable.remove(key);
-			System.out.println("FA["+myIP+"] > TTL: "+key+" eliminado da VLT");
-		} else {
-			data.setLifeTimeLeft(ttl);
-			visitorListTable.put(key, data);
+			int ttl = data.getLifeTimeLeft();
+			ttl--;
+
+			if(ttl == 0) {
+				visitorListTable.remove(key);
+				System.out.println("FA["+myIP+"] > TTL: "+key+" eliminado da VLT");
+			} else {
+				data.setLifeTimeLeft(ttl);
+				visitorListTable.put(key, data);
+			}
+
 		}
-
 	}
-}
 
-//6 - Arranque, ou temporizador de anuncio de HA/FA
+	//6 - Arranque, ou temporizador de anuncio de HA/FA
 	public void broadcast(boolean arranque) {
 		/*
 		 * Se Arranque entao
@@ -261,7 +269,7 @@ public void temporizadorTTL() {
 		 * Envia anuncio por broadcast
 		 */
 
-		int sequenceNumber = 0; //TODO perguntar pra k serve o sequence number
+		int sequenceNumber = 0;
 		if(arranque) {
 			sequenceNumber = generateRandomInteger(0, 255);
 		} else {
@@ -272,16 +280,16 @@ public void temporizadorTTL() {
 	}
 
 	private void sendAdvertisementMessage(int sequenceNumber) {
-		System.out.println("FA["+myIP+"] > A enviar advertisement message");
-		
+		//System.out.println("FA["+myIP+"] > A enviar advertisement message");
+
 		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage(sequenceNumber);
 		advertisementMessage.setHomeAgent(true);
-		
+
 		for(String key : visitorListTable.keySet()) {
 			MobileNodeData data = visitorListTable.get(key);
 			advertisementMessage.addCareOfAddress(myIP); //AQUI MUDEI POR SER FA MAS TENHO ALGUMAS DUVIDAS. ATENCIONE
 		}
-		
+
 		HashMap<String, Communication> aux = new HashMap<String, Communication>(nodesSockets);
 		for(String ip : aux.keySet()) {
 			try {
@@ -300,34 +308,34 @@ public void temporizadorTTL() {
 		return (int) randomInt;
 	}
 
-private PacoteEncapsulado encapsulaPacote(Pacote packet) {
-	System.out.println("FA["+myIP+"] > A encapsular pacote");
+	private PacoteEncapsulado encapsulaPacote(Pacote packet) {
+		System.out.println("FA["+myIP+"] > A encapsular pacote");
 
-	MobileNodeData d = visitorListTable.get(packet.getSource());
-	PacoteEncapsulado packetE = new PacoteEncapsulado();
-	packetE.setSource(myIP);
-	packetE.setDestination(d.getHomeAgentAddress());
-	packetE.setProtocol("IP in IP");
-	packetE.setData(packet);
-	packetE.setType("pacoteEncapsulado");
+		MobileNodeData d = visitorListTable.get(packet.getSource());
+		PacoteEncapsulado packetE = new PacoteEncapsulado();
+		packetE.setSource(myIP);
+		packetE.setDestination(d.getHomeAgentAddress());
+		packetE.setProtocol("IP in IP");
+		packetE.setData(packet);
+		packetE.setType("pacoteEncapsulado");
 
-	return packetE;
-}
-
-private Pacote desencapsulaPacote(PacoteEncapsulado packetE) {
-	System.out.println("FA["+myIP+"] > A desencapsular pacote");
-
-	return packetE.getData();
-}
-
-private boolean existHAA(String HAA) {
-	for(String key : visitorListTable.keySet()) {
-		MobileNodeData data = visitorListTable.get(key);
-		if(data.getHomeAgentAddress().equals(HAA))
-			return true;
+		return packetE;
 	}
 
-	return false;
-}
+	private Pacote desencapsulaPacote(PacoteEncapsulado packetE) {
+		System.out.println("FA["+myIP+"] > A desencapsular pacote");
+
+		return packetE.getData();
+	}
+
+	private boolean existHAA(String HAA) {
+		for(String key : visitorListTable.keySet()) {
+			MobileNodeData data = visitorListTable.get(key);
+			if(data.getHomeAgentAddress().equals(HAA))
+				return true;
+		}
+
+		return false;
+	}
 
 }

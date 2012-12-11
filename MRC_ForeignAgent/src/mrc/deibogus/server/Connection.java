@@ -43,7 +43,7 @@ public class Connection extends Thread {
 				//1 - Recebe pedido de registo
 				if(request.getType().equals("ConnectMN")) {
 					MobileNodeData data = (MobileNodeData) request;
-					System.out.println("> Pedido de registo na rede de um Mobile Node ["+data.getIP()+"]");
+					//System.out.println("> Pedido de registo na rede de um Mobile Node ["+data.getIP()+"]");
 
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
@@ -55,12 +55,13 @@ public class Connection extends Thread {
 					}
 				}
 				
-				if(request.getType().equals("pacoteCNtoMN")) { //4 O NOME ENGANA, USEI ESTE PARA FICAR UNIFORME COM O HA, MAS ISTO É MN TO CN
-					Pacote packet = (Pacote) request;
+				//2 - Resposta de Registo
+				if(request.getType().equals("RespRegistoFA")) {
+					Response resp = (Response) request;
 					
-					System.out.println("FA recebeu pacote para encapsular e enviar");
+					//System.out.println("FA recebeu resposta de registo");
 					synchronized (foreignAgent) {
-						foreignAgent.sendPacket(packet);
+						foreignAgent.nodeRegisterResponse(resp);
 						if(foreignAgent.getState().name().equals("WAITING")) {
 							foreignAgent.notify();
 						}
@@ -70,7 +71,7 @@ public class Connection extends Thread {
 				if(request.getType().equals("pacoteEncapsulado")) { //3
 					PacoteEncapsulado packetE = (PacoteEncapsulado) request;
 					
-					System.out.println("FA recebeu pacote encapsulado");
+					//System.out.println("FA recebeu pacote encapsulado");
 					synchronized (foreignAgent) {
 						foreignAgent.receivePacketFromHa(packetE.getSource(), packetE);
 						if(foreignAgent.getState().name().equals("WAITING")) {
@@ -79,7 +80,21 @@ public class Connection extends Thread {
 					}
 				}
 				
-				if(request.getType().equals("cancelamentoRegisto")) { //Este nem ta na folha.. somos bwe a frente
+				if(request.getType().equals("pacoteCNtoMN")) { //4 O NOME ENGANA, USEI ESTE PARA FICAR UNIFORME COM O HA, MAS ISTO É MN TO CN
+					Pacote packet = (Pacote) request;
+					
+					//System.out.println("FA recebeu pacote para encapsular e enviar");
+					synchronized (foreignAgent) {
+						foreignAgent.sendPacket(packet);
+						if(foreignAgent.getState().name().equals("WAITING")) {
+							foreignAgent.notify();
+						}
+					}
+				}
+				
+				
+				
+				/*if(request.getType().equals("cancelamentoRegisto")) { //Este nem ta na folha.. somos bwe a frente -- SE NAO TA NA FOLHA NAO ƒ PRA FAZER DUH
 					MobileNodeData mb = (MobileNodeData) request;
 					
 					System.out.println("FA recebeu cancelamento de registo");
@@ -89,30 +104,19 @@ public class Connection extends Thread {
 							foreignAgent.notify();
 						}
 					}
-				}
-				//2 - Resposta de Registo
-				if(request.getType().equals("RespRegistoFA")) {
-					Response resp = (Response) request;
-					
-					System.out.println("FA recebeu resposta de registo");
-					synchronized (foreignAgent) {
-						foreignAgent.nodeRegisterResponse(resp);
-						if(foreignAgent.getState().name().equals("WAITING")) {
-							foreignAgent.notify();
-						}
-					}
-				}
+				}*/
+				
 				
 			} catch(SocketException e2) {
-				System.err.println("Socket Closed!");
+				//System.err.println("Socket Closed!");
 				connected = false;
 				break;
 			} catch (IOException e) {
-				System.err.println("Socket Closed!");
+				//System.err.println("Socket Closed!");
 				connected = false;
 				break;
 			} catch (ClassNotFoundException e) {
-				System.err.println("Socket Closed!");
+				//System.err.println("Socket Closed!");
 				connected = false;
 				break;
 			}
