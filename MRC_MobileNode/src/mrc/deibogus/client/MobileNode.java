@@ -21,14 +21,14 @@ public class MobileNode extends Thread {
 	public static int homeAgentPort = 7000; //HOMEAGENTADDRESS 
 	public static int foreignAgentPort = 6000;
 
-	private String currentNetwork = "hn";
+	private String currentNetwork = "HN";
 
 	private final String homeAgentIP = "192.168.1.17"; //port = 7000
 	private final String foreignAgentIP = "192.168.1.16"; //port = 6000 
 
 	private final String myIP = "192.168.169.1";
 	private final String myMAC = "00:23:6c:8f:73:ab";
-	public int LIFETIME = 100;
+	private final int LIFETIME = 10;
 
 	private final String destinationIP = "192.168.169.2";
 
@@ -74,7 +74,7 @@ public class MobileNode extends Thread {
 				case 1: mb.changeNetwork(); break;
 				case 2: mb.sendPacket(); break;
 				case 3: mb.printNetwork();break;
-				//case 4: break; //TODO
+				case 4: mb.logout(); break; //TODO
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -82,8 +82,19 @@ public class MobileNode extends Thread {
 		}
 	}
 
-	public synchronized void  printNetwork(){
-		System.out.println("O Mobile Node " + myIP + " esta na rede " + currentNetwork);
+	private synchronized void  printNetwork() {
+		System.out.println("MN["+myIP+"] > " + myIP + " esta na rede " + currentNetwork);
+	}
+	
+	public synchronized void logout() {
+		try {
+			s.close();
+			out.close();
+			in.close();
+			logged = false;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public synchronized boolean connect(int port) {
@@ -97,7 +108,7 @@ public class MobileNode extends Thread {
 				out.flush();
 				in = new ObjectInputStream( s.getInputStream());
 
-				System.out.println("MB["+myIP+"] > Conectado a nova rede");
+				//System.out.println("MN["+myIP+"] > Conectado a nova rede");
 
 				return true;
 			} catch (UnknownHostException e) {
@@ -106,7 +117,7 @@ public class MobileNode extends Thread {
 				//System.out.println(">> Warning: Server not available! Working on it...");
 			}
 		} while(retry < 5);
-		System.err.println("MB["+myIP+"] > Agent nao esta disponivel.");
+		System.err.println("MN["+myIP+"] > Agent nao esta disponivel.");
 		return false;
 	}
 
@@ -125,27 +136,27 @@ public class MobileNode extends Thread {
 
 			resp = (Response) in.readObject();
 		} catch (IOException e) {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("MN["+myIP+"] > Erro ao conectar na rede.");
 		} catch (ClassNotFoundException e) {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("MN["+myIP+"] > Erro ao conectar na rede.");
 		}
 
 		if (resp.isResponse()) {
 			this.logged = true;
 
-			cc = new ClientResponse(in, out, myIP, this, timer);
+			cc = new ClientResponse(in, out, myIP, this);
 			cc.start();
-			System.out.println("MB["+myIP+"] > Conectado a rede.");
+			System.out.println("MN["+myIP+"] > Conectado a rede.");
 
 			return true;
 		} else {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("MN["+myIP+"] > Erro ao conectar na rede.");
 		}
 
 		return false;
 	}
 
-	public synchronized boolean conectarRedeFA() {
+	private synchronized boolean conectarRedeFA() {
 		Response resp = null;
 
 		MobileNodeData data = new MobileNodeData();
@@ -154,78 +165,76 @@ public class MobileNode extends Thread {
 		data.setHomeAgentAddress(homeAgentIP);
 		data.setCareOfAddress(foreignAgentIP);
 		data.setLifeTimeLeft(LIFETIME);
+		
 		data.setType("ConnectMN");
 
-		System.out.println("MB["+myIP+"] > a conectar ao FA");
+		System.out.println("MN["+myIP+"] > a conectar ao FA");
 		try {
 			out.writeObject(data);
 
 			resp = (Response) in.readObject();
 		} catch (IOException e) {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("MN["+myIP+"] > Erro ao conectar na rede.");
 		} catch (ClassNotFoundException e) {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("MN["+myIP+"] > Erro ao conectar na rede.");
 		}
 
 		if (resp.isResponse()) {
 			this.logged = true;
 
-			cc = new ClientResponse(in, out, myIP, this, timer);
+			cc = new ClientResponse(in, out, myIP, this);
 			cc.start();
-			System.out.println("MB["+myIP+"] > Conectado a rede.");
+			System.out.println("MN["+myIP+"] > Conectado a rede FN.");
 
 			return true;
 		} else {
-			System.err.println("MB["+myIP+"] > Erro ao conectar na rede.");
+			System.err.println("MN["+myIP+"] > Erro ao conectar na rede FN.");
 		}
 
 		return false;
 	}
 
-	public synchronized boolean changeNetwork() {
+	public synchronized void changeNetwork() {
 
 		try {
 			this.s.close();
+			this.out.close();
+			this.in.close();
+			this.cc.logged = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(currentNetwork.equals("hn")){
+
+		if(currentNetwork.equals("HN")) {
 			if(this.connect(foreignAgentPort)) {
 				this.conectarRedeFA();
-				
+
 				timer.scheduleAtFixedRate(new TimerTask() {
 					@Override
 					public void run() {
 						ttl--;
-						System.out.println("MB["+myIP+"] > TTL: "+ttl);
+						//System.out.println("MN["+myIP+"] > TTL: "+ttl);
 						if(ttl == 0) {
 							sendSolicitationMessage();
-							
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							
 							ttl = LIFETIME;
 
-							System.out.println("MB["+myIP+"] > Solicitation message enviada ao FA");
+							System.out.println("MN["+myIP+"] > Solicitation message enviada ao FA");
 						}
 					}
 				}, 2000, 2000);
+				
+				this.currentNetwork = "FN";
 			}
-			this.currentNetwork = "fn";
 		}
-		else{
+		else {
 			if(this.connect(homeAgentPort)) {
 				this.conectarRede();
 
 				timer.cancel();
+				
+				this.currentNetwork = "HN";
 			}
-			this.currentNetwork = "hn";
 		}
-
-		return false;
 	}
 
 	private void sendSolicitationMessage() {
@@ -237,11 +246,11 @@ public class MobileNode extends Thread {
 		data.setLifeTimeLeft(LIFETIME);
 		data.setType("ConnectMN");
 
-		System.out.println("MB["+myIP+"] > a enviar solicitation message ao FA");
+		System.out.println("MN["+myIP+"] > a enviar solicitation message ao FA");
 		try {
 			out.writeObject(data);
 		} catch (IOException e) {
-			System.err.println("MB["+myIP+"] > Erro ao enviar solicitation message.");
+			System.err.println("MN["+myIP+"] > Erro ao enviar solicitation message.");
 		} 
 	}
 
@@ -254,14 +263,15 @@ public class MobileNode extends Thread {
 
 		packet.setType("pacoteCNtoMN");
 
-		System.out.println("MB["+myIP+"] > Pacote enviado");
+		System.out.println("MN["+myIP+"] > Pacote enviado com destino a ["+destinationIP+"]");
 
 		try {
 			out.writeObject(packet);
 		} catch (IOException e) {
-			System.err.println("MB["+myIP+"] > Erro ao enviar pacote.");
+			System.err.println("MN["+myIP+"] > Erro ao enviar pacote.");
 		}
 	}
+
 
 }
 
@@ -271,22 +281,20 @@ class ClientResponse extends Thread {
 
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	private static boolean logged = true;
+	public boolean logged = true;
 
 	private MobileNode mb;
-	private Timer timer;
-	
+
 	ClientResponse() {
 
 	}
 
-	ClientResponse(ObjectInputStream in, ObjectOutputStream out, String myIP, MobileNode mb, Timer timer) {
+	ClientResponse(ObjectInputStream in, ObjectOutputStream out, String myIP, MobileNode mb) {
 		this.in = in;
 		this.out = out;
 
 		this.myIP = myIP;
 		this.mb = mb;
-		this.timer = timer;
 	}
 
 	public void run() {
@@ -297,25 +305,33 @@ class ClientResponse extends Thread {
 				Object response = in.readObject();
 
 				if(response instanceof Pacote) {
-					System.out.println("MB["+myIP+"] > Pacote recebido.");
+					Pacote packet = (Pacote) response;
+					System.out.println("MN["+myIP+"] > Pacote recebido. Data: "+packet.getData());
 				}
 
 				if(response instanceof AgentAdvertisementMessage) {
-					System.out.println("MB["+myIP+"] > Advertisement message recebida do Agente: " + ((AgentAdvertisementMessage) response).getSequenceNumber());
+					AgentAdvertisementMessage msg = (AgentAdvertisementMessage) response;
+
+					if(msg.isHomeAgent())
+						System.out.println("MN["+myIP+"] > Advertisement message recebida do HA: " + msg.getSequenceNumber());
+					else
+						System.out.println("MN["+myIP+"] > Advertisement message recebida do FA: " + msg.getSequenceNumber());
 				}
-				
+
 				if(response instanceof Response) {
-					synchronized (mb) {
-						mb.LIFETIME = ((Response) response).getTTL();
-					}
+					if(((Response) response).isResponse())
+						System.out.println("MN["+myIP+"] > HA confirmou registo com sucesso.");
+					else
+						System.out.println("MN["+myIP+"] > HA recusou registo.");
 				}
 
 			} catch (IOException e) {
 				//e.printStackTrace();
-				System.err.println("MB["+myIP+"] > Socket closed!");
+				System.err.println("MN["+myIP+"] > Socket closed!");
 				logged = false;
 				break;
 			} catch (ClassNotFoundException e) {
+				logged = false;
 				e.printStackTrace();
 			}
 		}
