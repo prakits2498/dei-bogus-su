@@ -48,7 +48,7 @@ public class Connection extends Thread {
 				
 				if(request.getType().equals("ConnectFA")) {
 					MobileNodeData data = (MobileNodeData) request;
-					System.out.println("> Pedido de conexao na rede de um Foreign Agent ["+data.getIP()+"]");
+					//System.out.println("> Pedido de conexao na rede de um Foreign Agent ["+data.getIP()+"]");
 
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
@@ -67,7 +67,7 @@ public class Connection extends Thread {
 				
 				if(request.getType().equals("ConnectMN")) {
 					MobileNodeData data = (MobileNodeData) request;
-					System.out.println("> Pedido de registo na rede de um Mobile Node ["+data.getIP()+"]");
+					//System.out.println("> Pedido de registo na rede de um Mobile Node ["+data.getIP()+"]");
 
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
@@ -87,7 +87,7 @@ public class Connection extends Thread {
 				
 				if(request.getType().equals("ConnectCN")) {
 					CorrespondentNodeData data = (CorrespondentNodeData) request;
-					System.out.println("> HomeAgent vai guardar o contacto de um CorrespondentNode ["+data.getIP()+"]");
+					//System.out.println("> HomeAgent vai guardar o contacto de um CorrespondentNode ["+data.getIP()+"]");
 
 					Communication communication = new Communication(data.getIP(), this.inObject, this.outObject, this.clientSocket);
 					
@@ -108,7 +108,7 @@ public class Connection extends Thread {
 					Pacote packet = (Pacote) request;
 					
 					synchronized (homeAgent) {
-						homeAgent.sendPacket(packet); //TODO testar isto. pus isto fora do if pk pus timeout no wait da thread
+						homeAgent.sendPacket(packet);
 						if(homeAgent.getState().name().equals("WAITING")) {
 							homeAgent.notify();
 						}

@@ -103,7 +103,7 @@ public class HomeAgent extends Thread {
 		if(!mobilityBindingTable.containsKey(packet.getDestination())) {
 			if(nodesSockets.containsKey(packet.getDestination())) {
 				Communication mb = nodesSockets.get(packet.getDestination());
-				System.out.println("HA["+myIP+"] > A enviar pacote para MN["+packet.getDestination()+"]");
+				System.out.println("HA["+myIP+"] > A enviar pacote para ["+packet.getDestination()+"]");
 
 				try {
 					mb.getOut().writeObject(packet);
@@ -162,50 +162,40 @@ public class HomeAgent extends Thread {
 		 *   Envia Confirmacao (pos/neg) ao FA
 		 */
 
-		int lifetime = 30;
 		Response resp = new Response();
 		resp.setType("RespRegistoFA");
 		resp.setIP(mb.getIP());
 
-		System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA");
-		
-		if(mb.getLifeTimeLeft() < 50) {
-			lifetime = mb.getLifeTimeLeft();
-		} else {
-			lifetime = 30;
-		}
-		
-		resp.setTTL(lifetime);
-
 		if(mobilityBindingTable.containsKey(mb.getIP())) {
 			HomeAgentData data = mobilityBindingTable.get(mb.getIP());
 			data.setCareOfAddress(mb.getCareOfAddress());
-			data.setLifeTime(lifetime);
+			data.setLifeTime(mb.getLifeTimeLeft());
 			mobilityBindingTable.put(mb.getIP(), data);
 
 			resp.setResponse(true);
 
-			System.out.println("HA["+myIP+"] > MN ja existe na MBT - registo actualizado");
+			System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA: MN ja existe na MBT - registo actualizado");
 		} else {
 
 			if(!mobileNodes.containsKey(mb.getIP())) {
 				resp.setResponse(false);
 
-				System.out.println("HA["+myIP+"] > MN nao pertence a HN");
+				System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA: MN nao pertence a HN");
 			} else {
 				HomeAgentData data = new HomeAgentData();
 				data.setCareOfAddress(mb.getCareOfAddress());
-				data.setLifeTime(lifetime);
+				data.setLifeTime(mb.getLifeTimeLeft());
 				mobilityBindingTable.put(mb.getIP(), data);
 
 				resp.setResponse(true);
 
-				System.out.println("HA["+myIP+"] > MN registado");
+				System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA: MN registado");
 			}
 
 		}
 		
 		try {
+			System.out.println("HA["+myIP+"] > Recebido pedido de registo de FA: a enviar resposta a FA");
 			FAsockets.get(mb.getCareOfAddress()).getOut().writeObject(resp);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -246,7 +236,7 @@ public class HomeAgent extends Thread {
 		 *     elimina entrada correspondente da MBT
 		 */
 
-		System.out.println("HA["+myIP+"] > a enviar TTL");
+		//System.out.println("HA["+myIP+"] > a enviar TTL");
 
 		HashMap<String, HomeAgentData> mbtAux = new HashMap<String, HomeAgentData>(mobilityBindingTable);
 		for(String key : mbtAux.keySet()) {
@@ -288,7 +278,7 @@ public class HomeAgent extends Thread {
 	}
 
 	private void sendAdvertisementMessage(int sequenceNumber) {
-		System.out.println("HA["+myIP+"] > A enviar advertisement message");
+		//System.out.println("HA["+myIP+"] > A enviar advertisement message");
 		
 		AgentAdvertisementMessage advertisementMessage = new AgentAdvertisementMessage(sequenceNumber);
 		advertisementMessage.setHomeAgent(true);
@@ -305,7 +295,7 @@ public class HomeAgent extends Thread {
 				c.getOut().writeObject(advertisementMessage);
 			} catch (IOException e) {
 				//e.printStackTrace();
-				System.err.println("HA["+myIP+"] > socket removido");
+				System.err.println("HA["+myIP+"] > IP["+ip+"] removido");
 				nodesSockets.remove(ip);
 			}
 		}
