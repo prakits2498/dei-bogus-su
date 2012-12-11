@@ -164,7 +164,7 @@ class ClientResponse extends Thread {
 
 		while(logged) {
 			try {
-				System.out.println("CN["+myIP+"] > ClientResponse Waiting for messages...");
+				//System.out.println("CN["+myIP+"] > ClientResponse Waiting for messages...");
 				Object response = in.readObject();
 
 				if(response instanceof Pacote) {
