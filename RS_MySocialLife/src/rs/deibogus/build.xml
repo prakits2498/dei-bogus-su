@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="ImageViewer" default="all" basedir="/Users/kis/Documents/development/Faculdade/RS_MySocialLife">
+	<description>
+		This is build file for GWT module 'rs.deibogus.RS_MySocialLife' deployment.
+		GWT Designer generates it each time when you initiate deployment.
+		
+		You can use this file later for manual deployment, but keep in mind, that
+		classpath is hardcoded in it, so after changes in classpath you should
+		regenerate build file.
+	</description>
+
+	<property name="gwt.home" value="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0" />
+	<property name="gwt.module.id" value="rs.deibogus.RS_MySocialLife" />
+	<property name="war.name" value="RS_MySocialLife.war" />
+
+	<target name="jars" description="Package up the module project and required projects as jars">
+		<mkdir dir="war/WEB-INF/lib" />
+		<!--=== RS_MySocialLife ===-->
+		<jar destfile='war/WEB-INF/lib/RS_MySocialLife.jar'>
+			<fileset dir="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/src">
+				<include name="**"/>
+			</fileset>
+			<fileset dir="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/test">
+				<include name="**"/>
+			</fileset>
+			<fileset dir="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/war/WEB-INF/classes">
+				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/test-classes">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+		<copy todir='war/WEB-INF/lib'>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/test-classes"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/war/WEB-INF/classes"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/appengine-local-runtime-shared.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/el-api.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-ant-1.7.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-ant-launcher-1.7.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-jasper-6.0.29.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-jasper-el-6.0.29.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-tomcat-juli-6.0.29.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp-api.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/servlet-api.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/appengine-tools-api.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/appengine-api-labs/v1/appengine-api-labs.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/appengine-endpoints/v1/appengine-endpoints.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/jsr107/v1/appengine-jsr107cache-1.7.4.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/jsr107/v1/jsr107cache-1.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/user/appengine-api-1.0-sdk-1.7.4.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/asm-4.0.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-api-jdo-3.1.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-api-jpa-3.1.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-appengine-2.1.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-core-3.1.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/geronimo-jpa_2.0_spec-1.0.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/jdo-api-3.0.1.jar"/>
+			<fileset file="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/jta-1.1.jar"/>
+			<fileset file="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/gwt-dev.jar"/>
+			<fileset file="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/validation-api-1.0.0.GA-sources.jar"/>
+			<fileset file="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/validation-api-1.0.0.GA.jar"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-core-1.0.jar"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-client-meta-1.0.jar"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-client-1.0.jar"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-media-1.0.jar"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-base-1.0.jar"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-photos-meta-2.0.jar"/>
+			<fileset file="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-photos-2.0.jar"/>
+		</copy>		
+	</target>
+
+	<target name="gwt-compile" description="Compile to JavaScript">
+		<java classname="com.google.gwt.dev.Compiler" fork="yes" failonerror="true" maxmemory="256m">
+			<classpath>
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/src" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/test" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/test-classes" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/war/WEB-INF/classes" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/appengine-local-runtime-shared.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/el-api.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-ant-1.7.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-ant-launcher-1.7.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-jasper-6.0.29.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-jasper-el-6.0.29.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp/repackaged-appengine-tomcat-juli-6.0.29.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/jsp-api.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/shared/servlet-api.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/appengine-tools-api.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/appengine-api-labs/v1/appengine-api-labs.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/appengine-endpoints/v1/appengine-endpoints.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/jsr107/v1/appengine-jsr107cache-1.7.4.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/jsr107/v1/jsr107cache-1.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/user/appengine-api-1.0-sdk-1.7.4.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/asm-4.0.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-api-jdo-3.1.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-api-jpa-3.1.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-appengine-2.1.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/datanucleus-core-3.1.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/geronimo-jpa_2.0_spec-1.0.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/jdo-api-3.0.1.jar" />
+				<pathelement location="/Applications/eclipseIndigo/plugins/com.google.appengine.eclipse.sdkbundle_1.7.4/appengine-java-sdk-1.7.4/lib/opt/user/datanucleus/v2/jta-1.1.jar" />
+				<pathelement location="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/gwt-user.jar" />
+				<pathelement location="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/gwt-dev.jar" />
+				<pathelement location="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/validation-api-1.0.0.GA-sources.jar" />
+				<pathelement location="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/validation-api-1.0.0.GA.jar" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-core-1.0.jar" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-client-meta-1.0.jar" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-client-1.0.jar" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-media-1.0.jar" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-base-1.0.jar" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-photos-meta-2.0.jar" />
+				<pathelement location="/Users/kis/Documents/development/Faculdade/RS_MySocialLife/lib/gdata-photos-2.0.jar" />
+				<pathelement location="/Applications/eclipseNormal/plugins/com.google.gwt.eclipse.sdkbundle_2.5.0.v201211121240-rel-r42/gwt-2.5.0/gwt-dev.jar" />
+			</classpath>
+			<arg value="-style"/>
+			<arg value="OBFUSCATED"/>
+			<arg value="${gwt.module.id}" />
+		</java>
+	</target>
+
+	<target name="war" depends="gwt-compile, jars">
+		<delete file="${war.name}" />
+		<jar destfile="${war.name}" basedir="war" duplicate="preserve" />
+	</target>
+	
+	<target name="deploy" depends="war">
+		<move file="${war.name}" todir="" />
+	</target>
+
+	<target name="all" depends="deploy" />
+
+</project>

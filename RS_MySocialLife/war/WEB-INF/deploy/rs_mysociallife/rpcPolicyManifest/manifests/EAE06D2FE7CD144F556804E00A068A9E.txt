@@ -1,0 +1,2 @@
+serviceClass: rs.deibogus.client.GreetingService
+path: 38346BDF007A944FB48C556BBAFE2D77.gwt.rpc
