@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -66,12 +68,14 @@ public class FlickrLogin implements ILoginImplementor {
 		} //URL para onde temos de mandar user para dar autorizacao
 		System.out.println("Press return after you granted access at this URL:");
 		System.out.println(url.toExternalForm());
-		return url.toExternalForm();
+		return url.toExternalForm() + " " + frob;
 	}
 
 	@Override
-	public boolean login(String user, String pass) {
+	public boolean login(String frobs, String pass) {
 		try {
+			this.frob = frobs;
+			System.out.println("FlickrLogin - login - " + frob);
 			auth = f.getAuthInterface().getToken(frob);
 			System.out.println("Authentication success");
 			// This token can be used until the user revokes it.
