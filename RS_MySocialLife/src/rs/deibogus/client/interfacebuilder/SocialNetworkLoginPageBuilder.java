@@ -1,7 +1,16 @@
 package rs.deibogus.client.interfacebuilder;
 
+import rs.deibogus.client.GreetingService;
+import rs.deibogus.client.GreetingServiceAsync;
+
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
@@ -17,6 +26,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  *
  */
 public class SocialNetworkLoginPageBuilder extends PageBuilder {
+	
+	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
+	
+	private static final String SERVER_ERROR = "An error occurred while "
+			+ "attempting to contact the server. Please check your network "
+			+ "connection and try again.";
 
 	private TextBox usernameFlickr;
 	private TextBox usernamePicasa;
@@ -55,46 +70,207 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 	    popup.setStyleName("demo-PopUpPanel");
 	    PopUpPanelContents = page.createHiddenVerticalPanel("popupContent");
 	    PopUpPanelContents.getElement().setId("popupContents");
-	    //PopUpPanelContents.add(sendButtonFlickr);
 	    popup.setTitle("PopUpPanel");
 	    popup.setWidget(PopUpPanelContents);
-	    
+	    PopUpPanelContents.add(sendButtonFlickr);
+	    PopUpPanelContents.add(usernamePicasa);
+	    PopUpPanelContents.add(passwordPicasa);
+	    PopUpPanelContents.add(sendButtonPicasa);
 	    popup.setVisible(false);
 	    
 	    class FlickrImage implements ClickHandler {
 			public void onClick(ClickEvent event) {
-				openPopUp();
+				PopUpHandler();
 			}
 
-			private void openPopUp() {
-				popup.setVisible(true);
-			    //popup = page.createPopupPanel("popup");
-			    //popup.center();
-			    //popup.setStyleName("demo-PopUpPanel");
-			    //PopUpPanelContents = page.createEmptyVerticalPanel("popupContent");
-			    //popup.setTitle("PopUpPanel");
-//			    message = new HTML("Click 'Close' to close");
-//			    message.setStyleName("demo-PopUpPanel-message");
-//			    ClickHandler listener = new ClickListener()
-//			    {
-//			        public void onClick(Widget sender)
-//			        {
-//			            popup.hide();
-//			        }
-//			    };
-//			    button = new Button("Close", listener);
-//			    holder = new SimplePanel();
-//			    holder.add(button);
-//			    holder.setStyleName("demo-PopUpPanel-footer");
-			    //PopUpPanelContents.add(new Button("teste"));
-			    //PopUpPanelContents.add(holder);
-			    //popup.setWidget(PopUpPanelContents);
+			private void PopUpHandler() {
+				if(!popup.isVisible()){
+					//PopUpPanelContents.clear();
+					PopUpPanelContents.getWidget(0).setVisible(true);
+					PopUpPanelContents.getWidget(1).setVisible(false);
+					PopUpPanelContents.getWidget(2).setVisible(false);
+					PopUpPanelContents.getWidget(3).setVisible(false);
+					popup.setVisible(true);
+				    //popup = page.createPopupPanel("popup");
+				    //popup.center();
+				    //popup.setStyleName("demo-PopUpPanel");
+				    //PopUpPanelContents = page.createEmptyVerticalPanel("popupContent");
+				    //popup.setTitle("PopUpPanel");
+	//			    message = new HTML("Click 'Close' to close");
+	//			    message.setStyleName("demo-PopUpPanel-message");
+	//			    ClickHandler listener = new ClickListener()
+	//			    {
+	//			        public void onClick(Widget sender)
+	//			        {
+	//			            popup.hide();
+	//			        }
+	//			    };
+	//			    button = new Button("Close", listener);
+	//			    holder = new SimplePanel();
+	//			    holder.add(button);
+	//			    holder.setStyleName("demo-PopUpPanel-footer");
+				    //PopUpPanelContents.add(new Button("teste"));
+				    //PopUpPanelContents.add(holder);
+				    //popup.setWidget(PopUpPanelContents);
+				}
+				else{
+					popup.setVisible(false);
+				}
 			    
 			}
 			
 		}
 		
 		flickrLogo.addClickHandler(new FlickrImage());
+		
+		class PicasaImage implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				PopUpHandler();
+			}
+
+			private void PopUpHandler() {
+				if(!popup.isVisible()){
+					//PopUpPanelContents.clear();
+					PopUpPanelContents.getWidget(0).setVisible(false);
+					PopUpPanelContents.getWidget(1).setVisible(true);
+					PopUpPanelContents.getWidget(2).setVisible(true);
+					PopUpPanelContents.getWidget(3).setVisible(true);
+					popup.setVisible(true);
+				    //popup = page.createPopupPanel("popup");
+				    //popup.center();
+				    //popup.setStyleName("demo-PopUpPanel");
+				    //PopUpPanelContents = page.createEmptyVerticalPanel("popupContent");
+				    //popup.setTitle("PopUpPanel");
+	//			    message = new HTML("Click 'Close' to close");
+	//			    message.setStyleName("demo-PopUpPanel-message");
+	//			    ClickHandler listener = new ClickListener()
+	//			    {
+	//			        public void onClick(Widget sender)
+	//			        {
+	//			            popup.hide();
+	//			        }
+	//			    };
+	//			    button = new Button("Close", listener);
+	//			    holder = new SimplePanel();
+	//			    holder.add(button);
+	//			    holder.setStyleName("demo-PopUpPanel-footer");
+				    //PopUpPanelContents.add(new Button("teste"));
+				    //PopUpPanelContents.add(holder);
+				    //popup.setWidget(PopUpPanelContents);
+				}
+				else{
+					popup.setVisible(false);
+				}
+				
+			}
+			
+		}
+		
+		picasaLogo.addClickHandler(new PicasaImage());
+		
+		
+		class FlickrHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				sendLoginToServer();
+			}
+
+			private void sendLoginToServer() {
+
+				if(sendButtonFlickr.getText().equals("Flickr Frob Request")){
+					sendButtonFlickr.setText("Confirm Flickr Login");
+					//textToServerLabel.setText(textToServer);
+					//serverResponseLabel.setText("");
+					greetingService.getURL(new AsyncCallback<String>() {
+						public void onFailure(Throwable caught) {
+							// Show the RPC error message to the user
+							System.out.println(SERVER_ERROR);
+						}
+		
+						public void onSuccess(String result) {
+							System.out.println(result);
+							Window.open(result,"_blank","");
+						}
+					});
+				}
+				else
+				{
+					greetingService.confirmLogin("", "flickr", new AsyncCallback<String>() {
+						public void onFailure(Throwable caught) {
+							// Show the RPC error message to the user
+							System.out.println(SERVER_ERROR);
+						}
+		
+						public void onSuccess(String result) {
+							//photosPage(); //TODO aqui n pode passar logo para a pagina das fotos pk sao 2 logins
+						}
+					});
+				}
+			}
+		}
+		
+		class PicasaHandler implements ClickHandler, KeyUpHandler {
+			public void onClick(ClickEvent event) {
+				sendLoginToServer();
+			}
+
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					sendLoginToServer();
+				}
+			}
+
+			private void sendLoginToServer() {
+				String txtToServer = usernamePicasa.getText() + " " + passwordPicasa.getText();
+
+				// First, we validate the input.
+				//errorLabel.setText("");
+
+				System.out.println(txtToServer);
+				
+				if (!this.validateInput(usernamePicasa.getText()) || !this.validateInput(passwordPicasa.getText())) {
+					//errorLabel.setText("Please enter a valid username or password");
+					System.out.println(SERVER_ERROR);
+					return;
+				}
+
+				// Then, we send the input to the server.
+				sendButtonPicasa.setEnabled(false);
+				//textToServerLabel.setText(textToServer);
+				//serverResponseLabel.setText("");
+				greetingService.confirmLogin(txtToServer, "picasa", new AsyncCallback<String>() {
+					public void onFailure(Throwable caught) {
+						// Show the RPC error message to the user
+						System.out.println(SERVER_ERROR);
+					}
+
+					public void onSuccess(String result) {
+						//photosPage(); //TODO aqui n pode passar logo para a pagina das fotos pk sao 2 logins
+					}
+				});
+			}
+
+			private boolean validateInput(String input) {
+				if (input == null) {
+					return false;
+				}
+
+				if(input.contains(" "))
+					return false;
+
+				return input.length() > 0;
+			}
+		}
+		
+		FlickrHandler handlerFlickr = new FlickrHandler();
+		PicasaHandler handlerPicasa = new PicasaHandler();
+		sendButtonFlickr.addClickHandler(handlerFlickr);
+		sendButtonPicasa.addClickHandler(handlerPicasa);
+		usernamePicasa.addKeyUpHandler(handlerPicasa);
+		passwordPicasa.addKeyUpHandler(handlerPicasa);
+		
+		
+		
 	}
 
 	@Override
