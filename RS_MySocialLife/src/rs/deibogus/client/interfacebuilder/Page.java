@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -86,10 +87,27 @@ public class Page {
 		
 		return txt;
 	}
+	
+	public TextBox createHiddenTextBox(String text) {
+		final TextBox txt = new TextBox();
+		txt.setText(text);
+		txt.setFocus(true);
+		txt.selectAll();
+		//rootPanel.add(txt, x, y);
+		
+		return txt;
+	}
 
 	public PasswordTextBox createPasswordTextBox(int x, int y) {
 		final PasswordTextBox passwordTxt = new PasswordTextBox();
 		rootPanel.add(passwordTxt, x, y);
+		
+		return passwordTxt;
+	}
+	
+	public PasswordTextBox createHiddenPasswordTextBox() {
+		final PasswordTextBox passwordTxt = new PasswordTextBox();
+		//rootPanel.add(passwordTxt, x, y);
 		
 		return passwordTxt;
 	}
@@ -101,11 +119,39 @@ public class Page {
 		return sendButton;
 	}
 	
+	public Button createHiddenButton(String label) {
+		final Button sendButton = new Button(label);
+		//rootPanel.add(sendButton, x, y);
+		
+		return sendButton;
+	}
+	
 	public Image createImage(String url, int x, int y, String width, String height) {
 		Image image = new Image(url);
 		image.setSize(width, height);
 		rootPanel.add(image, x, y);
 		
 		return image;
+	}
+	
+	public VerticalPanel createVerticalPanel(String label){
+		VerticalPanel vp = new VerticalPanel();
+		rootPanel.add(vp, 0, 0);
+		
+		return vp;
+	}
+	
+	public VerticalPanel createHiddenVerticalPanel(String label){
+		VerticalPanel vp = new VerticalPanel();
+		//rootPanel.add(vp, 0, 0);
+		
+		return vp;
+	}
+	
+	public PopupPanel createHiddenPopupPanel(String label){
+		PopupPanel popup = new PopupPanel();
+		//rootPanel.add(popup, 500, 500); //depois faz-se popup.center()
+		
+		return popup;
 	}
 }

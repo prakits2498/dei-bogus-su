@@ -16,9 +16,12 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -114,10 +117,16 @@ public class RS_MySocialLife implements EntryPoint {
 		page.construct();
 		
 		final Button sendButtonFlickr = Button.wrap(Document.get().getElementById("sendButtonFlickrLogin"));
-		
 		final TextBox usernamePicasa = TextBox.wrap(Document.get().getElementById("usernamePicasaTxtBox"));
 		final PasswordTextBox passwordPicasa = PasswordTextBox.wrap(Document.get().getElementById("passwordPicasaTxtBox"));
 		final Button sendButtonPicasa = Button.wrap(Document.get().getElementById("sendButtonPicasaLogin"));
+		
+//		final Image flickrLogo = Image.wrap(Document.get().getElementById("flickrLogo"));
+//		final Image picasaLogo = Image.wrap(Document.get().getElementById("picasaLogo"));
+//		final VerticalPanel PopUpPanelContents = (VerticalPanel)(Document.get().getElementById("popupContents"));
+//		private PopupPanel popup = PopupPanel.
+		
+		System.out.println(sendButtonFlickr.getText());
 		
 		class FlickrHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
