@@ -1,6 +1,7 @@
 package rs.deibogus.server.login;
 
 import rs.deibogus.server.DBManager;
+import rs.deibogus.shared.SessionData;
 
 /**
  * Bridge Design Pattern
@@ -10,7 +11,7 @@ import rs.deibogus.server.DBManager;
 public class AppLogin implements ILoginImplementor {
 
 	@Override
-	public boolean login(String user, String pass) {
+	public boolean login(String user, String pass,SessionData sessao) {
 		DBManager db = DBManager.getInstance();
 		if(db.clientLogin(user, pass))
 			return true;

@@ -1,5 +1,7 @@
 package rs.deibogus.server.login;
 
+import rs.deibogus.shared.SessionData;
+
 
 /**
  * Bridge Design Pattern
@@ -7,5 +9,5 @@ package rs.deibogus.server.login;
  *
  */
 public interface ILoginImplementor {
-	public boolean login(String user, String pass);
+	public boolean login(String user, String pass, SessionData sessao);
 }

@@ -1,5 +1,7 @@
 package rs.deibogus.server.login;
 
+import rs.deibogus.shared.SessionData;
+
 import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.util.AuthenticationException;
 
@@ -23,7 +25,7 @@ public class PicasaLogin implements ILoginImplementor {
 	}*/
 	
 	@Override
-	public boolean login(String user, String pass) {
+	public boolean login(String user, String pass, SessionData sessao) {
 		
 		this.service = new PicasawebService("exampleClient");
 
