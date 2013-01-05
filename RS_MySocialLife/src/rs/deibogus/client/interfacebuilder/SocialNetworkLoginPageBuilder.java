@@ -78,7 +78,115 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 	    PopUpPanelContents.add(sendButtonPicasa);
 	    popup.setVisible(false);
 	    
-	    class FlickrImage implements ClickHandler {
+	    handlerMethods();
+	}
+	
+	public void handlerMethods(){
+		class FlickrHandler implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				sendLoginToServer();
+			}
+
+			private void sendLoginToServer() {
+
+				if(sendButtonFlickr.getText().equals("Flickr Frob Request")){
+					sendButtonFlickr.setText("Confirm Flickr Login");
+					//textToServerLabel.setText(textToServer);
+					//serverResponseLabel.setText("");
+					greetingService.getURL(new AsyncCallback<String>() {
+						public void onFailure(Throwable caught) {
+							// Show the RPC error message to the user
+							System.out.println(SERVER_ERROR);
+						}
+		
+						public void onSuccess(String result) {
+							System.out.println(result);
+							Window.open(result,"_blank","");
+						}
+					});
+				}
+				else
+				{
+					greetingService.confirmLogin("", "flickr", new AsyncCallback<String>() {
+						public void onFailure(Throwable caught) {
+							// Show the RPC error message to the user
+							System.out.println(SERVER_ERROR);
+						}
+		
+						public void onSuccess(String result) {
+							Window.alert("Login no Flickr bem sucedido!");
+							popup.setVisible(false);
+							//photosPage(); //TODO aqui n pode passar logo para a pagina das fotos pk sao 2 logins
+						}
+					});
+				}
+			}
+		}
+		
+		class PicasaHandler implements ClickHandler, KeyUpHandler {
+			public void onClick(ClickEvent event) {
+				sendLoginToServer();
+			}
+
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					sendLoginToServer();
+				}
+			}
+
+			private void sendLoginToServer() {
+				String txtToServer = usernamePicasa.getText() + " " + passwordPicasa.getText();
+
+				// First, we validate the input.
+				//errorLabel.setText("");
+
+				System.out.println(txtToServer);
+				
+				if (!this.validateInput(usernamePicasa.getText()) || !this.validateInput(passwordPicasa.getText())) {
+					//errorLabel.setText("Please enter a valid username or password");
+					System.out.println(SERVER_ERROR);
+					return;
+				}
+
+				// Then, we send the input to the server.
+				sendButtonPicasa.setEnabled(false);
+				//textToServerLabel.setText(textToServer);
+				//serverResponseLabel.setText("");
+				greetingService.confirmLogin(txtToServer, "picasa", new AsyncCallback<String>() {
+					public void onFailure(Throwable caught) {
+						// Show the RPC error message to the user
+						System.out.println(SERVER_ERROR);
+					}
+
+					public void onSuccess(String result) {
+						Window.alert("Login no Picasa bem sucedido!");
+						popup.setVisible(false);
+						//photosPage(); //TODO aqui n pode passar logo para a pagina das fotos pk sao 2 logins
+					}
+				});
+			}
+
+			private boolean validateInput(String input) {
+				if (input == null) {
+					return false;
+				}
+
+				if(input.contains(" "))
+					return false;
+
+				return input.length() > 0;
+			}
+		}
+		
+		FlickrHandler handlerFlickr = new FlickrHandler();
+		PicasaHandler handlerPicasa = new PicasaHandler();
+		sendButtonFlickr.addClickHandler(handlerFlickr);
+		sendButtonPicasa.addClickHandler(handlerPicasa);
+		usernamePicasa.addKeyUpHandler(handlerPicasa);
+		passwordPicasa.addKeyUpHandler(handlerPicasa);
+		
+		class FlickrImage implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				PopUpHandler();
 			}
@@ -167,109 +275,6 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		}
 		
 		picasaLogo.addClickHandler(new PicasaImage());
-		
-		
-		class FlickrHandler implements ClickHandler {
-			public void onClick(ClickEvent event) {
-				sendLoginToServer();
-			}
-
-			private void sendLoginToServer() {
-
-				if(sendButtonFlickr.getText().equals("Flickr Frob Request")){
-					sendButtonFlickr.setText("Confirm Flickr Login");
-					//textToServerLabel.setText(textToServer);
-					//serverResponseLabel.setText("");
-					greetingService.getURL(new AsyncCallback<String>() {
-						public void onFailure(Throwable caught) {
-							// Show the RPC error message to the user
-							System.out.println(SERVER_ERROR);
-						}
-		
-						public void onSuccess(String result) {
-							System.out.println(result);
-							Window.open(result,"_blank","");
-						}
-					});
-				}
-				else
-				{
-					greetingService.confirmLogin("", "flickr", new AsyncCallback<String>() {
-						public void onFailure(Throwable caught) {
-							// Show the RPC error message to the user
-							System.out.println(SERVER_ERROR);
-						}
-		
-						public void onSuccess(String result) {
-							//photosPage(); //TODO aqui n pode passar logo para a pagina das fotos pk sao 2 logins
-						}
-					});
-				}
-			}
-		}
-		
-		class PicasaHandler implements ClickHandler, KeyUpHandler {
-			public void onClick(ClickEvent event) {
-				sendLoginToServer();
-			}
-
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendLoginToServer();
-				}
-			}
-
-			private void sendLoginToServer() {
-				String txtToServer = usernamePicasa.getText() + " " + passwordPicasa.getText();
-
-				// First, we validate the input.
-				//errorLabel.setText("");
-
-				System.out.println(txtToServer);
-				
-				if (!this.validateInput(usernamePicasa.getText()) || !this.validateInput(passwordPicasa.getText())) {
-					//errorLabel.setText("Please enter a valid username or password");
-					System.out.println(SERVER_ERROR);
-					return;
-				}
-
-				// Then, we send the input to the server.
-				sendButtonPicasa.setEnabled(false);
-				//textToServerLabel.setText(textToServer);
-				//serverResponseLabel.setText("");
-				greetingService.confirmLogin(txtToServer, "picasa", new AsyncCallback<String>() {
-					public void onFailure(Throwable caught) {
-						// Show the RPC error message to the user
-						System.out.println(SERVER_ERROR);
-					}
-
-					public void onSuccess(String result) {
-						//photosPage(); //TODO aqui n pode passar logo para a pagina das fotos pk sao 2 logins
-					}
-				});
-			}
-
-			private boolean validateInput(String input) {
-				if (input == null) {
-					return false;
-				}
-
-				if(input.contains(" "))
-					return false;
-
-				return input.length() > 0;
-			}
-		}
-		
-		FlickrHandler handlerFlickr = new FlickrHandler();
-		PicasaHandler handlerPicasa = new PicasaHandler();
-		sendButtonFlickr.addClickHandler(handlerFlickr);
-		sendButtonPicasa.addClickHandler(handlerPicasa);
-		usernamePicasa.addKeyUpHandler(handlerPicasa);
-		passwordPicasa.addKeyUpHandler(handlerPicasa);
-		
-		
 		
 	}
 

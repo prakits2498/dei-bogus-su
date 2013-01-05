@@ -121,8 +121,6 @@ public class RS_MySocialLife implements EntryPoint {
 //		final PasswordTextBox passwordPicasa = PasswordTextBox.wrap(Document.get().getElementById("passwordPicasaTxtBox"));
 //		final Button sendButtonPicasa = Button.wrap(Document.get().getElementById("sendButtonPicasaLogin"));
 //		
-		final TextBox username = (TextBox) RootPanel.get("popupContents").getWidget(1);
-		System.out.println(username.getText());
 ////		final Image flickrLogo = Image.wrap(Document.get().getElementById("flickrLogo"));
 ////		final Image picasaLogo = Image.wrap(Document.get().getElementById("picasaLogo"));
 ////		final VerticalPanel PopUpPanelContents = (VerticalPanel)(Document.get().getElementById("popupContents"));
