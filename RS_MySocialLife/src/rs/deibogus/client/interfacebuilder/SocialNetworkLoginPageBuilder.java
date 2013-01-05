@@ -321,6 +321,18 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 
 	}
 
+	@Override
+	public void buildStructure() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void destructStructure() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }

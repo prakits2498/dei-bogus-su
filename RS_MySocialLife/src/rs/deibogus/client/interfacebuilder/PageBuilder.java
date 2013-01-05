@@ -19,12 +19,16 @@ public abstract class PageBuilder {
 		page = new Page(); 
 	}
 	
+	abstract public void buildStructure();
 	abstract public void buildHeader();
 	abstract public void buildMain();
 	abstract public void buildFooter();
 
+	abstract public void destructStructure();
 	abstract public void destructHeader();
 	abstract void destructMain();
 	abstract void destructFooter();
+
+	
 	
 }

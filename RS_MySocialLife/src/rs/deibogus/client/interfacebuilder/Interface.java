@@ -20,12 +20,14 @@ public class Interface {
 
 	public void construct() {
 		pageBuilder.createNewPage();
+		pageBuilder.buildStructure();
 		pageBuilder.buildHeader();
 		pageBuilder.buildMain();
 		pageBuilder.buildFooter();
 	}
 	
 	public void destruct() {
+		pageBuilder.destructStructure();
 		pageBuilder.destructHeader();
 		pageBuilder.destructMain();
 		pageBuilder.destructFooter();

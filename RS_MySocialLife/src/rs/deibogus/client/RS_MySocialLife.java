@@ -16,12 +16,10 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -40,6 +38,76 @@ public class RS_MySocialLife implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+
+		/*FlowPanel wrapper = new FlowPanel();
+		wrapper.getElement().setId("wrapper");
+		
+		FlowPanel form = new FlowPanel();
+		form.getElement().setId("formID");
+		form.setStyleName("login-form");
+		
+		FlowPanel loginHeader = new FlowPanel();
+		FlowPanel loginContent = new FlowPanel();
+		FlowPanel loginFooter = new FlowPanel();
+		
+		loginHeader.setStyleName("header");
+		loginContent.setStyleName("content");
+		loginFooter.setStyleName("footer");
+		
+		
+		HTML htmlTitle = new HTML("<h1 align=\"center\"> My Social Life Login </h1>", true);
+		//HTML htmlSubTitle = new HTML("<span align=\"center\"> Insert login to My Social Life WebApp </span>", true);
+		
+		loginHeader.add(htmlTitle);
+		//RootPanel.get("loginHeader").add(htmlTitle);
+		//RootPanel.get("loginHeader").add(htmlSubTitle);
+		
+		final TextBox username = new TextBox();
+		username.getElement().setPropertyString("placeholder", "Username");
+		username.setStyleName("input username");
+		loginContent.add(username);
+		//RootPanel.get("loginContent").add(username);
+		
+		final HTML htmlUsernameInput = new HTML("<div> </div>", true);
+		htmlUsernameInput.setStyleName("user-icon");
+		loginContent.add(htmlUsernameInput);
+		//RootPanel.get("loginContent").add(htmlUsernameInput);
+		
+		final PasswordTextBox password = new PasswordTextBox();
+		password.getElement().setPropertyString("placeholder", "Password");
+		password.setStyleName("input password");
+		loginContent.add(password);
+		//RootPanel.get("loginContent").add(password);
+		
+		final HTML htmlPasswordInput = new HTML("<div></div>", true);
+		htmlPasswordInput.setStyleName("pass-icon");
+		loginContent.add(htmlPasswordInput);
+		//RootPanel.get("loginContent").add(htmlPasswordInput);
+		
+		
+		final Button submitButton = new Button();
+		submitButton.setText("Login");
+		submitButton.setStyleName("button");
+		loginFooter.add(submitButton);
+		//RootPanel.get("loginFooter").add(submitButton);
+		
+		final Button registerButton = new Button();
+		registerButton.setText("Register");
+		registerButton.setStyleName("register");
+		loginFooter.add(registerButton);
+		//RootPanel.get("loginFooter").add(registerButton);
+		
+		
+		FlowPanel gradient = new FlowPanel();
+		gradient.setStyleName("gradient");
+		
+		wrapper.add(form);
+		wrapper.add(gradient);
+		form.add(loginHeader);
+		form.add(loginContent);
+		form.add(loginFooter);
+		RootPanel.get().add(wrapper);*/
+		
 		initialLogin();
 	}
 
@@ -47,11 +115,26 @@ public class RS_MySocialLife implements EntryPoint {
 		PageBuilder login = new LoginPageBuilder();
 		page.setPageBuilder(login);
 		page.construct();
-		
-		final TextBox username = TextBox.wrap(Document.get().getElementById("usernameTxtBox"));
-		final PasswordTextBox password = PasswordTextBox.wrap(Document.get().getElementById("passwordTxtBox"));
-		final Button sendButton = Button.wrap(Document.get().getElementById("sendButtonLogin"));
 
+		final FlowPanel wrapper = (FlowPanel) RootPanel.get().getWidget(0);
+		final FlowPanel form = (FlowPanel) wrapper.getWidget(0);
+		
+		final FlowPanel loginContent = (FlowPanel) form.getWidget(1);
+		final TextBox username = (TextBox) loginContent.getWidget(0);
+		final PasswordTextBox password = (PasswordTextBox) loginContent.getWidget(2);
+		
+		final FlowPanel loginFooter = (FlowPanel) form.getWidget(2);
+		final Button sendButton = (Button) loginFooter.getWidget(0);
+		final Button registerButton = (Button) loginFooter.getWidget(1);
+
+		//final TextBox username = TextBox.wrap(Document.get().getElementById("usernameTxtBox"));
+		//final PasswordTextBox password = PasswordTextBox.wrap(Document.get().getElementById("passwordTxtBox"));
+		//final Button sendButton = Button.wrap(Document.get().getElementById("sendButtonLogin"));
+		
+		//final TextBox username = (TextBox) RootPanel.get("loginContent").getWidget(0);
+		//final PasswordTextBox password = (PasswordTextBox) RootPanel.get("loginContent").getWidget(2);
+		//final Button sendButton = (Button) RootPanel.get("loginFooter").getWidget(0);
+		
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			public void onClick(ClickEvent event) {
 				sendLoginToServer();
