@@ -1,7 +1,5 @@
 package rs.deibogus.shared;
 
-import com.aetrion.flickr.Flickr;
-import com.aetrion.flickr.RequestContext;
 import com.aetrion.flickr.auth.Auth;
 import com.google.gdata.client.photos.PicasawebService;
 
@@ -13,6 +11,7 @@ public class SessionData {
 	private int id;
 	
 	public SessionData(){
+		
 	}
 	
 	public PicasawebService getService() {
