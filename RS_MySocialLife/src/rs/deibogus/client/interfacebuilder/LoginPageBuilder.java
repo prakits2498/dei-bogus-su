@@ -18,7 +18,7 @@ public class LoginPageBuilder extends PageBuilder {
 
 	@Override
 	public void buildHeader() {
-		// TODO Auto-generated method stub
+		page.createLoginForm();
 	}
 	
 	@Override
