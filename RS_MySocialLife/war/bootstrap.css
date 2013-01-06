@@ -3585,10 +3585,12 @@ input[type="submit"].btn.btn-mini {
 /* PHOTO CONTAINER */
 
 .row .span4 img {
+	max-width: 350px;
+	max-height: 150px;
 	-webkit-transition: opacity .5s linear;
 	-webkit-transition: opacity .5s linear;
 	-moz-transition: opacity .5s linear;
-	transition: opacity .5s linear
+	transition: opacity .5s linear;
 }
 .row .span4 img:hover {
 	opacity:0.85;
