@@ -1,7 +1,11 @@
 package rs.deibogus.server.socialmanager;
 
+import java.util.ArrayList;
+
 import rs.deibogus.shared.Album;
+import rs.deibogus.shared.Foto;
 import rs.deibogus.shared.Photo;
+import rs.deibogus.shared.SessionData;
 
 /**
  * Bridge Design Pattern
@@ -17,7 +21,7 @@ public class SocialManager implements ISocialManager {
 	}
 
 	@Override
-	public Photo getPhoto(String id) {
+	public Foto getPhoto(String id) {
 		return this.implementor.getPhoto(id);
 	}
 
@@ -34,6 +38,11 @@ public class SocialManager implements ISocialManager {
 	@Override
 	public void removeAlbum(String id) {
 		this.implementor.removeAlbum(id);
+	}
+	
+	@Override
+	public ArrayList<Foto> getAllPhotos(SessionData session){
+		return this.implementor.getAllPhotos(session);
 	}
 	
 	

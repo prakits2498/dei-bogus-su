@@ -1,7 +1,10 @@
 package rs.deibogus.client.interfacebuilder;
 
+import java.util.ArrayList;
+
 import rs.deibogus.client.GreetingService;
 import rs.deibogus.client.GreetingServiceAsync;
+import rs.deibogus.shared.Foto;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -43,6 +46,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 	private Image flickrLogo;
 	private VerticalPanel PopUpPanelContents;
 	private PopupPanel popup;
+	private Button photoTesting;
 
 	@Override
 	public void buildHeader() {
@@ -53,6 +57,8 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		flickrLogo = page.createImage("http://www.peterboroughlibdems.org.uk/wp-content/uploads/2011/05/Flickr-logo.png", 200, 10, "55px", "55px");
 		flickrLogo.setStyleName("gallery");
 		flickrLogo.getElement().setId("flickrLogo");
+		
+		photoTesting = page.createButton("Teste Photos", true, "", "root");
 		
 		sendButtonFlickr = page.createHiddenButton("Flickr Frob Request");
 		sendButtonFlickr.getElement().setId("sendButtonFlickrLogin");
@@ -118,6 +124,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 						public void onSuccess(String result) {
 							Window.alert("Login no Flickr bem sucedido!");
 							popup.setVisible(false);
+							
 							//photosPage(); //TODO aqui n pode passar logo para a pagina das fotos pk sao 2 logins
 						}
 					});
@@ -277,6 +284,33 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		}
 		
 		picasaLogo.addClickHandler(new PicasaImage());
+		
+		class getPhotos implements ClickHandler {
+			public void onClick(ClickEvent event) {
+				getPhotos();
+			}
+
+			private void getPhotos() {
+				greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
+					public void onFailure(Throwable caught) {
+						// Show the RPC error message to the user
+						System.out.println(SERVER_ERROR);
+					}
+
+					public void onSuccess(ArrayList<Foto> result) {
+						Window.alert("Recebeu " + Integer.toString(result.size()) + "fotos!");
+						System.out.println(result.get(0).getTitle() + " " + result.get(0).getUrl());
+						System.out.println(result.get(1).getTitle() + " " + result.get(1).getUrl());
+						// TODO Auto-generated method stub
+						
+					}
+				});
+
+			}
+
+		}
+		
+		photoTesting.addClickHandler(new getPhotos());
 		
 	}
 

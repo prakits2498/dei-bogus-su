@@ -100,6 +100,7 @@ public class FlickrLogin implements ILoginImplementor {
 //			this.requestContext = sessao.getRequestContext();
 			this.requestContext = RequestContext.getRequestContext();
 			this.requestContext.setAuth(sessao.getFlickrAuth());
+			//sessao.setFlickr(true);
 			System.out.println("VAI TESTAR SHOW ACTIVITY");
 			showActivity();
 			//Flickr.debugRequest = false;

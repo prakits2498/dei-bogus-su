@@ -32,6 +32,9 @@ public class PicasaLogin implements ILoginImplementor {
 		if (user != null && pass != null) {
 			try {
 				service.setUserCredentials(user, pass);
+				sessao.setPicasaUsername(user);
+				sessao.setService(this.service);
+				//sessao.setPicasa(true);
 				return true;
 			} catch (AuthenticationException e) {
 				throw new IllegalArgumentException("Illegal username/password combination.");
