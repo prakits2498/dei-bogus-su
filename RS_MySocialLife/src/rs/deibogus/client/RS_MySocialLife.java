@@ -1,5 +1,6 @@
 package rs.deibogus.client;
 
+import rs.deibogus.client.interfacebuilder.ImagePageBuilder;
 import rs.deibogus.client.interfacebuilder.Interface;
 import rs.deibogus.client.interfacebuilder.LoginPageBuilder;
 import rs.deibogus.client.interfacebuilder.PageBuilder;
@@ -13,18 +14,11 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -113,8 +107,8 @@ public class RS_MySocialLife implements EntryPoint {
 		form.add(loginFooter);
 		RootPanel.get().add(wrapper);*/
 
-		//initialLogin();
-		photosPage();
+		initialLogin();
+		//photosPage();
 	}
 
 	public void initialLogin() {
@@ -201,8 +195,12 @@ public class RS_MySocialLife implements EntryPoint {
 	public void initialPage() {
 		System.out.println("initial page");
 
-		PageBuilder login = new SocialNetworkLoginPageBuilder();
-		page.setPageBuilder(login);
+		PageBuilder socialNetworkPage = new SocialNetworkLoginPageBuilder();
+		page.setPageBuilder(socialNetworkPage);
+		page.construct();
+		
+		PageBuilder imagesPage = new ImagePageBuilder();
+		page.setPageBuilder(imagesPage);
 		page.construct();
 
 		//		final Button sendButtonFlickr = Button.wrap(Document.get().getElementById("sendButtonFlickrLogin"));
@@ -345,58 +343,6 @@ public class RS_MySocialLife implements EntryPoint {
 		panel2.add(img2);
 		RootPanel.get().add(panel2);*/
 		
-		FlowPanel navBar = new FlowPanel();
-		navBar.getElement().setId("navBar");
-		navBar.setStyleName("navbar navbar-fixed-top");
 		
-		FlowPanel navBarInner = new FlowPanel();
-		navBarInner.getElement().setId("navBarInner");
-		navBarInner.setStyleName("navbar-inner");
-		
-		FlowPanel navBarContainer = new FlowPanel();
-		navBarContainer.getElement().setId("navBarContainer");
-		navBarContainer.setStyleName("container");
-		
-		Anchor logo = new Anchor();
-		logo.setStyleName("brand");
-		logo.setText("MySocialLife");
-		navBarContainer.add(logo);
-		
-		navBar.add(navBarInner);
-		navBarInner.add(navBarContainer);
-		RootPanel.get().add(navBar);
-		
-		
-		FlowPanel photoContainer = new FlowPanel();
-		photoContainer.getElement().setId("photoContainer");
-		photoContainer.setStyleName("container");
-		
-		HTML horizontalLine = new HTML("<hr>");
-		photoContainer.add(horizontalLine);
-		
-		FlowPanel row = new FlowPanel();
-		row.getElement().setId("row");
-		row.setStyleName("row");
-		photoContainer.add(row);
-		
-		HorizontalPanel photoPanel = new HorizontalPanel();
-		photoPanel.getElement().setId("photo");
-		photoPanel.setStyleName("span4");
-		row.add(photoPanel);
-		
-		HTML photo = new HTML("<h3>Deep Sky<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature_1.jpg\">Srawat56</a><small><h3>" 
-		+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb1.jpg\"><img src=\"img/thumb1.jpg\" alt=\"Thumbnail\"></a>");
-
-		HTML photo2 = new HTML("<h3>Cenas<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature%27s_Valley_(S._Africa)_2.jpg\">Cenass</a><small><h3>" 
-				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb2.jpg\"><img src=\"img/thumb2.jpg\" alt=\"Thumbnail\"></a>");
-
-		photoPanel.setSpacing(100);
-		
-		photoPanel.add(photo);
-		photoPanel.add(photo2);
-		RootPanel.get().add(photoContainer);
-
-		HTML footer = new HTML("<hr><footer class=\"row\"><p>&copy;2012 DeiBogusTeam<br></p></footer>");
-		photoContainer.add(footer);
 	}
 }
