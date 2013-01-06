@@ -204,12 +204,12 @@ CONTENT
 }
 
 .user-icon {
-	top:153px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
+	top:173px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
 	background: rgba(65,72,72,0.75) url(http://www.demo.amitjakhu.com/login-form/images/user-icon.png) no-repeat center;	
 }
 
 .pass-icon {
-	top:201px;
+	top:250px;
 	background: rgba(65,72,72,0.75) url(http://www.demo.amitjakhu.com/login-form/images/pass-icon.png) no-repeat center;
 }
 
@@ -313,12 +313,10 @@ FOOTER
 /**********************************************************************************/
 
 .gallery {
-	float: left;
-	padding: 10px 10px 25px 10px;
-	background: #eee;
-	border: 1px solid #fff;
-	-moz-box-shadow: 0px 2px 15px #333;
+	float: right;
+	padding: 10px 20px 0px 0px;
 	position: relative;
+	margin-right: 20px;
 }
 
 .polaroid1 {

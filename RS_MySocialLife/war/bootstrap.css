@@ -233,7 +233,7 @@ a:hover {
 }
 
 .span4 {
-  width: 300px;
+  /*width: 300px; AQUI*/ 
 }
 
 .span3 {
@@ -443,10 +443,10 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0;
-  font-family: 'Lato', sans-serif;
+  margin-bottom: 5px;
+  font-family: 'Bree Serif', serif;
   font-weight: bold;
-  color: #9b958b;
+  color: #3f9db8; /*#56c2e1; #9b958b;*/
   text-rendering: optimizelegibility;
 }
 
@@ -3558,12 +3558,14 @@ input[type="submit"].btn.btn-mini {
 .navbar {
   *position: relative;
   *z-index: 2;
+  margin-right: 18px;
+  margin-top: 18px;
   margin-bottom: 18px;
   overflow: visible;
 }
 
 .navbar-inner {
-  min-height: 100px;
+  min-height: 10px;
   padding-right: 20px;
   padding-left: 20px;
   }
@@ -3580,6 +3582,8 @@ input[type="submit"].btn.btn-mini {
   color: #dbdbdb;
 }
 
+/* PHOTO CONTAINER */
+
 .row .span4 img {
 	-webkit-transition: opacity .5s linear;
 	-webkit-transition: opacity .5s linear;
@@ -3591,23 +3595,29 @@ input[type="submit"].btn.btn-mini {
 	filter:alpha(opacity=85); /* For IE8 and earlier */
 }
 
-
-
 .navbar .brand {
-  display: block;
-  float: left;
-  padding: 16px 20px 12px;
-  margin-left: -20px;
-  font-size: 50px;
-  font-weight: 200;
-  line-height: 1;
-  color: #c5bfb3;
-  opacity: 0.6;
-  font-family: 'Lato', sans-serif;
-  -webkit-transition: opacity .3s linear;
-  -webkit-transition: opacity .3s linear;
-  -moz-transition: opacity .3s linear;
-  transition: opacity .3s linear;
+	font-family: 'Bree Serif', serif;
+	font-weight: 300;
+	font-size: 38px;
+	line-height:34px;
+	color: #414848;
+	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+		
+	display: block;
+	float: left;
+	padding: 16px 50px 12px;
+	margin-left: -20px;
+	opacity: 0.8;
+	/*font-size: 50px;
+	font-weight: 200;
+	line-height: 1;
+	color: #c5bfb3;
+	opacity: 0.6;
+	font-family: 'Lato', sans-serif;
+	-webkit-transition: opacity .3s linear;
+	-webkit-transition: opacity .3s linear;
+	-moz-transition: opacity .3s linear;
+	transition: opacity .3s linear;*/
   
 }
 .navbar .brand:hover {
@@ -3617,8 +3627,8 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar .navbar-text {
-  margin-bottom: 0;
-  line-height: 40px;
+  margin-bottom: -10px;
+  line-height: 10px;
 }
 
 .navbar .navbar-link {
@@ -4978,6 +4988,8 @@ a.badge:hover {
 .invisible {
   visibility: hidden;
 }
+
+/*aqui nao*/
 .row .span4 img {
 	-webkit-transition: opacity .5s linear;
 	-webkit-transition: opacity .5s linear;
