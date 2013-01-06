@@ -1,5 +1,13 @@
 package rs.deibogus.client.interfacebuilder;
 
+import java.util.ArrayList;
+
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
+
 
 /**
  * Builder Design Pattern
@@ -9,52 +17,123 @@ package rs.deibogus.client.interfacebuilder;
  */
 public class ImagePageBuilder extends PageBuilder {
 
-	@Override
-	public void buildHeader() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void buildMain() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void buildFooter() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void destructHeader() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void destructMain() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void destructFooter() {
-		// TODO Auto-generated method stub
-		
-	}
-
+	private FlowPanel navBar;
+	private FlowPanel navBarInner;
+	private FlowPanel navBarContainer;
+	
+	private FlowPanel photoContainer;
+	private HTML horizontalLine;
+	private FlowPanel row;
+	private HorizontalPanel photoPanel;
+	
+	private Anchor logo;
+	private HTML footer;
+	
+	private ArrayList<HTML> photos;
+	
 	@Override
 	public void buildStructure() {
-		// TODO Auto-generated method stub
-		
+		//HEADER STRUCTURE
+		navBar = new FlowPanel();
+		navBar.getElement().setId("navBar");
+		navBar.setStyleName("navbar navbar-fixed-top");
+
+		navBarInner = new FlowPanel();
+		navBarInner.getElement().setId("navBarInner");
+		navBarInner.setStyleName("navbar-inner");
+
+		navBarContainer = new FlowPanel();
+		navBarContainer.getElement().setId("navBarContainer");
+		navBarContainer.setStyleName("container");
+
+		navBar.add(navBarInner);
+		navBarInner.add(navBarContainer);
+		RootPanel.get().add(navBar);
+
+		//MAIN STRUCTURE
+		photoContainer = new FlowPanel();
+		photoContainer.getElement().setId("photoContainer");
+		photoContainer.setStyleName("container");
+
+		horizontalLine = new HTML("<hr>");
+		photoContainer.add(horizontalLine);
+
+		row = new FlowPanel();
+		row.getElement().setId("row");
+		row.setStyleName("row");
+		photoContainer.add(row);
+
+		photoPanel = new HorizontalPanel();
+		photoPanel.getElement().setId("photo");
+		photoPanel.setStyleName("span4");
+		row.add(photoPanel);
+
+		RootPanel.get().add(photoContainer);
 	}
 
 	@Override
 	public void destructStructure() {
-		// TODO Auto-generated method stub
+		navBar.removeFromParent();
+		navBarInner.removeFromParent();
+		navBarContainer.removeFromParent();
 		
+		photoContainer.removeFromParent();
+		horizontalLine.removeFromParent();
+		row.removeFromParent();
+		photoPanel.removeFromParent();
 	}
+
+	@Override
+	public void buildHeader() {
+		logo = new Anchor();
+		logo.setStyleName("brand");
+		logo.setText("My Social Life");
+		navBarContainer.add(logo);
+	}
+	
+	@Override
+	public void destructHeader() {
+		logo.removeFromParent();
+	}
+
+	@Override
+	public void buildMain() {
+		/*photo = new HTML("<h3>Deep Sky<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature_1.jpg\">Srawat56</a><small><h3>" 
+				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb1.jpg\"><img src=\"img/thumb1.jpg\" width=\"80%\" height=\"80%\" alt=\"Thumbnail\"></a>");
+
+		photo2 = new HTML("<h3>Cenas<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature%27s_Valley_(S._Africa)_2.jpg\">Cenass</a><small><h3>" 
+				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb2.jpg\"><img src=\"img/thumb2.jpg\" width=\"80%\" height=\"80%\" alt=\"Thumbnail\"></a>");
+		 */
+		
+		//TODO percorrer a lista de fotos
+		HTML ph = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image1", "Cenas", 80, 80);
+		HTML ph2 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image2", "Africa", 80, 80);
+		
+		photos.add(ph);
+		photos.add(ph2);
+		
+		for(HTML photo : photos) {
+			photoPanel.add(photo);
+		}
+	}
+	
+	@Override
+	void destructMain() {
+		for(HTML photo : photos) {
+			photo.removeFromParent();
+		}
+	}
+
+	@Override
+	public void buildFooter() {
+		footer = new HTML("<hr><footer class=\"row\"><p>&copy;2012 DeiBogusTeam<br></p></footer>");
+		photoContainer.add(footer);
+	}
+	
+	@Override
+	void destructFooter() {
+		footer.removeFromParent();
+	}
+	
 
 }

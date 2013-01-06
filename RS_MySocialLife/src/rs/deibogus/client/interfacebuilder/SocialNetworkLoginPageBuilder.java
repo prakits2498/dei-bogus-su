@@ -46,10 +46,12 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 
 	@Override
 	public void buildHeader() {
-		picasaLogo = page.createImage("http://2.bp.blogspot.com/-m9CD-tmeo1M/ULNHIBy_KkI/AAAAAAAAAHw/fpdDmzbEMNA/s1600/picasa-logo.png", 100, 10, "80px", "80px");
+		picasaLogo = page.createImage("http://2.bp.blogspot.com/-m9CD-tmeo1M/ULNHIBy_KkI/AAAAAAAAAHw/fpdDmzbEMNA/s1600/picasa-logo.png", 100, 10, "60px", "60px");
+		picasaLogo.setStyleName("gallery");
 		picasaLogo.getElement().setId("picasaLogo");
 		
-		flickrLogo = page.createImage("http://www.peterboroughlibdems.org.uk/wp-content/uploads/2011/05/Flickr-logo.png", 200, 10, "80px", "80px");
+		flickrLogo = page.createImage("http://www.peterboroughlibdems.org.uk/wp-content/uploads/2011/05/Flickr-logo.png", 200, 10, "55px", "55px");
+		flickrLogo.setStyleName("gallery");
 		flickrLogo.getElement().setId("flickrLogo");
 		
 		sendButtonFlickr = page.createHiddenButton("Flickr Frob Request");

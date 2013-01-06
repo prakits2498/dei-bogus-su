@@ -142,9 +142,15 @@ public class Page {
 	public Image createImage(String url, int x, int y, String width, String height) {
 		Image image = new Image(url);
 		image.setSize(width, height);
-		rootPanel.add(image, x, y);
+		rootPanel.add(image);
 
 		return image;
+	}
+	
+	public HTML createPhotoWithLightbox(String url, String altText, String description, String title, int widthPercentage, int heightPercentage) {
+		HTML photo = new HTML("<h3>"+title+"<h3>" 
+				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\""+description+"\" href=\""+url+"\"><img src=\""+url+"\" width=\""+widthPercentage+"%\" height=\""+heightPercentage+"%\" alt=\""+altText+"\"></a>");
+		return photo;
 	}
 
 	public VerticalPanel createVerticalPanel(String label){
