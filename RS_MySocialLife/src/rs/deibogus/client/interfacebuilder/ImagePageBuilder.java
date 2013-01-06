@@ -23,8 +23,9 @@ public class ImagePageBuilder extends PageBuilder {
 	
 	private FlowPanel photoContainer;
 	private HTML horizontalLine;
+	
 	private FlowPanel row;
-	private HorizontalPanel photoPanel;
+	private ArrayList<HorizontalPanel> photoPanels;
 	
 	private Anchor logo;
 	private HTML footer;
@@ -58,16 +59,6 @@ public class ImagePageBuilder extends PageBuilder {
 		horizontalLine = new HTML("<hr>");
 		photoContainer.add(horizontalLine);
 
-		row = new FlowPanel();
-		row.getElement().setId("row");
-		row.setStyleName("row");
-		photoContainer.add(row);
-
-		photoPanel = new HorizontalPanel();
-		photoPanel.getElement().setId("photo");
-		photoPanel.setStyleName("span4");
-		row.add(photoPanel);
-
 		RootPanel.get().add(photoContainer);
 	}
 
@@ -79,8 +70,13 @@ public class ImagePageBuilder extends PageBuilder {
 		
 		photoContainer.removeFromParent();
 		horizontalLine.removeFromParent();
+		
 		row.removeFromParent();
-		photoPanel.removeFromParent();
+		
+		for(HorizontalPanel panel : photoPanels) {
+			panel.removeFromParent();
+		}
+		
 	}
 
 	@Override
@@ -104,11 +100,26 @@ public class ImagePageBuilder extends PageBuilder {
 		photo2 = new HTML("<h3>Cenas<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature%27s_Valley_(S._Africa)_2.jpg\">Cenass</a><small><h3>" 
 				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb2.jpg\"><img src=\"img/thumb2.jpg\" width=\"80%\" height=\"80%\" alt=\"Thumbnail\"></a>");
 		 */
+		ArrayList<String> tempPhotos = new ArrayList<String>();
+		tempPhotos.add("img/thumb1.jpg");
+		tempPhotos.add("img/thumb2.jpg");
+		tempPhotos.add("img/thumb3.png");
+		/*tempPhotos.add("img/thumb2.jpg");
+		tempPhotos.add("img/thumb1.jpg");
+		tempPhotos.add("img/thumb2.jpg");
+		tempPhotos.add("img/thumb1.jpg");
+		tempPhotos.add("img/thumb2.jpg");
+		tempPhotos.add("img/thumb1.jpg");
+		tempPhotos.add("img/thumb2.jpg");
+		tempPhotos.add("img/thumb2.jpg");*/
 		
 		photos = new ArrayList<HTML>();
+		photoPanels = new ArrayList<HorizontalPanel>();
+		
+		
 		
 		//TODO percorrer a lista de fotos
-		HTML ph1 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image1", "Cenas", 80, 80);
+		/*HTML ph1 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image1", "Cenas", 80, 80);
 		HTML ph2 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image2", "Africa", 80, 80);
 		HTML ph3 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image3", "Cenas", 80, 80);
 		HTML ph4 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image4", "Africa", 80, 80);
@@ -124,11 +135,39 @@ public class ImagePageBuilder extends PageBuilder {
 		photos.add(ph5);
 		photos.add(ph6);
 		photos.add(ph7);
-		photos.add(ph8);
+		photos.add(ph8);*/
 		
-		for(HTML photo : photos) {
-			photoPanel.add(photo);
+		HorizontalPanel photoPanel = null;
+		row = createRow();
+		for(int i=0; i<tempPhotos.size(); i++) {
+			HTML ph = page.createPhotoWithLightbox(tempPhotos.get(i), "Image"+(i+1), "This is the image"+(i+1), "Cenas"+(i+1), 80, 80);
+			photos.add(ph);
+			
+			if(i%3 == 0) {
+				photoPanel = createPhotoPanel();
+				row.add(photoPanel);
+				photoPanels.add(photoPanel);
+			}
+			
+			photoPanel.add(photos.get(i));
 		}
+
+	}
+	
+	private FlowPanel createRow() {
+		FlowPanel row = new FlowPanel();
+		row.getElement().setId("row");
+		row.setStyleName("row");
+		photoContainer.add(row);
+		
+		return row;
+	}
+	
+	private HorizontalPanel createPhotoPanel() {
+		HorizontalPanel photoPanel = new HorizontalPanel();
+		photoPanel.getElement().setId("cover");
+		photoPanel.setStyleName("span4");
+		return photoPanel;
 	}
 	
 	@Override
