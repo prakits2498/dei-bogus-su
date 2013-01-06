@@ -105,12 +105,26 @@ public class ImagePageBuilder extends PageBuilder {
 				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb2.jpg\"><img src=\"img/thumb2.jpg\" width=\"80%\" height=\"80%\" alt=\"Thumbnail\"></a>");
 		 */
 		
-		//TODO percorrer a lista de fotos
-		HTML ph = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image1", "Cenas", 80, 80);
-		HTML ph2 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image2", "Africa", 80, 80);
+		photos = new ArrayList<HTML>();
 		
-		photos.add(ph);
+		//TODO percorrer a lista de fotos
+		HTML ph1 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image1", "Cenas", 80, 80);
+		HTML ph2 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image2", "Africa", 80, 80);
+		HTML ph3 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image3", "Cenas", 80, 80);
+		HTML ph4 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image4", "Africa", 80, 80);
+		HTML ph5 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image5", "Cenas", 80, 80);
+		HTML ph6 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image6", "Africa", 80, 80);
+		HTML ph7 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image7", "Cenas", 80, 80);
+		HTML ph8 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image8", "Africa", 80, 80);
+		
+		photos.add(ph1);
 		photos.add(ph2);
+		photos.add(ph3);
+		photos.add(ph4);
+		photos.add(ph5);
+		photos.add(ph6);
+		photos.add(ph7);
+		photos.add(ph8);
 		
 		for(HTML photo : photos) {
 			photoPanel.add(photo);
