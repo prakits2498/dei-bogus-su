@@ -184,7 +184,7 @@ public class ImagePageBuilder extends PageBuilder {
 
 	@Override
 	public void buildFooter() {
-		footer = new HTML("<hr><footer class=\"row\"><p>&copy;2012 DeiBogusTeam<br></p></footer>");
+		footer = new HTML("<hr><footer class=\"row\"><p>&copy;2013 DeiBogusTeam<br></p></footer>");
 		photoContainer.add(footer);
 	}
 	
