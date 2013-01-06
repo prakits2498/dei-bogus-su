@@ -31,6 +31,11 @@ public class ImagePageBuilder extends PageBuilder {
 	private HTML footer;
 	
 	private ArrayList<HTML> photos;
+	private ArrayList<String> photosURL;
+	
+	public ImagePageBuilder(ArrayList<String> photosURL) {
+		this.photosURL = photosURL;
+	}
 	
 	@Override
 	public void buildStructure() {
