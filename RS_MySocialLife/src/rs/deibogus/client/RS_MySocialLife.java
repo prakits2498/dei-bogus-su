@@ -1,13 +1,10 @@
 package rs.deibogus.client;
 
-import java.util.ArrayList;
-
 import rs.deibogus.client.interfacebuilder.ImagePageBuilder;
 import rs.deibogus.client.interfacebuilder.Interface;
 import rs.deibogus.client.interfacebuilder.LoginPageBuilder;
 import rs.deibogus.client.interfacebuilder.PageBuilder;
 import rs.deibogus.client.interfacebuilder.SocialNetworkLoginPageBuilder;
-import rs.deibogus.shared.Foto;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -16,13 +13,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -324,78 +317,4 @@ public class RS_MySocialLife implements EntryPoint {
 
 	}
 
-	public void photosPage() {
-		/*RootPanel.get().setStyleName("body");
-		Grid grid = new Grid(5, 5);
-		grid.setStyleName("body");
-		Image img = new Image("http://us.123rf.com/400wm/400/400/tr3gi/tr3gi1107/tr3gi110700001/10017592-rainbow-flower-multi-colored-petals-of-daisy-flower-isolated-on-white-background-range-of-happy-mult.jpg");
-		//img.setStyleName("polaroid1");
-		//grid.setWidget(0, 0, img);
-
-		Image img2 = new Image("http://digital-photography-school.com/wp-content/uploads/2007/11/flower.jpg");
-		img2.setTitle("flower");
-		//img2.setStyleName("polaroid2");
-		//grid.setWidget(0, 1, img2);
-
-
-		//rootPanel.add(grid);
-
-		HorizontalPanel panel = new HorizontalPanel();
-		panel.setStyleName("polaroid1");
-		panel.add(img);
-		RootPanel.get().add(panel);
-
-		HorizontalPanel panel2 = new HorizontalPanel();
-		panel2.setStyleName("polaroid2");
-		panel2.add(img2);
-		RootPanel.get().add(panel2);*/
-
-		FlowPanel navBar = new FlowPanel();
-		navBar.getElement().setId("navBar");
-		navBar.setStyleName("navbar navbar-fixed-top");
-
-		FlowPanel navBarInner = new FlowPanel();
-		navBarInner.getElement().setId("navBarInner");
-		navBarInner.setStyleName("navbar-inner");
-
-		FlowPanel navBarContainer = new FlowPanel();
-		navBarContainer.getElement().setId("navBarContainer");
-		navBarContainer.setStyleName("container");
-
-		Anchor logo = new Anchor();
-		logo.setStyleName("brand");
-		logo.setText("MySocialLife");
-		navBarContainer.add(logo);
-
-		navBar.add(navBarInner);
-		navBarInner.add(navBarContainer);
-		RootPanel.get().add(navBar);
-
-
-		FlowPanel photoContainer = new FlowPanel();
-		photoContainer.getElement().setId("photoContainer");
-		photoContainer.setStyleName("container");
-
-		HTML horizontalLine = new HTML("<hr>");
-		photoContainer.add(horizontalLine);
-
-		FlowPanel row = new FlowPanel();
-		row.getElement().setId("row");
-		row.setStyleName("row");
-		photoContainer.add(row);
-
-		HorizontalPanel photoPanel = new HorizontalPanel();
-		photoPanel.getElement().setId("photo");
-		photoPanel.setStyleName("span4");
-		row.add(photoPanel);
-
-		HTML photo = new HTML("<h3>Deep Sky<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature_1.jpg\">Srawat56</a><small><h3>" 
-				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb1.jpg\"><img src=\"img/thumb1.jpg\" alt=\"Thumbnail\"></a>");
-
-		HTML photo2 = new HTML("<h3>Cenas<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature%27s_Valley_(S._Africa)_2.jpg\">Cenass</a><small><h3>" 
-				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb2.jpg\"><img src=\"img/thumb2.jpg\" alt=\"Thumbnail\"></a>");
-
-		photoPanel.setSpacing(100);
-
-	}
 }
