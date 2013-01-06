@@ -1,5 +1,7 @@
 package rs.deibogus.client;
 
+import java.util.ArrayList;
+
 import rs.deibogus.client.interfacebuilder.ImagePageBuilder;
 import rs.deibogus.client.interfacebuilder.Interface;
 import rs.deibogus.client.interfacebuilder.LoginPageBuilder;
@@ -199,7 +201,9 @@ public class RS_MySocialLife implements EntryPoint {
 		page.setPageBuilder(socialNetworkPage);
 		page.construct();
 		
-		PageBuilder imagesPage = new ImagePageBuilder();
+		ArrayList<String> photosURL = new ArrayList<String>();
+		
+		PageBuilder imagesPage = new ImagePageBuilder(photosURL);
 		page.setPageBuilder(imagesPage);
 		page.construct();
 
