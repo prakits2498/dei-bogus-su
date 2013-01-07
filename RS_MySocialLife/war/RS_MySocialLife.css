@@ -311,6 +311,15 @@ FOOTER
 }
 
 /**********************************************************************************/
+.gwt-PopupPanelGlass {
+  opacity:0.3;
+  filter:alpha(opacity=30);
+  background-color: grey;
+  -webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
 
 .gallery {
 	float: right;
