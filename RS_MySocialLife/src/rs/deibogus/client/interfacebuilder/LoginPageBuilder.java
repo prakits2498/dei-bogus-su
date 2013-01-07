@@ -56,6 +56,7 @@ public class LoginPageBuilder extends PageBuilder {
 	
 	@Override
 	public void destructStructure() {
+		wrapper.removeFromParent();
 		form.removeFromParent();
 		loginHeader.removeFromParent();
 		loginContent.removeFromParent();
