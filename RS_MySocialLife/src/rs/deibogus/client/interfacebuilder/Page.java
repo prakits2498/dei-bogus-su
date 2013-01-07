@@ -1,5 +1,8 @@
 package rs.deibogus.client.interfacebuilder;
 
+import java.util.ArrayList;
+
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -9,6 +12,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Builder Design Pattern
@@ -139,7 +143,7 @@ public class Page {
 		return sendButton;
 	}
 
-	public Image createImage(String url, int x, int y, String width, String height) {
+	public Image createImage(String url, String width, String height) {
 		Image image = new Image(url);
 		image.setSize(width, height);
 		rootPanel.add(image);
@@ -168,9 +172,31 @@ public class Page {
 	}
 
 	public PopupPanel createHiddenPopupPanel(String label){
-		PopupPanel popup = new PopupPanel();
+		PopupPanel popup = new PopupPanel(true);
 		//rootPanel.add(popup, 500, 500); //depois faz-se popup.center()
 
+		return popup;
+	}
+	
+	public PopupPanel createPopupAndContents(ArrayList<Widget> widgets, String contentPanelID) {
+		final PopupPanel popup = new PopupPanel(true);
+		
+		VerticalPanel PopUpPanelContents = new VerticalPanel();
+		PopUpPanelContents.getElement().setId(contentPanelID);
+		popup.add(PopUpPanelContents);
+		
+		for(Widget w : widgets) {
+			PopUpPanelContents.add(w);
+		}
+
+		popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+			public void setPosition(int offsetWidth, int offsetHeight) {
+				int left = (Window.getClientWidth() - offsetWidth) / 2;
+				int top = (Window.getClientHeight() - offsetHeight) / 2;
+				popup.setPopupPosition(left, top);
+			}
+		});
+		
 		return popup;
 	}
 }

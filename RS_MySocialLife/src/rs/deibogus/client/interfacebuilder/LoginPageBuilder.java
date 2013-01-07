@@ -4,6 +4,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
@@ -30,6 +31,9 @@ public class LoginPageBuilder extends PageBuilder {
 	private FlowPanel loginContent;
 	private FlowPanel loginFooter;
 	private FlowPanel gradient;
+
+	public LoginPageBuilder() {
+	}
 	
 	@Override
 	public void buildStructure() {
@@ -45,12 +49,13 @@ public class LoginPageBuilder extends PageBuilder {
 		form.add(loginHeader);
 		form.add(loginContent);
 		form.add(loginFooter);
+		
 		RootPanel.get().add(wrapper);
+			
 	}
 	
 	@Override
 	public void destructStructure() {
-		wrapper.removeFromParent();
 		form.removeFromParent();
 		loginHeader.removeFromParent();
 		loginContent.removeFromParent();
