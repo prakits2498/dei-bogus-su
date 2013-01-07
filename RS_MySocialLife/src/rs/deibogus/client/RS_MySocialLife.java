@@ -318,6 +318,7 @@ public class RS_MySocialLife implements EntryPoint {
 		//		sendButtonPicasa.addClickHandler(handlerPicasa);
 		//		usernamePicasa.addKeyUpHandler(handlerPicasa);
 		//		passwordPicasa.addKeyUpHandler(handlerPicasa);
+		
 
 	}
 
