@@ -31,8 +31,8 @@ public class SocialManager implements ISocialManager {
 	}
 
 	@Override
-	public void removePhoto(String id) {
-		this.implementor.removePhoto(id);
+	public void removePhoto(Foto foto) {
+		this.implementor.removePhoto(foto);
 	}
 
 	@Override
@@ -43,6 +43,12 @@ public class SocialManager implements ISocialManager {
 	@Override
 	public ArrayList<Foto> getAllPhotos(SessionData session){
 		return this.implementor.getAllPhotos(session);
+	}
+
+	@Override
+	public void uploadPhoto(Foto foto) {
+		// TODO Auto-generated method stub
+		this.implementor.uploadPhoto(foto);
 	}
 	
 	

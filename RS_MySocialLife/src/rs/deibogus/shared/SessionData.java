@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.aetrion.flickr.auth.Auth;
 import com.google.gdata.client.photos.PicasawebService;
 
+
 public class SessionData {
 	private String flickrFrob; //o objecto f não o tem, e em vez de tar a criar outra session attribute, é mais limpo estar aqui
 	private Auth flickrAuth;	//ibidem

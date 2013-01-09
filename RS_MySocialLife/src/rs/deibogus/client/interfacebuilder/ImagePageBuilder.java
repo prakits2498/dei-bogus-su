@@ -2,6 +2,7 @@ package rs.deibogus.client.interfacebuilder;
 
 import java.util.ArrayList;
 
+import rs.deibogus.client.ClientData;
 import rs.deibogus.client.GreetingService;
 import rs.deibogus.client.GreetingServiceAsync;
 import rs.deibogus.shared.Foto;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.dom.client.Element;
 
 
 /**
@@ -26,33 +28,36 @@ import com.google.gwt.user.client.ui.RootPanel;
  *
  */
 public class ImagePageBuilder extends PageBuilder {
-	
+
 	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
+	
+	private Interface builder;
 
 	private static final String SERVER_ERROR = "An error occurred while "
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
 
 	private FlowPanel navBar;
+
 	private FlowPanel navBarInner;
 	private FlowPanel navBarContainer;
-	
+
 	private FlowPanel photoContainer;
 	private HTML horizontalLine;
-	
+
 	private FlowPanel row;
 	private ArrayList<HorizontalPanel> photoPanels;
-	
+
 	private Anchor logo;
 	private HTML footer;
-	
+
 	private ArrayList<HTML> photos;
-	private ArrayList<String> photosURL;
-	
-	public ImagePageBuilder(ArrayList<String> photosURL) {
-		this.photosURL = photosURL;
+	//private ArrayList<Foto> photoCatalog;
+
+	public ImagePageBuilder() {
+		//this.photoCatalog = photos;
 	}
-	
+
 	@Override
 	public void buildStructure() {
 		//HEADER STRUCTURE
@@ -88,16 +93,16 @@ public class ImagePageBuilder extends PageBuilder {
 		navBar.removeFromParent();
 		navBarInner.removeFromParent();
 		navBarContainer.removeFromParent();
-		
+
 		photoContainer.removeFromParent();
 		horizontalLine.removeFromParent();
-		
+
 		row.removeFromParent();
-		
+
 		for(HorizontalPanel panel : photoPanels) {
 			panel.removeFromParent();
 		}
-		
+
 	}
 
 	@Override
@@ -107,7 +112,7 @@ public class ImagePageBuilder extends PageBuilder {
 		logo.setText("My Social Life");
 		navBarContainer.add(logo);
 	}
-	
+
 	@Override
 	public void destructHeader() {
 		logo.removeFromParent();
@@ -121,7 +126,7 @@ public class ImagePageBuilder extends PageBuilder {
 		photo2 = new HTML("<h3>Cenas<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature%27s_Valley_(S._Africa)_2.jpg\">Cenass</a><small><h3>" 
 				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb2.jpg\"><img src=\"img/thumb2.jpg\" width=\"80%\" height=\"80%\" alt=\"Thumbnail\"></a>");
 		 */
-		ArrayList<String> tempPhotos = new ArrayList<String>();
+		/*ArrayList<String> tempPhotos = new ArrayList<String>();
 		tempPhotos.add("img/thumb1.jpg");
 		tempPhotos.add("img/thumb2.jpg");
 		tempPhotos.add("img/thumb3.png");
@@ -133,12 +138,12 @@ public class ImagePageBuilder extends PageBuilder {
 		tempPhotos.add("img/thumb1.jpg");
 		tempPhotos.add("img/thumb2.jpg");
 		tempPhotos.add("img/thumb2.jpg");*/
-		
+
 		photos = new ArrayList<HTML>();
 		photoPanels = new ArrayList<HorizontalPanel>();
-		
-		
-		
+
+
+
 		//TODO percorrer a lista de fotos
 		/*HTML ph1 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image1", "Cenas", 80, 80);
 		HTML ph2 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image2", "Africa", 80, 80);
@@ -148,7 +153,7 @@ public class ImagePageBuilder extends PageBuilder {
 		HTML ph6 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image6", "Africa", 80, 80);
 		HTML ph7 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image7", "Cenas", 80, 80);
 		HTML ph8 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image8", "Africa", 80, 80);
-		
+
 		photos.add(ph1);
 		photos.add(ph2);
 		photos.add(ph3);
@@ -157,40 +162,45 @@ public class ImagePageBuilder extends PageBuilder {
 		photos.add(ph6);
 		photos.add(ph7);
 		photos.add(ph8);*/
-		
+		ArrayList<Foto> catalogo = ClientData.getInstance().getFotos();
 		HorizontalPanel photoPanel = null;
+
 		row = createRow();
-		for(int i=0; i<tempPhotos.size(); i++) {
-			HTML ph = page.createPhotoWithLightbox(tempPhotos.get(i), "Image"+(i+1), "This is the image"+(i+1), "Cenas"+(i+1), 80, 80);
+		for(int i=0; i<catalogo.size(); i++) {
+			HTML ph = page.createPhotoWithLightbox(catalogo.get(i).getUrl(), catalogo.get(i).getTitle(),catalogo.get(i).getTitle(), catalogo.get(i).getTitle(), 80, 80);
 			photos.add(ph);
-			
+
 			if(i%3 == 0) {
 				photoPanel = createPhotoPanel();
 				row.add(photoPanel);
 				photoPanels.add(photoPanel);
 			}
-			
+
+			Button temp = new Button();
+			temp.setText("Teste");
+			temp.addClickHandler(new DeleteHandler(catalogo.get(i)));
 			photoPanel.add(photos.get(i));
+			photoPanel.add(temp);
 		}
 
 	}
-	
+
 	private FlowPanel createRow() {
 		FlowPanel row = new FlowPanel();
 		row.getElement().setId("row");
 		row.setStyleName("row");
 		photoContainer.add(row);
-		
+
 		return row;
 	}
-	
+
 	private HorizontalPanel createPhotoPanel() {
 		HorizontalPanel photoPanel = new HorizontalPanel();
 		photoPanel.getElement().setId("cover");
 		photoPanel.setStyleName("span4");
 		return photoPanel;
 	}
-	
+
 	@Override
 	void destructMain() {
 		for(HTML photo : photos) {
@@ -203,11 +213,45 @@ public class ImagePageBuilder extends PageBuilder {
 		footer = new HTML("<hr><footer class=\"row\"><p>&copy;2013 DeiBogusTeam<br></p></footer>");
 		photoContainer.add(footer);
 	}
-	
+
 	@Override
 	void destructFooter() {
 		footer.removeFromParent();
 	}
-	
+
+	class DeleteHandler implements ClickHandler {
+		Foto photo;
+
+		public DeleteHandler(Foto foto) {
+			// TODO Auto-generated constructor stub
+			this.photo = foto;
+		}
+
+		public void onClick(ClickEvent event) {
+			System.out.println(this.photo.getTitle());
+			delete();
+		}
+
+		private void delete() {
+
+			greetingService.deletePhoto(this.photo, new AsyncCallback<String>() {
+				public void onFailure(Throwable caught) {
+					// Show the RPC error message to the user
+					System.out.println(SERVER_ERROR);
+				}
+
+				public void onSuccess(String result) {
+					System.out.println("Delete: " + result);
+					if(result.equals("true")){
+						ClientData.getInstance().getFotos().remove(photo);
+						destructMain();
+						buildMain();
+					}
+					//Window.open(result,"_blank","");
+				}
+			});
+		}
+		
+	}
 
 }

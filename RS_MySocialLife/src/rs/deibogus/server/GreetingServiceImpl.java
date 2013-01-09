@@ -91,7 +91,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		return aux[0];
 	}
 
-	public ArrayList<Foto> getPhotos() throws IllegalArgumentException {
+	public ArrayList<Foto> getPhotos(String rede) throws IllegalArgumentException {
 		ISocialManager socialManager = null;
 		ArrayList<Foto> result = new ArrayList<Foto>();
 
@@ -99,7 +99,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		session = request.getSession();
 		profile = (SessionData)session.getAttribute("session");
 
-		if(profile.isFlickr()) {
+		if(rede.equals("flickr")) {
 			try {
 				socialManager = new SocialManager(new FlickrManager(profile.getFlickrAuth()));
 				ArrayList<Foto> temp = socialManager.getAllPhotos(profile);
@@ -110,34 +110,57 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			}
 
 		}
-		else if(profile.isPicasa()){
+		else if(rede.equals("picasa")){
 			socialManager = new SocialManager(new PicasaManager(profile.getService()));
 			ArrayList<Foto> temp = socialManager.getAllPhotos(profile);
 			result.addAll(temp);
 		}
 
 
-		if(profile.getCatalogo().size() == 0){
-			for(Foto photo : result){
-				profile.getCatalogo().add(photo);
+		for(Foto photo : result){
+			System.out.println(photo.getAlbumId() + " ------------ " + photo.getId());
+			profile.getCatalogo().add(photo);
+		}
+
+		return result;
+		//throw new IllegalArgumentException("Photos Error");
+	}
+	
+	public String deletePhoto(Foto foto) throws IllegalArgumentException {
+		ISocialManager socialManager = null;
+		request = this.getThreadLocalRequest();
+		session = request.getSession();
+		profile = (SessionData)session.getAttribute("session");
+		ArrayList<Foto> temp = new ArrayList(profile.getCatalogo());
+		
+		if(foto.getNetwork().equals("flickr")){
+			try {
+				socialManager = new SocialManager(new FlickrManager(profile.getFlickrAuth()));
+				socialManager.removePhoto(foto);
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "false";
 			}
 		}
-		/*else{
-			ArrayList<Foto> temp = new ArrayList<Foto>(profile.getCatalogo());
-			for(Foto photo : result){
-				for(Foto photoCat : temp){
-					System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-					if(!(photoCat.getId().equals(photo.getId()))){
-						profile.getCatalogo().add(photo);
-					}
-				}
+		else if(foto.getNetwork().equals("picasa")){
+			try {
+				socialManager = new SocialManager(new PicasaManager(profile.getService()));
+				socialManager.removePhoto(foto);
+			} catch (Exception e) {
+				return "false";
 			}
-		}*/
-		//TODO COMPLETAR ISTO!!
-
-
-		return profile.getCatalogo();
-		//throw new IllegalArgumentException("Photos Error");
+			
+		}
+		
+		for(Foto foto2 : temp){
+			if(foto2.getId().equals(foto.getId())){
+				profile.getCatalogo().remove(foto2);
+			}
+		}
+		
+		return "true";
+		
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package rs.deibogus.server.socialmanager;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,8 +15,11 @@ import rs.deibogus.shared.SessionData;
 
 import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.data.Link;
+import com.google.gdata.data.PlainTextConstruct;
+import com.google.gdata.data.media.MediaFileSource;
 import com.google.gdata.data.photos.AlbumEntry;
 import com.google.gdata.data.photos.AlbumFeed;
+import com.google.gdata.data.photos.PhotoFeed;
 import com.google.gdata.data.photos.GphotoEntry;
 import com.google.gdata.data.photos.GphotoFeed;
 import com.google.gdata.data.photos.PhotoEntry;
@@ -58,12 +62,12 @@ public class PicasaManager implements ISocialManagerImplementor {
 				String temp[] = myAlbum.getId().split("/");
 				System.out.println(temp[0] + temp[1] + temp[2] + temp[7]);
 				URL photosFeedUrl = new URL(API_PREFIX + session.getPicasaUsername() + "/albumid/" + temp[8]);
-				
+
 
 				AlbumFeed feed = service.getFeed(photosFeedUrl, AlbumFeed.class);
 
 				for(PhotoEntry p : feed.getPhotoEntries()) {
-					Foto photo = new Foto("Picasa",p.getId(), p.getMediaContents().get(0).getUrl(), p.getMediaThumbnails().get(0).getUrl(), p.getAlbumId(), p.getTitle().getPlainText(), p.getWidth(), p.getHeight());
+					Foto photo = new Foto("picasa",p.getId(), p.getMediaContents().get(0).getUrl(), p.getMediaThumbnails().get(0).getUrl(), p.getAlbumId(), p.getTitle().getPlainText(), p.getWidth(), p.getHeight());
 					System.out.println(photo.getTitle());
 					photos.add(photo);
 				}
@@ -80,7 +84,7 @@ public class PicasaManager implements ISocialManagerImplementor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return photos;
 
 		//		String feedHref = getLinkByRel(album.getLinks(), Link.Rel.FEED);
@@ -128,8 +132,49 @@ public class PicasaManager implements ISocialManagerImplementor {
 	}
 
 	@Override
-	public void removePhoto(String id) {
+	public void removePhoto(Foto foto) {
 		// TODO Auto-generated method stub
+		URL albumFeedUrl;
+		try {
+			albumFeedUrl = new URL(API_PREFIX + "default?kind=album");
+			UserFeed myUserFeed = service.getFeed(albumFeedUrl, UserFeed.class);
+			System.out.println(myUserFeed.getAlbumEntries().size());
+
+			for (AlbumEntry myAlbum : myUserFeed.getAlbumEntries()) {
+
+				System.out.println(myAlbum.getId());
+				String temp[] = myAlbum.getId().split("/");
+				System.out.println(temp[0] + temp[1] + temp[2] + temp[7]);
+				URL photosFeedUrl = new URL(API_PREFIX + "default/albumid/" + temp[8]);
+
+
+				AlbumFeed feed = service.getFeed(photosFeedUrl, AlbumFeed.class);
+
+				for(PhotoEntry p : feed.getPhotoEntries()) {
+					//					Foto photo = new Foto("Picasa",p.getId(), p.getMediaContents().get(0).getUrl(), p.getMediaThumbnails().get(0).getUrl(), p.getAlbumId(), p.getTitle().getPlainText(), p.getWidth(), p.getHeight());
+					//					System.out.println(photo.getTitle());
+					//					photos.add(photo);
+					String temp2[] = p.getId().split("/");
+					String temp3[] = foto.getId().split("/");
+					if(temp2[10].equals(temp3[10])){
+						System.out.println("DELETING PHOTO " + foto.getTitle());
+						p.delete();
+						break;
+					}
+				}
+
+				System.out.println(myAlbum.getTitle().getPlainText());
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -137,6 +182,34 @@ public class PicasaManager implements ISocialManagerImplementor {
 	public void removeAlbum(String id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void uploadPhoto(Foto foto) {
+		// TODO Auto-generated method stub
+		URL albumPostUrl;
+		try {
+			albumPostUrl = new URL("https://picasaweb.google.com/data/feed/api/user/username/albumid/" + foto.getAlbumId());
+			PhotoEntry myPhoto = new PhotoEntry();
+			myPhoto.setTitle(new PlainTextConstruct(foto.getTitle()));
+			//NAO TEMOS DESCRIPTION... DAMN!
+			myPhoto.setDescription(new PlainTextConstruct(foto.getTitle()));
+			//myPhoto.setClient("myClientName");
+
+			MediaFileSource myMedia = new MediaFileSource(new File("/home/liz/puppies.jpg"), "image/jpeg");
+			myPhoto.setMediaSource(myMedia);
+
+			PhotoEntry returnedPhoto = service.insert(albumPostUrl, myPhoto);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

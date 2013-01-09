@@ -14,7 +14,8 @@ import rs.deibogus.shared.SessionData;
 public interface ISocialManager {
 	public Foto getPhoto(String id);
 	public Album getAlbum(String id);
-	public void removePhoto(String id);
+	public void removePhoto(Foto foto);
 	public void removeAlbum(String id);
 	public ArrayList<Foto> getAllPhotos(SessionData session);
+	public void uploadPhoto(Foto foto);
 }

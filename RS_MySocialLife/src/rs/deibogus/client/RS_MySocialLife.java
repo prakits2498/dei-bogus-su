@@ -56,7 +56,7 @@ public class RS_MySocialLife implements EntryPoint {
 
 		final FlowPanel loginFooter = (FlowPanel) form.getWidget(2);
 		final Button sendButton = (Button) loginFooter.getWidget(0);
-		final Button registerButton = (Button) loginFooter.getWidget(1); //TODO funçao de registar
+		final Button registerButton = (Button) loginFooter.getWidget(1); //TODO funÔøΩao de registar
 
 		//final TextBox username = TextBox.wrap(Document.get().getElementById("usernameTxtBox"));
 		//final PasswordTextBox password = PasswordTextBox.wrap(Document.get().getElementById("passwordTxtBox"));
@@ -121,15 +121,16 @@ public class RS_MySocialLife implements EntryPoint {
 	}
 
 	public void initialPage() {
-		PageBuilder socialNetworkLogins = new SocialNetworkLoginPageBuilder();
+		ArrayList<String> photosURL = new ArrayList<String>(); //TODO meter as fotos neste URL ou nalgum objecto k tenha la a lista de fotos
+
+		PageBuilder imagesPage = new ImagePageBuilder();
+		page.setPageBuilder(imagesPage);
+		page.construct();
+		
+		PageBuilder socialNetworkLogins = new SocialNetworkLoginPageBuilder((ImagePageBuilder)imagesPage);
 		page.setPageBuilder(socialNetworkLogins);
 		page.construct();
 		
-		ArrayList<String> photosURL = new ArrayList<String>(); //TODO meter as fotos neste URL ou nalgum objecto k tenha la a lista de fotos
-		PageBuilder imagesPage = new ImagePageBuilder(photosURL);
-		page.setPageBuilder(imagesPage);
-		page.construct();
-
 	}
 
 }

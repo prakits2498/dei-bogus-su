@@ -13,6 +13,7 @@ public class Foto implements Serializable{
 	private long height;
 	//private long size;
 	private String network;
+	private String path;
 	
 	public Foto(String network, String id, String url, String thumbnailUrl, String albumId, String title, long width, long height) {
 		this.network = network;
@@ -100,4 +101,14 @@ public class Foto implements Serializable{
 	public void setThumbnailUrl(String thumbnailUrl) {
 		this.thumbnailUrl = thumbnailUrl;
 	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
+	
 }

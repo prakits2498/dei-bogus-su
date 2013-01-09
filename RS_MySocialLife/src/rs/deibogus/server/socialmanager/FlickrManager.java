@@ -1,6 +1,9 @@
 package rs.deibogus.server.socialmanager;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,6 +20,9 @@ import com.aetrion.flickr.photos.PhotoList;
 import com.aetrion.flickr.photos.Size;
 import com.aetrion.flickr.photosets.Photoset;
 import com.aetrion.flickr.photosets.Photosets;
+import com.aetrion.flickr.uploader.UploadMetaData;
+import com.aetrion.flickr.uploader.Uploader;
+import com.aetrion.flickr.util.IOUtilities;
 
 import rs.deibogus.shared.Album;
 import rs.deibogus.shared.Foto;
@@ -57,9 +63,20 @@ public class FlickrManager implements ISocialManagerImplementor {
 	}
 
 	@Override
-	public void removePhoto(String id) {
+	public void removePhoto(Foto foto) {
 		// TODO Auto-generated method stub
-		
+		try {
+			f.getPhotosInterface().delete(foto.getId());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FlickrException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -84,7 +101,7 @@ public class FlickrManager implements ISocialManagerImplementor {
 				PhotoList lista = f.getPhotosetsInterface().getPhotos(album.getId(), 10, 0); //metadata das fotos. Para obter foto PhotosInterface.getImage(Photo, int)
 				for(Object b : lista){
 					Photo foto = (Photo) b;
-					result.add(new Foto("Flickr",foto.getId(),foto.getUrl(),foto.getThumbnailUrl(),album.getId(), foto.getTitle(), foto.getOriginalWidth(),foto.getOriginalHeight()));//se nao bater certo, testar get original URL
+					result.add(new Foto("flickr",foto.getId(),foto.getMediumUrl(),foto.getThumbnailUrl(),album.getId(), foto.getTitle(), foto.getOriginalWidth(),foto.getOriginalHeight()));//se nao bater certo, testar get original URL
 					//f.getPhotosInterface().getImage(foto, Size.ORIGINAL);//Há varios tamanhos possivels, ver doc
 				}
 			}
@@ -101,6 +118,32 @@ public class FlickrManager implements ISocialManagerImplementor {
 		
 		return result;
 		
+	}
+
+
+	@Override
+	public void uploadPhoto(Foto foto) {
+//		// TODO Auto-generated method stub
+//		Uploader uploader = f.getUploader();
+//        
+//        File imageFile = new File(testProperties.getImageFile());
+//        InputStream uploadIS = null;
+//        //String photoId = null;
+//        
+//        try {
+//            uploadIS = new FileInputStream(imageFile);
+//           
+//            UploadMetaData metaData = new UploadMetaData();
+//            metaData.setPublicFlag(true);
+//            
+//            foto.setId(uploader.upload(uploadIS, metaData));
+//        } finally {
+//            IOUtilities.close(uploadIS);
+//        }
+//        
+//        //add to album?? EXIGE QUE ID DO ALBUM JÁ VENHA
+//        f.getPhotosetsInterface().addPhoto(foto.getAlbumId(), foto.getId());
+//        
 	}
 
 }

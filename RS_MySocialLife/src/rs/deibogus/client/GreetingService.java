@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface GreetingService extends RemoteService {
 	String greetServer(String input) throws IllegalArgumentException;
 	String confirmLogin(String input, String network) throws IllegalArgumentException;
-	ArrayList<Foto> getPhotos() throws IllegalArgumentException;
+	ArrayList<Foto> getPhotos(String rede) throws IllegalArgumentException;
 	String getURL() throws IllegalArgumentException;
+	String deletePhoto(Foto foto) throws IllegalArgumentException;
 }

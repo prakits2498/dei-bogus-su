@@ -2,6 +2,7 @@ package rs.deibogus.client.interfacebuilder;
 
 import java.util.ArrayList;
 
+import rs.deibogus.client.ClientData;
 import rs.deibogus.client.GreetingService;
 import rs.deibogus.client.GreetingServiceAsync;
 import rs.deibogus.shared.Foto;
@@ -30,7 +31,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class SocialNetworkLoginPageBuilder extends PageBuilder {
 
 	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
-
+	
+	private Interface builder;
+	
 	private static final String SERVER_ERROR = "An error occurred while "
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
@@ -41,6 +44,12 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 	private Button sendButtonPicasa;
 	private Image picasaLogo;
 	private Image flickrLogo;
+	private ClientData client = ClientData.getInstance();
+	
+	public SocialNetworkLoginPageBuilder(ImagePageBuilder imagesPage){
+		builder = new Interface();
+		builder.setPageBuilder(imagesPage);
+	}
 
 	@Override
 	public void buildHeader() {
@@ -51,7 +60,14 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		flickrLogo = page.createImage("http://www.peterboroughlibdems.org.uk/wp-content/uploads/2011/05/Flickr-logo.png", "55px", "55px");
 		flickrLogo.setStyleName("gallery");
 		flickrLogo.getElement().setId("flickrLogo");
+	}
 
+	@Override
+	public void buildMain() {
+		buildPopUp();
+	}
+	
+	public void buildPopUp(){
 		sendButtonFlickr = page.createHiddenButton("Flickr Frob Request");
 		sendButtonFlickr.getElement().setId("sendButtonFlickrLogin");
 
@@ -66,11 +82,76 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		//sendButtonPicasa = page.createHiddenButton("Picasa Login");
 		sendButtonPicasa = page.createButton("Login", false, "", "");
 		sendButtonPicasa.getElement().setId("sendButtonPicasaLogin");
+//<<<<<<< .mine
+//		
+//		popup = page.createHiddenPopupPanel("popup");
+//		popup.getElement().setId("popup");
+//	    popup.center();
+//	    popup.setStyleName("demo-PopUpPanel");
+//	    popup.setTitle("PopUpPanel");
+//	    popup.getElement().getStyle().setZIndex(-50);
+//	    
+//	    PopUpPanelContents = page.createHiddenVerticalPanel("popupContent");
+//	    PopUpPanelContents.getElement().setId("popupContents");
+//	    
+//	    popup.setWidget(PopUpPanelContents);
+//	    
+//	    PopUpPanelContents.add(sendButtonFlickr);
+//	    PopUpPanelContents.add(usernamePicasa);
+//	    PopUpPanelContents.add(passwordPicasa);
+//	    PopUpPanelContents.add(sendButtonPicasa);
+//	    
+//	    popup.setVisible(false);
+//	    
+//	    handlerMethods();
+//=======
 
 		handlerMethods();
+
 	}
 
+
+	@Override
+	public void buildFooter() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void destructHeader() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	void destructMain() {
+		sendButtonFlickr.removeFromParent();
+		usernamePicasa.removeFromParent();
+		passwordPicasa.removeFromParent();
+		sendButtonPicasa.removeFromParent();
+	}
+
+	@Override
+	void destructFooter() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void buildStructure() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void destructStructure() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	public void handlerMethods() {
+
 		class FlickrHandler implements ClickHandler {
 			public void onClick(ClickEvent event) {
 				sendLoginToServer();
@@ -102,7 +183,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 
 						public void onSuccess(String result) {
 							Window.alert("Login no Flickr bem sucedido!");
-							greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
+							greetingService.getPhotos("flickr",new AsyncCallback<ArrayList<Foto>>() {
 								public void onFailure(Throwable caught) {
 									// Show the RPC error message to the user
 									System.out.println(SERVER_ERROR);
@@ -110,12 +191,16 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 
 								public void onSuccess(ArrayList<Foto> result) {
 									Window.alert("Recebeu " + Integer.toString(result.size()) + "fotos!");
+									client.getFotos().addAll(result);
+									builder.destruct();
+									builder.construct();
 								}
 							});
 						}
 					});
 				}
 			}
+		
 		}
 
 		class PicasaHandler implements ClickHandler, KeyUpHandler {
@@ -149,7 +234,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 					public void onSuccess(String result) {
 						Window.alert("Login no Picasa bem sucedido!");
 
-						greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
+						greetingService.getPhotos("picasa",new AsyncCallback<ArrayList<Foto>>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
 								System.out.println(SERVER_ERROR);
@@ -157,6 +242,9 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 
 							public void onSuccess(ArrayList<Foto> result) {
 								Window.alert("Recebeu " + Integer.toString(result.size()) + "fotos!");
+								client.getFotos().addAll(result);
+								builder.destruct();
+								builder.construct();
 							}
 						});
 					}
@@ -204,50 +292,5 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 			}
 		});
 	}
-
-	@Override
-	public void buildMain() {
-
-	}
-
-	@Override
-	public void buildFooter() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void destructHeader() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	void destructMain() {
-		sendButtonFlickr.removeFromParent();
-		usernamePicasa.removeFromParent();
-		passwordPicasa.removeFromParent();
-		sendButtonPicasa.removeFromParent();
-	}
-
-	@Override
-	void destructFooter() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void buildStructure() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void destructStructure() {
-		// TODO Auto-generated method stub
-
-	}
-
-
 
 }
