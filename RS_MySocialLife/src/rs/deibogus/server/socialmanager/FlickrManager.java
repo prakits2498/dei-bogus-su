@@ -2,6 +2,7 @@ package rs.deibogus.server.socialmanager;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -122,28 +123,68 @@ public class FlickrManager implements ISocialManagerImplementor {
 
 
 	@Override
-	public void uploadPhoto(Foto foto) {
-//		// TODO Auto-generated method stub
-//		Uploader uploader = f.getUploader();
-//        
-//        File imageFile = new File(testProperties.getImageFile());
-//        InputStream uploadIS = null;
-//        //String photoId = null;
-//        
-//        try {
-//            uploadIS = new FileInputStream(imageFile);
-//           
-//            UploadMetaData metaData = new UploadMetaData();
-//            metaData.setPublicFlag(true);
-//            
-//            foto.setId(uploader.upload(uploadIS, metaData));
-//        } finally {
-//            IOUtilities.close(uploadIS);
-//        }
-//        
-//        //add to album?? EXIGE QUE ID DO ALBUM JÁ VENHA
-//        f.getPhotosetsInterface().addPhoto(foto.getAlbumId(), foto.getId());
-//        
+	public void uploadPhoto(Foto foto, File ficheiro) {
+		// TODO Auto-generated method stub
+		Uploader uploader = f.getUploader();
+        
+        //File imageFile = new File(testProperties.getImageFile());
+        InputStream uploadIS = null;
+        //String photoId = null;
+        
+        try {
+            uploadIS = new FileInputStream(ficheiro);
+           
+            UploadMetaData metaData = new UploadMetaData();
+            metaData.setPublicFlag(true);
+            
+            foto.setId(uploader.upload(uploadIS, metaData));
+            Photo photo = f.getPhotosInterface().getPhoto(foto.getId());
+            foto.setUrl(photo.getUrl());
+            foto.setHeight(photo.getOriginalHeight());
+			foto.setThumbnailUrl(photo.getThumbnailUrl());
+			foto.setWidth(photo.getOriginalWidth());
+        } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FlickrException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            IOUtilities.close(uploadIS);
+        }
+        
+        //add to album?? EXIGE QUE ID DO ALBUM JÁ VENHA
+        Photosets albuns;
+		try {
+			albuns = f.getPhotosetsInterface().getList(auth.getUser().getId());
+			System.out.println("nº albuns = " + albuns.getPhotosets().size());
+			
+			for (Object a : albuns.getPhotosets()){
+				Photoset album = (Photoset) a;
+				if(album.getTitle().equals("SocialLifeOfMine")){
+					foto.setAlbumId(album.getId());
+					f.getPhotosetsInterface().addPhoto(foto.getAlbumId(), foto.getId());
+				}
+			
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FlickrException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //
+        
 	}
 
 }

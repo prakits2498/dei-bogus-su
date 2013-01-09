@@ -1,5 +1,6 @@
 package rs.deibogus.server.socialmanager;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import rs.deibogus.shared.Album;
@@ -46,9 +47,9 @@ public class SocialManager implements ISocialManager {
 	}
 
 	@Override
-	public void uploadPhoto(Foto foto) {
+	public void uploadPhoto(Foto foto, File ficheiro) {
 		// TODO Auto-generated method stub
-		this.implementor.uploadPhoto(foto);
+		this.implementor.uploadPhoto(foto, ficheiro);
 	}
 	
 	

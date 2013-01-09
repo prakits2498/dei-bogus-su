@@ -14,7 +14,7 @@ public class Foto implements Serializable{
 	//private long size;
 	private String network;
 	private String path;
-	
+
 	public Foto(String network, String id, String url, String thumbnailUrl, String albumId, String title, long width, long height) {
 		this.network = network;
 		this.id = id;
@@ -25,7 +25,12 @@ public class Foto implements Serializable{
 		this.height = height;
 		this.thumbnailUrl = thumbnailUrl;
 	}
-	
+
+	public Foto(String network, String title){
+		this.network = network;
+		this.title = title;
+	}
+
 	public Foto(){
 		
 	}
@@ -70,13 +75,13 @@ public class Foto implements Serializable{
 		this.height = height;
 	}
 
-//	public long getSize() {
-//		return size;
-//	}
-//
-//	public void setSize(long size) {
-//		this.size = size;
-//	}
+	//	public long getSize() {
+	//		return size;
+	//	}
+	//
+	//	public void setSize(long size) {
+	//		this.size = size;
+	//	}
 
 	public String getTitle() {
 		return title;
@@ -109,6 +114,6 @@ public class Foto implements Serializable{
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
-	
+
+
 }

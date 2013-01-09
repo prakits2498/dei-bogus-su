@@ -185,21 +185,30 @@ public class PicasaManager implements ISocialManagerImplementor {
 	}
 
 	@Override
-	public void uploadPhoto(Foto foto) {
+	public void uploadPhoto(Foto foto, File ficheiro) {
 		// TODO Auto-generated method stub
 		URL albumPostUrl;
+		foto.setAlbumId("104671037160986968721"); //album id
 		try {
-			albumPostUrl = new URL("https://picasaweb.google.com/data/feed/api/user/username/albumid/" + foto.getAlbumId());
+			albumPostUrl = new URL("https://picasaweb.google.com/data/feed/api/user/default/albumid/" + foto.getAlbumId());
 			PhotoEntry myPhoto = new PhotoEntry();
 			myPhoto.setTitle(new PlainTextConstruct(foto.getTitle()));
 			//NAO TEMOS DESCRIPTION... DAMN!
 			myPhoto.setDescription(new PlainTextConstruct(foto.getTitle()));
 			//myPhoto.setClient("myClientName");
 
-			MediaFileSource myMedia = new MediaFileSource(new File("/home/liz/puppies.jpg"), "image/jpeg");
+			MediaFileSource myMedia = new MediaFileSource(ficheiro, "image/jpeg");
 			myPhoto.setMediaSource(myMedia);
 
 			PhotoEntry returnedPhoto = service.insert(albumPostUrl, myPhoto);
+			
+			String temp[] = returnedPhoto.getId().split("/");
+			foto.setId(temp[10]);
+			foto.setUrl(returnedPhoto.getMediaContents().get(0).getUrl());
+			foto.setHeight(returnedPhoto.getHeight());
+			foto.setThumbnailUrl(returnedPhoto.getMediaThumbnails().get(0).getUrl());
+			foto.setWidth(returnedPhoto.getWidth());
+			
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

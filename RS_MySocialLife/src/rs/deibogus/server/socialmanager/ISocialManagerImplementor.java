@@ -1,5 +1,6 @@
 package rs.deibogus.server.socialmanager;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import rs.deibogus.shared.Album;
@@ -17,5 +18,5 @@ public interface ISocialManagerImplementor {
 	public void removePhoto(Foto foto);
 	public void removeAlbum(String id);
 	public ArrayList<Foto> getAllPhotos(SessionData session);
-	public void uploadPhoto(Foto foto);
+	public void uploadPhoto(Foto foto, File ficheiro);
 }
