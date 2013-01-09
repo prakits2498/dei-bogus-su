@@ -152,8 +152,8 @@ public class Page {
 	}
 	
 	public HTML createPhotoWithLightbox(String url, String altText, String description, String title, int widthPercentage, int heightPercentage) {
-		HTML photo = new HTML("<h3>"+title+"<h3>" 
-				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\""+description+"\" href=\""+url+"\"><img src=\""+url+"\" width=\""+widthPercentage+"%\" height=\""+heightPercentage+"%\" alt=\""+altText+"\"></a>");
+		HTML photo = new HTML("<a rel=\"lightbox[portfolio] tooltip\" title=\""+description+"\" href=\""+url+"\"><img src=\""+url+"\" width=\""+widthPercentage+"%\" height=\""+heightPercentage+"%\" alt=\""+altText+"\"></a>"
+				+ "<h3>"+title+"<h3>" );
 		return photo;
 	}
 

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -28,7 +29,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class ImagePageBuilder extends PageBuilder {
 
 	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
-	
+
 	private Interface builder;
 
 	private static final String SERVER_ERROR = "An error occurred while "
@@ -128,26 +129,30 @@ public class ImagePageBuilder extends PageBuilder {
 
 		photos = new ArrayList<HTML>();
 		photoPanels = new ArrayList<HorizontalPanel>();
-		
+
 		ArrayList<Foto> catalogo = ClientData.getInstance().getFotos();
 		HorizontalPanel photoPanel = null;
 
 		row = createRow();
 		for(int i=0; i<catalogo.size(); i++) {
+			deleteButton = new Button();
+			deleteButton.setText("Delete");
+			deleteButton.addClickHandler(new DeleteHandler(catalogo.get(i)));
+			
+			
 			HTML ph = page.createPhotoWithLightbox(catalogo.get(i).getUrl(), catalogo.get(i).getTitle(),catalogo.get(i).getTitle(), catalogo.get(i).getTitle(), 80, 80);
 			photos.add(ph);
 
 			if(i%3 == 0) {
 				photoPanel = createPhotoPanel();
+				photoPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				row.add(photoPanel);
 				photoPanels.add(photoPanel);
 			}
 
-			deleteButton = new Button();
-			deleteButton.setText("Delete");
-			deleteButton.addClickHandler(new DeleteHandler(catalogo.get(i)));
-			photoPanel.add(photos.get(i));
 			photoPanel.add(deleteButton);
+			photoPanel.add(photos.get(i));
+			
 		}
 
 	}
@@ -173,13 +178,13 @@ public class ImagePageBuilder extends PageBuilder {
 		for(HTML photo : photos) {
 			photo.removeFromParent();
 		}
-		
+
 		for(HorizontalPanel panel : photoPanels) {
 			panel.removeFromParent();
 		}
-		
+
 		row.removeFromParent();
-		
+
 		if(deleteButton != null)
 			deleteButton.removeFromParent();
 	}
@@ -228,7 +233,7 @@ public class ImagePageBuilder extends PageBuilder {
 				}
 			});
 		}
-		
+
 	}
 
 }

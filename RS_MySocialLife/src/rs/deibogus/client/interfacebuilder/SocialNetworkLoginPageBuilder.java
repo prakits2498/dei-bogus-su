@@ -82,29 +82,6 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		//sendButtonPicasa = page.createHiddenButton("Picasa Login");
 		sendButtonPicasa = page.createButton("Login", false, "", "");
 		sendButtonPicasa.getElement().setId("sendButtonPicasaLogin");
-//<<<<<<< .mine
-//		
-//		popup = page.createHiddenPopupPanel("popup");
-//		popup.getElement().setId("popup");
-//	    popup.center();
-//	    popup.setStyleName("demo-PopUpPanel");
-//	    popup.setTitle("PopUpPanel");
-//	    popup.getElement().getStyle().setZIndex(-50);
-//	    
-//	    PopUpPanelContents = page.createHiddenVerticalPanel("popupContent");
-//	    PopUpPanelContents.getElement().setId("popupContents");
-//	    
-//	    popup.setWidget(PopUpPanelContents);
-//	    
-//	    PopUpPanelContents.add(sendButtonFlickr);
-//	    PopUpPanelContents.add(usernamePicasa);
-//	    PopUpPanelContents.add(passwordPicasa);
-//	    PopUpPanelContents.add(sendButtonPicasa);
-//	    
-//	    popup.setVisible(false);
-//	    
-//	    handlerMethods();
-//=======
 
 		handlerMethods();
 
@@ -204,14 +181,17 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		}
 
 		class PicasaHandler implements ClickHandler, KeyUpHandler {
+			private boolean enter = false;
+			
 			public void onClick(ClickEvent event) {
 				sendLoginToServer();
 			}
 
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !enter) {
 					sendLoginToServer();
+					enter = true;
 				}
 			}
 
@@ -228,7 +208,10 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 				greetingService.confirmLogin(txtToServer, "picasa", new AsyncCallback<String>() {
 					public void onFailure(Throwable caught) {
 						// Show the RPC error message to the user
-						System.out.println(SERVER_ERROR);
+						//System.out.println(SERVER_ERROR);
+						Window.alert("Erro ao fazer login.");
+						sendButtonPicasa.setEnabled(true);
+						enter = false;
 					}
 
 					public void onSuccess(String result) {
@@ -237,7 +220,8 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 						greetingService.getPhotos("picasa",new AsyncCallback<ArrayList<Foto>>() {
 							public void onFailure(Throwable caught) {
 								// Show the RPC error message to the user
-								System.out.println(SERVER_ERROR);
+								//System.out.println(SERVER_ERROR);
+								Window.alert("N‹o tem fotos!");
 							}
 
 							public void onSuccess(ArrayList<Foto> result) {

@@ -124,11 +124,13 @@ public class RS_MySocialLife implements EntryPoint {
 		ArrayList<String> photosURL = new ArrayList<String>(); //TODO meter as fotos neste URL ou nalgum objecto k tenha la a lista de fotos
 
 		PageBuilder imagesPage = new ImagePageBuilder();
-		page.setPageBuilder(imagesPage);
-		page.construct();
+		
 		
 		PageBuilder socialNetworkLogins = new SocialNetworkLoginPageBuilder((ImagePageBuilder)imagesPage);
 		page.setPageBuilder(socialNetworkLogins);
+		page.construct();
+		
+		page.setPageBuilder(imagesPage);
 		page.construct();
 		
 	}
