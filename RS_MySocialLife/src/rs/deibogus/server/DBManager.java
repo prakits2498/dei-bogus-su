@@ -18,7 +18,6 @@ public class DBManager {
 	private DBManager() {
 		if (!checkSQLITEfile()) {
 			createBD();
-			addClient("thethis", "bb");
 		} else {
 			connection();
 		}
@@ -55,7 +54,7 @@ public class DBManager {
 
 	}
 
-	public void addClient(String username, String password) {
+	public boolean addClient(String username, String password) {
 		connection();
 		try {
 			PreparedStatement prep = null;
@@ -72,8 +71,10 @@ public class DBManager {
 
 			destroyConnection();
 		} catch (SQLException ex) {
-
+			return false;
 		}
+		
+		return true;
 	}
 
 	public boolean clientLogin(String username, String password) {

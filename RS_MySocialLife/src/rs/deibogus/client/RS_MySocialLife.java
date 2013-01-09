@@ -1,7 +1,5 @@
 package rs.deibogus.client;
 
-import java.util.ArrayList;
-
 import rs.deibogus.client.interfacebuilder.ImagePageBuilder;
 import rs.deibogus.client.interfacebuilder.Interface;
 import rs.deibogus.client.interfacebuilder.LoginPageBuilder;
@@ -31,11 +29,7 @@ public class RS_MySocialLife implements EntryPoint {
 
 	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 	private final Interface page = new Interface();
-
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
-
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -57,7 +51,7 @@ public class RS_MySocialLife implements EntryPoint {
 
 		final FlowPanel loginFooter = (FlowPanel) form.getWidget(2);
 		final Button sendButton = (Button) loginFooter.getWidget(0);
-		final Button registerButton = (Button) loginFooter.getWidget(1); //TODO funï¿½ao de registar
+		final Button registerButton = (Button) loginFooter.getWidget(1);
 
 		//final TextBox username = TextBox.wrap(Document.get().getElementById("usernameTxtBox"));
 		//final PasswordTextBox password = PasswordTextBox.wrap(Document.get().getElementById("passwordTxtBox"));
@@ -66,6 +60,30 @@ public class RS_MySocialLife implements EntryPoint {
 		//final TextBox username = (TextBox) RootPanel.get("loginContent").getWidget(0);
 		//final PasswordTextBox password = (PasswordTextBox) RootPanel.get("loginContent").getWidget(2);
 		//final Button sendButton = (Button) RootPanel.get("loginFooter").getWidget(0);
+		
+		registerButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (!validateInput(username.getText()) || !validateInput(password.getText())) {
+					Window.alert("Introduza um username e password v‡lidos.");
+					return;
+				}
+				
+				String txtToServer = username.getText() + " " + password.getText();
+				registerButton.setEnabled(false);
+				greetingService.registerUser(txtToServer, new AsyncCallback<String>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Erro ao registar.");
+						registerButton.setEnabled(true);
+					}
+
+					public void onSuccess(String result) {
+						Window.alert("Conta registada com sucesso.");
+					}
+				});
+				
+			}
+		});
 
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			private boolean enter = false;
@@ -85,15 +103,12 @@ public class RS_MySocialLife implements EntryPoint {
 			private void sendLoginToServer() {
 				String txtToServer = username.getText() + " " + password.getText();
 				
-				if (!this.validateInput(username.getText()) || !this.validateInput(password.getText())) {
-					//errorLabel.setText("Please enter a valid username or password");
-					//System.out.println(SERVER_ERROR);
+				if (!validateInput(username.getText()) || !validateInput(password.getText())) {
 					Window.alert("Introduza um username e password v‡lidos.");
 					enter = false;
 					return;
 				}
 
-				// Then, we send the input to the server.
 				sendButton.setEnabled(false);
 				greetingService.confirmLogin(txtToServer, "app", new AsyncCallback<String>() {
 					public void onFailure(Throwable caught) {
@@ -111,23 +126,23 @@ public class RS_MySocialLife implements EntryPoint {
 					}
 				});
 			}
-
-			private boolean validateInput(String input) {
-				if (input == null) {
-					return false;
-				}
-
-				if(input.contains(" "))
-					return false;
-
-				return input.length() > 0;
-			}
 		}
 
 		MyHandler handler = new MyHandler();
 		sendButton.addClickHandler(handler);
 		username.addKeyUpHandler(handler);
 		password.addKeyUpHandler(handler);
+	}
+	
+	private boolean validateInput(String input) {
+		if (input == null) {
+			return false;
+		}
+
+		if(input.contains(" "))
+			return false;
+
+		return input.length() > 0;
 	}
 
 	public void initialPage() {

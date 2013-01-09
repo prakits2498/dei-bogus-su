@@ -15,7 +15,13 @@ public class Login implements ILogin {
 		this.implementor = imp;
 	}
 	
+	@Override
 	public boolean confirmLogin(String user, String pass, SessionData sessao) {
-		return implementor.login(user, pass,sessao);
+		return implementor.login(user, pass, sessao);
+	}
+
+	@Override
+	public boolean registerUser(String user, String pass) {
+		return implementor.registerUser(user, pass);
 	}
 }

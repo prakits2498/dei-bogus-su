@@ -19,5 +19,11 @@ public class AppLogin implements ILoginImplementor {
 		return false;
 	}
 
+	@Override
+	public boolean registerUser(String user, String pass) {
+		DBManager db = DBManager.getInstance();
+		return db.addClient(user, pass);
+	}
+
 	
 }

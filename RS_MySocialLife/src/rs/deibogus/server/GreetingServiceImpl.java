@@ -16,8 +16,8 @@ import rs.deibogus.server.socialmanager.FlickrManager;
 import rs.deibogus.server.socialmanager.ISocialManager;
 import rs.deibogus.server.socialmanager.PicasaManager;
 import rs.deibogus.server.socialmanager.SocialManager;
-import rs.deibogus.shared.SessionData;
 import rs.deibogus.shared.Foto;
+import rs.deibogus.shared.SessionData;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -30,10 +30,6 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	HttpSession session;
 	SessionData profile;
 
-	public String greetServer(String input) throws IllegalArgumentException {
-		return confirmLogin(input, "");
-	}
-
 	public String confirmLogin(String input, String network) throws IllegalArgumentException {
 		String[] aux = new String[2];
 		if(!input.equals("")) {
@@ -42,7 +38,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		}
 
 		ILogin login;
-		if(network.equals("app")){
+		if(network.equals("app")) {
 			profile = new SessionData();
 			request = this.getThreadLocalRequest();
 			session = request.getSession();
@@ -59,15 +55,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			//aux[0] = (String)session.getAttribute("frob");
 			//aux[1] = "";
 		}
-		else{
+		else {
 			login = new Login(new PicasaLogin());
 
 			request = this.getThreadLocalRequest();
 			session = request.getSession();
-			profile = (SessionData)session.getAttribute("session");
+			profile = (SessionData) session.getAttribute("session");
 		}
 
-		if(login.confirmLogin(aux[0], aux[1],profile)){
+		if(login.confirmLogin(aux[0], aux[1], profile)) {
 			if(network.equals("flickr"))
 				profile.setFlickr(true);
 			else if(network.equals("picasa"))
@@ -76,6 +72,22 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		}
 
 		throw new IllegalArgumentException("Login Error");
+	}
+	
+	public String registerUser(String input) throws IllegalArgumentException {
+		String[] aux = new String[2];
+		if(!input.equals("")) {
+			input = escapeHtml(input);
+			aux = input.split(" ");
+		}
+
+		ILogin login;
+		login = new Login(new AppLogin());
+		
+		if(login.registerUser(aux[0], aux[1]))
+			return "register success";
+		
+		throw new IllegalArgumentException("Register Error");
 	}
 
 	public String getURL() throws IllegalArgumentException {
@@ -105,7 +117,6 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 				ArrayList<Foto> temp = socialManager.getAllPhotos(profile);
 				result.addAll(temp);
 			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

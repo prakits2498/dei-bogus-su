@@ -234,4 +234,10 @@ public class FlickrLogin implements ILoginImplementor {
         }
     }
 
+	@Override
+	public boolean registerUser(String user, String pass) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

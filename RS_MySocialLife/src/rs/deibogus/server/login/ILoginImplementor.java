@@ -10,4 +10,5 @@ import rs.deibogus.shared.SessionData;
  */
 public interface ILoginImplementor {
 	public boolean login(String user, String pass, SessionData sessao);
+	public boolean registerUser(String user, String pass);
 }

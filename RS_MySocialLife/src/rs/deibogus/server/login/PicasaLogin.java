@@ -48,4 +48,10 @@ public class PicasaLogin implements ILoginImplementor {
 		return this.service;
 	}
 
+	@Override
+	public boolean registerUser(String user, String pass) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
