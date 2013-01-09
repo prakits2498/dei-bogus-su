@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -67,14 +68,17 @@ public class RS_MySocialLife implements EntryPoint {
 		//final Button sendButton = (Button) RootPanel.get("loginFooter").getWidget(0);
 
 		class MyHandler implements ClickHandler, KeyUpHandler {
+			private boolean enter = false;
+			
 			public void onClick(ClickEvent event) {
 				sendLoginToServer();
 			}
 
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && !enter) {
 					sendLoginToServer();
+					enter = true;
 				}
 			}
 
@@ -83,7 +87,9 @@ public class RS_MySocialLife implements EntryPoint {
 				
 				if (!this.validateInput(username.getText()) || !this.validateInput(password.getText())) {
 					//errorLabel.setText("Please enter a valid username or password");
-					System.out.println(SERVER_ERROR);
+					//System.out.println(SERVER_ERROR);
+					Window.alert("Introduza um username e password v‡lidos.");
+					enter = false;
 					return;
 				}
 
@@ -92,7 +98,11 @@ public class RS_MySocialLife implements EntryPoint {
 				greetingService.confirmLogin(txtToServer, "app", new AsyncCallback<String>() {
 					public void onFailure(Throwable caught) {
 						// Show the RPC error message to the user
-						System.out.println(SERVER_ERROR);
+						//System.out.println(SERVER_ERROR);
+						
+						Window.alert("Erro ao fazer login.");
+						sendButton.setEnabled(true);
+						enter = false;
 					}
 
 					public void onSuccess(String result) {
@@ -121,12 +131,10 @@ public class RS_MySocialLife implements EntryPoint {
 	}
 
 	public void initialPage() {
-		ArrayList<String> photosURL = new ArrayList<String>(); //TODO meter as fotos neste URL ou nalgum objecto k tenha la a lista de fotos
-
 		PageBuilder imagesPage = new ImagePageBuilder();
 		
-		
 		PageBuilder socialNetworkLogins = new SocialNetworkLoginPageBuilder((ImagePageBuilder)imagesPage);
+		
 		page.setPageBuilder(socialNetworkLogins);
 		page.construct();
 		
