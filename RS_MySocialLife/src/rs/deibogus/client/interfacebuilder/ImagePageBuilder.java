@@ -151,8 +151,8 @@ public class ImagePageBuilder extends PageBuilder {
 			}
 
 			photoPanel.add(deleteButton);
-			photoPanel.add(photos.get(i));
 			
+			photoPanel.add(photos.get(i));
 		}
 
 	}
