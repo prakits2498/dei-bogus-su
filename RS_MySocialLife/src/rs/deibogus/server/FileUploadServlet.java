@@ -23,14 +23,9 @@ import rs.deibogus.server.socialmanager.SocialManager;
 import rs.deibogus.shared.Foto;
 import rs.deibogus.shared.SessionData;
 
-/**
- * servlet to handle file upload requests
- * 
- * @author hturksoy
- * 
- */
 public class FileUploadServlet extends HttpServlet {
 
+	private static final long serialVersionUID = 4646930280989636350L;
 	private static final String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/images";
 	private static final String DEFAULT_TEMP_DIR = ".";
 
