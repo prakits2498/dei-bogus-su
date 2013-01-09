@@ -10,7 +10,6 @@ import rs.deibogus.shared.Foto;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -18,7 +17,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.dom.client.Element;
 
 
 /**
@@ -53,6 +51,7 @@ public class ImagePageBuilder extends PageBuilder {
 
 	private ArrayList<HTML> photos;
 	//private ArrayList<Foto> photoCatalog;
+	Button deleteButton;
 
 	public ImagePageBuilder() {
 		//this.photoCatalog = photos;
@@ -126,42 +125,10 @@ public class ImagePageBuilder extends PageBuilder {
 		photo2 = new HTML("<h3>Cenas<small> By <a href=\"http://commons.wikimedia.org/wiki/File:Nature%27s_Valley_(S._Africa)_2.jpg\">Cenass</a><small><h3>" 
 				+ "<a rel=\"lightbox[portfolio] tooltip\" title=\"This is a tooltip.\" href=\"img/thumb2.jpg\"><img src=\"img/thumb2.jpg\" width=\"80%\" height=\"80%\" alt=\"Thumbnail\"></a>");
 		 */
-		/*ArrayList<String> tempPhotos = new ArrayList<String>();
-		tempPhotos.add("img/thumb1.jpg");
-		tempPhotos.add("img/thumb2.jpg");
-		tempPhotos.add("img/thumb3.png");
-		/*tempPhotos.add("img/thumb2.jpg");
-		tempPhotos.add("img/thumb1.jpg");
-		tempPhotos.add("img/thumb2.jpg");
-		tempPhotos.add("img/thumb1.jpg");
-		tempPhotos.add("img/thumb2.jpg");
-		tempPhotos.add("img/thumb1.jpg");
-		tempPhotos.add("img/thumb2.jpg");
-		tempPhotos.add("img/thumb2.jpg");*/
 
 		photos = new ArrayList<HTML>();
 		photoPanels = new ArrayList<HorizontalPanel>();
-
-
-
-		//TODO percorrer a lista de fotos
-		/*HTML ph1 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image1", "Cenas", 80, 80);
-		HTML ph2 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image2", "Africa", 80, 80);
-		HTML ph3 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image3", "Cenas", 80, 80);
-		HTML ph4 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image4", "Africa", 80, 80);
-		HTML ph5 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image5", "Cenas", 80, 80);
-		HTML ph6 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image6", "Africa", 80, 80);
-		HTML ph7 = page.createPhotoWithLightbox("img/thumb1.jpg", "Image1", "This is the image7", "Cenas", 80, 80);
-		HTML ph8 = page.createPhotoWithLightbox("img/thumb2.jpg", "Image2", "This is the image8", "Africa", 80, 80);
-
-		photos.add(ph1);
-		photos.add(ph2);
-		photos.add(ph3);
-		photos.add(ph4);
-		photos.add(ph5);
-		photos.add(ph6);
-		photos.add(ph7);
-		photos.add(ph8);*/
+		
 		ArrayList<Foto> catalogo = ClientData.getInstance().getFotos();
 		HorizontalPanel photoPanel = null;
 
@@ -176,11 +143,11 @@ public class ImagePageBuilder extends PageBuilder {
 				photoPanels.add(photoPanel);
 			}
 
-			Button temp = new Button();
-			temp.setText("Teste");
-			temp.addClickHandler(new DeleteHandler(catalogo.get(i)));
+			deleteButton = new Button();
+			deleteButton.setText("Delete");
+			deleteButton.addClickHandler(new DeleteHandler(catalogo.get(i)));
 			photoPanel.add(photos.get(i));
-			photoPanel.add(temp);
+			photoPanel.add(deleteButton);
 		}
 
 	}
@@ -206,6 +173,15 @@ public class ImagePageBuilder extends PageBuilder {
 		for(HTML photo : photos) {
 			photo.removeFromParent();
 		}
+		
+		for(HorizontalPanel panel : photoPanels) {
+			panel.removeFromParent();
+		}
+		
+		row.removeFromParent();
+		
+		if(deleteButton != null)
+			deleteButton.removeFromParent();
 	}
 
 	@Override
@@ -223,7 +199,6 @@ public class ImagePageBuilder extends PageBuilder {
 		Foto photo;
 
 		public DeleteHandler(Foto foto) {
-			// TODO Auto-generated constructor stub
 			this.photo = foto;
 		}
 
@@ -245,7 +220,9 @@ public class ImagePageBuilder extends PageBuilder {
 					if(result.equals("true")){
 						ClientData.getInstance().getFotos().remove(photo);
 						destructMain();
+						destructFooter();
 						buildMain();
+						buildFooter();
 					}
 					//Window.open(result,"_blank","");
 				}
