@@ -25,6 +25,7 @@ import com.google.gdata.data.photos.GphotoFeed;
 import com.google.gdata.data.photos.PhotoEntry;
 import com.google.gdata.data.photos.UserFeed;
 import com.google.gdata.util.ServiceException;
+import com.google.gwt.dev.javac.asm.CollectAnnotationData.MyAnnotationArrayVisitor;
 
 /**
  * Bridge Design Pattern
@@ -187,28 +188,55 @@ public class PicasaManager implements ISocialManagerImplementor {
 	@Override
 	public void uploadPhoto(Foto foto, File ficheiro) {
 		// TODO Auto-generated method stub
-		URL albumPostUrl;
-		foto.setAlbumId("104671037160986968721"); //album id
+
+		URL albumFeedUrl;
 		try {
-			albumPostUrl = new URL("https://picasaweb.google.com/data/feed/api/user/default/albumid/" + foto.getAlbumId());
-			PhotoEntry myPhoto = new PhotoEntry();
-			myPhoto.setTitle(new PlainTextConstruct(foto.getTitle()));
-			//NAO TEMOS DESCRIPTION... DAMN!
-			myPhoto.setDescription(new PlainTextConstruct(foto.getTitle()));
-			//myPhoto.setClient("myClientName");
+			albumFeedUrl = new URL(API_PREFIX + "default?kind=album");
+			UserFeed myUserFeed = service.getFeed(albumFeedUrl, UserFeed.class);
+			System.out.println(myUserFeed.getAlbumEntries().size());
 
-			MediaFileSource myMedia = new MediaFileSource(ficheiro, "image/jpeg");
-			myPhoto.setMediaSource(myMedia);
+			AlbumEntry Album=null;
+			for (AlbumEntry myAlbum : myUserFeed.getAlbumEntries()) {
+				if(myAlbum.getTitle().getPlainText().equals("SocialLifeOfMine")){
+					Album = myAlbum;
+					break;
+				}
+			}
 
-			PhotoEntry returnedPhoto = service.insert(albumPostUrl, myPhoto);
-			
-			String temp[] = returnedPhoto.getId().split("/");
-			foto.setId(temp[10]);
-			foto.setUrl(returnedPhoto.getMediaContents().get(0).getUrl());
-			foto.setHeight(returnedPhoto.getHeight());
-			foto.setThumbnailUrl(returnedPhoto.getMediaThumbnails().get(0).getUrl());
-			foto.setWidth(returnedPhoto.getWidth());
-			
+			URL albumPostUrl;
+			String temp[] = Album.getId().split("/");
+			//foto.setId(temp[10]);
+			foto.setAlbumId(temp[8]); //album id
+			try {
+				albumPostUrl = new URL("https://picasaweb.google.com/data/feed/api/user/default/albumid/" + foto.getAlbumId());
+				PhotoEntry myPhoto = new PhotoEntry();
+				myPhoto.setTitle(new PlainTextConstruct(foto.getTitle()));
+				//NAO TEMOS DESCRIPTION... DAMN!
+				myPhoto.setDescription(new PlainTextConstruct(foto.getTitle()));
+				//myPhoto.setClient("myClientName");
+
+				MediaFileSource myMedia = new MediaFileSource(ficheiro, "image/jpeg");
+				myPhoto.setMediaSource(myMedia);
+
+				PhotoEntry returnedPhoto = service.insert(albumPostUrl, myPhoto);
+
+				temp = returnedPhoto.getId().split("/");
+				foto.setId(temp[10]);
+				foto.setUrl(returnedPhoto.getMediaContents().get(0).getUrl());
+				foto.setHeight(returnedPhoto.getHeight());
+				foto.setThumbnailUrl(returnedPhoto.getMediaThumbnails().get(0).getUrl());
+				foto.setWidth(returnedPhoto.getWidth());
+
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -220,5 +248,4 @@ public class PicasaManager implements ISocialManagerImplementor {
 			e.printStackTrace();
 		}
 	}
-
 }

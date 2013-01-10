@@ -83,16 +83,20 @@ public class FileUploadServlet extends HttpServlet {
 						fileItem.write(uploadedFile);
 						
 						//Flickr
-						Foto foto = new Foto("flickr", fileName);
-						socialManager = new SocialManager(new FlickrManager(profile.getFlickrAuth()));
-						socialManager.uploadPhoto(foto,uploadedFile);
-						profile.getCatalogo().add(foto);
+						if(profile.isFlickr()){
+							Foto foto = new Foto("flickr", fileName);
+							socialManager = new SocialManager(new FlickrManager(profile.getFlickrAuth()));
+							socialManager.uploadPhoto(foto,uploadedFile);
+							profile.getCatalogo().add(foto);
+						}
 						
 						//Picasa
-						Foto foto2 = new Foto("picasa", fileName);
-						socialManager = new SocialManager(new PicasaManager(profile.getService()));
-						socialManager.uploadPhoto(foto,uploadedFile);
-						profile.getCatalogo().add(foto2);
+						if(profile.isPicasa()){
+							Foto foto2 = new Foto("picasa", fileName);
+							socialManager = new SocialManager(new PicasaManager(profile.getService()));
+							socialManager.uploadPhoto(foto2,uploadedFile);
+							profile.getCatalogo().add(foto2);
+						}
 						
 						//apapgar a foto
 						uploadedFile.delete();
