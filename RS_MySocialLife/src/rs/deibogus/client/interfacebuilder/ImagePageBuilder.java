@@ -113,7 +113,7 @@ public class ImagePageBuilder extends PageBuilder {
 				if(Cookies.getCookie("logged") != null) {
 					greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
 						public void onFailure(Throwable caught) {
-							Window.alert("Nao tem fotos.");
+							Window.alert("No photos.");
 						}
 
 						public void onSuccess(ArrayList<Foto> result) {
@@ -234,7 +234,7 @@ public class ImagePageBuilder extends PageBuilder {
 			greetingService.deletePhoto(this.photo, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
 					// Show the RPC error message to the user
-					Window.alert("Erro ao eliminar foto.");
+					Window.alert("Error while eliminating the photo.");
 				}
 
 				public void onSuccess(String result) {

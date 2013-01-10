@@ -102,7 +102,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 				
 				greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
 					public void onFailure(Throwable caught) {
-						Window.alert("Nao tem fotos.");
+						Window.alert("No photos.");
 					}
 
 					public void onSuccess(ArrayList<Foto> result) {
@@ -207,10 +207,10 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 
 						public void onSuccess(String result) {
 							popupFlickr.setVisible(false);
-							Window.alert("Login no Flickr bem sucedido!");
+							Window.alert("Flickr Login was successful!");
 							greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
 								public void onFailure(Throwable caught) {
-									Window.alert("Nao tem fotos.");
+									Window.alert("No photos.");
 								}
 
 								public void onSuccess(ArrayList<Foto> result) {
@@ -247,25 +247,25 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 				String txtToServer = usernamePicasa.getText() + " " + passwordPicasa.getText();
 
 				if (!this.validateInput(usernamePicasa.getText()) || !this.validateInput(passwordPicasa.getText())) {
-					Window.alert("Introduza username e password validos.");
+					Window.alert("Please insert a valid username and/or password.");
 					return;
 				}
 
 				sendButtonPicasa.setEnabled(false);
 				greetingService.confirmLogin(txtToServer, "picasa", new AsyncCallback<String>() {
 					public void onFailure(Throwable caught) {
-						Window.alert("Erro ao fazer login.");
+						Window.alert("Login Error.");
 						sendButtonPicasa.setEnabled(true);
 						enter = false;
 					}
 
 					public void onSuccess(String result) {
 						popupPicasa.setVisible(false);
-						Window.alert("Login no Picasa bem sucedido!");
+						Window.alert("Login on Picas was successful!");
 
 						greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
 							public void onFailure(Throwable caught) {
-								Window.alert("N‹o tem fotos!");
+								Window.alert("No photos!");
 							}
 
 							public void onSuccess(ArrayList<Foto> result) {

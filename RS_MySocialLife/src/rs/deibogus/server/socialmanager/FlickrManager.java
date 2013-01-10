@@ -107,7 +107,7 @@ public class FlickrManager implements ISocialManagerImplementor {
 	@Override
 	public void uploadPhoto(Foto foto, File ficheiro) {
 		Uploader uploader = f.getUploader();
-
+        
 		//File imageFile = new File(testProperties.getImageFile());
 		InputStream uploadIS = null;
 		//String photoId = null;

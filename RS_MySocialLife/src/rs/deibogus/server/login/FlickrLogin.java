@@ -46,7 +46,7 @@ public class FlickrLogin implements ILoginImplementor {
 			f = new Flickr(apiKey,secret,new REST());
 		} catch (ParserConfigurationException e1) {
 			e1.printStackTrace();
-			return "error Generating Flickr Auth URL";
+			return "Error Generating Flickr Auth URL";
 		}
 		
 		//Flickr.debugStream = false;

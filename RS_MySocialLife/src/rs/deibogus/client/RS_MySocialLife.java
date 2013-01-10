@@ -72,7 +72,7 @@ public class RS_MySocialLife implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!validateInput(username.getText()) || !validateInput(password.getText())) {
-					Window.alert("Introduza um username e password v‡lidos.");
+					Window.alert("Please insert a valid username and/or password.");
 					return;
 				}
 				
@@ -80,12 +80,12 @@ public class RS_MySocialLife implements EntryPoint {
 				registerButton.setEnabled(false);
 				greetingService.registerUser(txtToServer, new AsyncCallback<String>() {
 					public void onFailure(Throwable caught) {
-						Window.alert("Erro ao registar.");
+						Window.alert("Error while registering.");
 						registerButton.setEnabled(true);
 					}
 
 					public void onSuccess(String result) {
-						Window.alert("Conta registada com sucesso.");
+						Window.alert("New account succcessfully created.");
 					}
 				});
 				
@@ -111,7 +111,7 @@ public class RS_MySocialLife implements EntryPoint {
 				String txtToServer = username.getText() + " " + password.getText();
 				
 				if (!validateInput(username.getText()) || !validateInput(password.getText())) {
-					Window.alert("Introduza um username e password v‡lidos.");
+					Window.alert("Please insert a valid username and/or password.");
 					enter = false;
 					return;
 				}
