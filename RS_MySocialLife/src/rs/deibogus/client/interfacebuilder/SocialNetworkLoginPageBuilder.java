@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 
 /**
  * Builder Design Pattern
@@ -47,6 +48,10 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 	private Image uploadImage;
 	private ClientData client = ClientData.getInstance();
 	private FormPanel form;
+	
+	public PopupPanel popupPicasa;
+	public PopupPanel popupFlickr;
+	public PopupPanel popupUpload;
 
 	public SocialNetworkLoginPageBuilder(ImagePageBuilder imagesPage){
 		builder = new Interface();
@@ -73,19 +78,6 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		uploadImage.setTitle("Upload Image");
 		uploadImage.getElement().getStyle().setCursor(Cursor.POINTER); 
 	}
-	
-	private void buildPopupUpload() {
-		form = page.createUploadForm(UPLOAD_ACTION_URL);
-		uploadImage.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				ArrayList<Widget> w = new ArrayList<Widget>();
-				w.add(form);
-				final PopupPanel popup = page.createPopupAndContents(w, "popupContentsUpload");
-			}
-		});
-	}
 
 	@Override
 	public void destructHeader() {
@@ -100,6 +92,42 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		buildPopupUpload();
 	}
 	
+	private void buildPopupUpload() {
+		form = page.createUploadForm(UPLOAD_ACTION_URL);
+		
+		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+				popupUpload.setVisible(false);
+				
+				greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Nao tem fotos.");
+					}
+
+					public void onSuccess(ArrayList<Foto> result) {
+						client.setFotos(result);
+						builder.destruct();
+						builder.construct();
+					}
+				});
+				
+				
+				Window.alert(event.getResults());
+			}
+		});
+		
+		
+		uploadImage.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				ArrayList<Widget> w = new ArrayList<Widget>();
+				w.add(form);
+				popupUpload = page.createPopupAndContents(w, "popupContentsUpload");
+			}
+		});
+	}
+	
 	@Override
 	void destructMain() {
 		sendButtonFlickr.removeFromParent();
@@ -110,7 +138,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		form.removeFromParent();
 	}
 
-	private void buildPopUp(){
+	private void buildPopUp() {
 		sendButtonFlickr = page.createHiddenButton("Flickr Frob Request");
 		sendButtonFlickr.getElement().setId("sendButtonFlickrLogin");
 
@@ -160,7 +188,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 					sendButtonFlickr.setText("Confirm Flickr Login");
 					greetingService.getURL(new AsyncCallback<String>() {
 						public void onFailure(Throwable caught) {
-							Window.alert("Erro ao fazer login.");
+							Window.alert("Login error.");
 						}
 
 						public void onSuccess(String result) {
@@ -173,19 +201,21 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 				{
 					greetingService.confirmLogin("", "flickr", new AsyncCallback<String>() {
 						public void onFailure(Throwable caught) {
-							Window.alert("Erro ao fazer login.");
+							Window.alert("Login error.");
 						}
 
 						public void onSuccess(String result) {
+							popupFlickr.setVisible(false);
 							Window.alert("Login no Flickr bem sucedido!");
-							greetingService.getPhotos("flickr", new AsyncCallback<ArrayList<Foto>>() {
+							greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
 								public void onFailure(Throwable caught) {
 									Window.alert("Nao tem fotos.");
 								}
 
 								public void onSuccess(ArrayList<Foto> result) {
-									Window.alert("Recebeu " + Integer.toString(result.size()) + "fotos!");
-									client.getFotos().addAll(result);
+									//Window.alert("Recebeu " + Integer.toString(result.size()) + "fotos!");
+									//client.getFotos().addAll(result);
+									client.setFotos(result);
 									builder.destruct();
 									builder.construct();
 								}
@@ -229,16 +259,18 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 					}
 
 					public void onSuccess(String result) {
+						popupPicasa.setVisible(false);
 						Window.alert("Login no Picasa bem sucedido!");
 
-						greetingService.getPhotos("picasa",new AsyncCallback<ArrayList<Foto>>() {
+						greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
 							public void onFailure(Throwable caught) {
 								Window.alert("N‹o tem fotos!");
 							}
 
 							public void onSuccess(ArrayList<Foto> result) {
-								Window.alert("Recebeu " + Integer.toString(result.size()) + "fotos!");
-								client.getFotos().addAll(result);
+								//Window.alert("Recebeu " + Integer.toString(result.size()) + "fotos!");
+								//client.getFotos().addAll(result);
+								client.setFotos(result);
 								builder.destruct();
 								builder.construct();
 							}
@@ -272,7 +304,7 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 				ArrayList<Widget> w = new ArrayList<Widget>();
 				w.add(sendButtonFlickr);
 
-				final PopupPanel popup = page.createPopupAndContents(w, "popupContentsFlickr");
+				popupFlickr = page.createPopupAndContents(w, "popupContentsFlickr");
 			}
 		});
 
@@ -284,7 +316,8 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 				w.add(passwordPicasa);
 				w.add(sendButtonPicasa);
 
-				final PopupPanel popup = page.createPopupAndContents(w, "popupContentsPicasa");
+				popupPicasa = page.createPopupAndContents(w, "popupContentsPicasa");
+				usernamePicasa.setCursorPos(0);
 			}
 		});
 	}

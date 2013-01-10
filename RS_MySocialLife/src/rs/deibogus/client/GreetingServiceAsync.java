@@ -12,7 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface GreetingServiceAsync {
 	void confirmLogin(String input, String network, AsyncCallback<String> callback) throws IllegalArgumentException;
 	void registerUser(String input, AsyncCallback<String> callback) throws IllegalArgumentException;
-	void getPhotos(String rede, AsyncCallback<ArrayList<Foto>> callback) throws IllegalArgumentException;
+	void getPhotos(AsyncCallback<ArrayList<Foto>> callback) throws IllegalArgumentException;
 	void getURL(AsyncCallback<String> callback) throws IllegalArgumentException;
 	void deletePhoto(Foto foto, AsyncCallback<String> callback) throws IllegalArgumentException;
 }

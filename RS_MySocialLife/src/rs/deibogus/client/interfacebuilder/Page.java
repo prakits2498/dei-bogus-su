@@ -185,6 +185,7 @@ public class Page {
 
 	public PopupPanel createPopupAndContents(ArrayList<Widget> widgets, String contentPanelID) {
 		final PopupPanel popup = new PopupPanel(true);
+		popup.setModal(true);
 
 		VerticalPanel PopUpPanelContents = new VerticalPanel();
 		PopUpPanelContents.getElement().setId(contentPanelID);
@@ -230,16 +231,6 @@ public class Page {
 				form.submit();
 			}
 		}));
-
-		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				// When the form submission is successfully completed, this
-				// event is fired. Assuming the service returned a response of type
-				// text/html, we can get the result text here (see the FormPanel
-				// documentation for further explanation).
-				Window.alert(event.getResults());
-			}
-		});
 
 		return form;
 	}

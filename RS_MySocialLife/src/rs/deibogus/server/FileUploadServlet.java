@@ -34,7 +34,6 @@ public class FileUploadServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		super.doGet(req, resp);
 	}
 
@@ -45,14 +44,11 @@ public class FileUploadServlet extends HttpServlet {
 		ISocialManager socialManager = null;
 		HttpSession session = req.getSession();
 		
-		profile = (SessionData)session.getAttribute("session");
+		profile = (SessionData) session.getAttribute("session");
 		//System.out.println("TESTE NA SERVLET: ----- " + profile.getCatalogo().size());
 		
 		// process only multipart requests
 		if (ServletFileUpload.isMultipartContent(req)) {
-			
-			System.out.println("1o IF");
-
 			File tempDir = getTempDir();
 			if (!tempDir.exists()) {
 				tempDir.mkdirs();
@@ -66,10 +62,8 @@ public class FileUploadServlet extends HttpServlet {
 
 			// Parse the request
 			try {
-				System.out.println("Dentro do try!!!");
 				List<FileItem> items = upload.parseRequest(req);
 				for (FileItem fileItem : items) {
-					System.out.println("Dentro do for!!!");
 					// process only file upload
 					if (fileItem.isFormField()) continue;
 					String fileName = fileItem.getName();
@@ -98,13 +92,12 @@ public class FileUploadServlet extends HttpServlet {
 							profile.getCatalogo().add(foto2);
 						}
 						
-						//apapgar a foto
+						//apagar a foto
 						uploadedFile.delete();
 						
 						resp.setStatus(HttpServletResponse.SC_CREATED);
 						resp.getWriter().print("The file was created successfully.");
 						resp.flushBuffer();
-						System.out.println("Dentro do ultimo if!!!");
 					} else
 						throw new IOException("The file already exists in repository.");
 				}

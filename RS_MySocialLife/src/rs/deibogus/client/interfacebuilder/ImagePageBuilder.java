@@ -8,11 +8,12 @@ import rs.deibogus.client.GreetingServiceAsync;
 import rs.deibogus.shared.Foto;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -52,7 +53,7 @@ public class ImagePageBuilder extends PageBuilder {
 
 	private ArrayList<HTML> photos;
 	//private ArrayList<Foto> photoCatalog;
-	Button deleteButton;
+	private HTML deleteIcon;
 
 	public ImagePageBuilder() {
 		//this.photoCatalog = photos;
@@ -135,23 +136,21 @@ public class ImagePageBuilder extends PageBuilder {
 
 		row = createRow();
 		for(int i=0; i<catalogo.size(); i++) {
-			deleteButton = new Button();
-			deleteButton.setText("Delete");
-			deleteButton.addClickHandler(new DeleteHandler(catalogo.get(i)));
-			
+			deleteIcon = page.createHtmlDiv("deleteIcon", "delete-icon", "");
+			deleteIcon.setTitle("Delete Image");
+			deleteIcon.getElement().getStyle().setCursor(Cursor.POINTER);
+			deleteIcon.addClickHandler(new DeleteHandler(catalogo.get(i)));
 			
 			HTML ph = page.createPhotoWithLightbox(catalogo.get(i).getUrl(), catalogo.get(i).getTitle(),catalogo.get(i).getTitle(), catalogo.get(i).getTitle(), 80, 80);
 			photos.add(ph);
 
 			if(i%3 == 0) {
 				photoPanel = createPhotoPanel();
-				photoPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+				photoPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 				row.add(photoPanel);
 				photoPanels.add(photoPanel);
 			}
-
-			photoPanel.add(deleteButton);
-			
+			photoPanel.add(deleteIcon);
 			photoPanel.add(photos.get(i));
 		}
 
@@ -185,8 +184,8 @@ public class ImagePageBuilder extends PageBuilder {
 
 		row.removeFromParent();
 
-		if(deleteButton != null)
-			deleteButton.removeFromParent();
+		if(deleteIcon != null)
+			deleteIcon.removeFromParent();
 	}
 
 	@Override
@@ -217,7 +216,7 @@ public class ImagePageBuilder extends PageBuilder {
 			greetingService.deletePhoto(this.photo, new AsyncCallback<String>() {
 				public void onFailure(Throwable caught) {
 					// Show the RPC error message to the user
-					System.out.println(SERVER_ERROR);
+					Window.alert("Erro ao eliminar foto.");
 				}
 
 				public void onSuccess(String result) {

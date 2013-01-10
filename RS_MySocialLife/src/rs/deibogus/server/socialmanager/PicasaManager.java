@@ -7,10 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import rs.deibogus.server.login.PicasaLogin;
-import rs.deibogus.shared.Album;
 import rs.deibogus.shared.Foto;
-import rs.deibogus.shared.Photo;
 import rs.deibogus.shared.SessionData;
 
 import com.google.gdata.client.photos.PicasawebService;
@@ -19,13 +16,10 @@ import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.media.MediaFileSource;
 import com.google.gdata.data.photos.AlbumEntry;
 import com.google.gdata.data.photos.AlbumFeed;
-import com.google.gdata.data.photos.PhotoFeed;
-import com.google.gdata.data.photos.GphotoEntry;
 import com.google.gdata.data.photos.GphotoFeed;
 import com.google.gdata.data.photos.PhotoEntry;
 import com.google.gdata.data.photos.UserFeed;
 import com.google.gdata.util.ServiceException;
-import com.google.gwt.dev.javac.asm.CollectAnnotationData.MyAnnotationArrayVisitor;
 
 /**
  * Bridge Design Pattern
@@ -55,13 +49,13 @@ public class PicasaManager implements ISocialManagerImplementor {
 		try {
 			albumFeedUrl = new URL(API_PREFIX + session.getPicasaUsername() + "?kind=album");
 			UserFeed myUserFeed = service.getFeed(albumFeedUrl, UserFeed.class);
-			System.out.println(myUserFeed.getAlbumEntries().size());
+			//System.out.println(myUserFeed.getAlbumEntries().size());
 
 			for (AlbumEntry myAlbum : myUserFeed.getAlbumEntries()) {
 
-				System.out.println(myAlbum.getId());
+				//System.out.println(myAlbum.getId());
 				String temp[] = myAlbum.getId().split("/");
-				System.out.println(temp[0] + temp[1] + temp[2] + temp[7]);
+				//System.out.println(temp[0] + temp[1] + temp[2] + temp[7]);
 				URL photosFeedUrl = new URL(API_PREFIX + session.getPicasaUsername() + "/albumid/" + temp[8]);
 
 
@@ -69,39 +63,21 @@ public class PicasaManager implements ISocialManagerImplementor {
 
 				for(PhotoEntry p : feed.getPhotoEntries()) {
 					Foto photo = new Foto("picasa",p.getId(), p.getMediaContents().get(0).getUrl(), p.getMediaThumbnails().get(0).getUrl(), p.getAlbumId(), p.getTitle().getPlainText(), p.getWidth(), p.getHeight());
-					System.out.println(photo.getTitle());
+					//System.out.println(photo.getTitle());
 					photos.add(photo);
 				}
 
-				System.out.println(myAlbum.getTitle().getPlainText());
+				//System.out.println(myAlbum.getTitle().getPlainText());
 			}
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return photos;
-
-		//		String feedHref = getLinkByRel(album.getLinks(), Link.Rel.FEED);
-		//		AlbumFeed albumFeed = getFeed(feedHref, AlbumFeed.class);
-		//
-		//		List<GphotoEntry> entries = albumFeed.getEntries();
-		//		List<Foto> photos = new ArrayList<Foto>();
-		//		for (GphotoEntry entry : entries) {
-		//			GphotoEntry adapted = entry.getAdaptedEntry();
-		//			if (adapted instanceof PhotoEntry) {
-		//				PhotoEntry p = (PhotoEntry) adapted;
-		//				Foto photo = new Foto(p.getId(), p.getMediaContents().get(0).getUrl(), p.getAlbumId(), p.getTitle().getPlainText(), p.getWidth(), p.getHeight(), p.getSize());
-		//				photos.add(photo);
-		//			}
-		//		}
-		//		return photos;
 	}
 
 	/**
@@ -127,14 +103,7 @@ public class PicasaManager implements ISocialManagerImplementor {
 	}
 
 	@Override
-	public Album getAlbum(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void removePhoto(Foto foto) {
-		// TODO Auto-generated method stub
 		URL albumFeedUrl;
 		try {
 			albumFeedUrl = new URL(API_PREFIX + "default?kind=album");
@@ -147,7 +116,6 @@ public class PicasaManager implements ISocialManagerImplementor {
 				String temp[] = myAlbum.getId().split("/");
 				System.out.println(temp[0] + temp[1] + temp[2] + temp[7]);
 				URL photosFeedUrl = new URL(API_PREFIX + "default/albumid/" + temp[8]);
-
 
 				AlbumFeed feed = service.getFeed(photosFeedUrl, AlbumFeed.class);
 
@@ -167,28 +135,17 @@ public class PicasaManager implements ISocialManagerImplementor {
 				System.out.println(myAlbum.getTitle().getPlainText());
 			}
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	@Override
-	public void removeAlbum(String id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void uploadPhoto(Foto foto, File ficheiro) {
-		// TODO Auto-generated method stub
-
 		URL albumFeedUrl;
 		try {
 			albumFeedUrl = new URL(API_PREFIX + "default?kind=album");
@@ -228,23 +185,17 @@ public class PicasaManager implements ISocialManagerImplementor {
 				foto.setWidth(returnedPhoto.getWidth());
 
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ServiceException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -115,7 +115,7 @@ public class RS_MySocialLife implements EntryPoint {
 						// Show the RPC error message to the user
 						//System.out.println(SERVER_ERROR);
 						
-						Window.alert("Erro ao fazer login.");
+						Window.alert("Login error.");
 						sendButton.setEnabled(true);
 						enter = false;
 					}

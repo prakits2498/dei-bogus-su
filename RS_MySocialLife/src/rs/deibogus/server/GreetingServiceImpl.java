@@ -103,15 +103,15 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		return aux[0];
 	}
 
-	public ArrayList<Foto> getPhotos(String rede) throws IllegalArgumentException {
+	public ArrayList<Foto> getPhotos() throws IllegalArgumentException {
 		ISocialManager socialManager = null;
 		ArrayList<Foto> result = new ArrayList<Foto>();
 
 		request = this.getThreadLocalRequest();
 		session = request.getSession();
-		profile = (SessionData)session.getAttribute("session");
+		profile = (SessionData) session.getAttribute("session");
 
-		if(rede.equals("flickr")) {
+		if(profile.isFlickr()) {
 			try {
 				socialManager = new SocialManager(new FlickrManager(profile.getFlickrAuth()));
 				ArrayList<Foto> temp = socialManager.getAllPhotos(profile);
@@ -121,17 +121,20 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 			}
 
 		}
-		else if(rede.equals("picasa")){
+		
+		if(profile.isPicasa()){
 			socialManager = new SocialManager(new PicasaManager(profile.getService()));
 			ArrayList<Foto> temp = socialManager.getAllPhotos(profile);
 			result.addAll(temp);
 		}
 
 
-		for(Foto photo : result){
+		/*for(Foto photo : result){
 			System.out.println(photo.getAlbumId() + " ------------ " + photo.getId());
 			profile.getCatalogo().add(photo);
-		}
+		}*/
+		
+		profile.setCatalogo(result);
 
 		return result;
 		//throw new IllegalArgumentException("Photos Error");
@@ -141,15 +144,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		ISocialManager socialManager = null;
 		request = this.getThreadLocalRequest();
 		session = request.getSession();
-		profile = (SessionData)session.getAttribute("session");
-		ArrayList<Foto> temp = new ArrayList(profile.getCatalogo());
+		profile = (SessionData) session.getAttribute("session");
+		ArrayList<Foto> temp = new ArrayList<Foto>(profile.getCatalogo());
 		
 		if(foto.getNetwork().equals("flickr")){
 			try {
 				socialManager = new SocialManager(new FlickrManager(profile.getFlickrAuth()));
 				socialManager.removePhoto(foto);
 			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return "false";
 			}

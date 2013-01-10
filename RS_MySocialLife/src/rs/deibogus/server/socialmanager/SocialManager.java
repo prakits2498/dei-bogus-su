@@ -3,9 +3,7 @@ package rs.deibogus.server.socialmanager;
 import java.io.File;
 import java.util.ArrayList;
 
-import rs.deibogus.shared.Album;
 import rs.deibogus.shared.Foto;
-import rs.deibogus.shared.Photo;
 import rs.deibogus.shared.SessionData;
 
 /**
@@ -25,20 +23,10 @@ public class SocialManager implements ISocialManager {
 	public Foto getPhoto(String id) {
 		return this.implementor.getPhoto(id);
 	}
-
-	@Override
-	public Album getAlbum(String id) {
-		return this.implementor.getAlbum(id);
-	}
-
+	
 	@Override
 	public void removePhoto(Foto foto) {
 		this.implementor.removePhoto(foto);
-	}
-
-	@Override
-	public void removeAlbum(String id) {
-		this.implementor.removeAlbum(id);
 	}
 	
 	@Override
@@ -48,7 +36,6 @@ public class SocialManager implements ISocialManager {
 
 	@Override
 	public void uploadPhoto(Foto foto, File ficheiro) {
-		// TODO Auto-generated method stub
 		this.implementor.uploadPhoto(foto, ficheiro);
 	}
 	

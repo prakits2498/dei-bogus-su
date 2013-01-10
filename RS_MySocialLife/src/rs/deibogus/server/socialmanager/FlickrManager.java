@@ -11,6 +11,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import rs.deibogus.shared.Foto;
+import rs.deibogus.shared.SessionData;
+
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.REST;
@@ -18,16 +21,11 @@ import com.aetrion.flickr.RequestContext;
 import com.aetrion.flickr.auth.Auth;
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotoList;
-import com.aetrion.flickr.photos.Size;
 import com.aetrion.flickr.photosets.Photoset;
 import com.aetrion.flickr.photosets.Photosets;
 import com.aetrion.flickr.uploader.UploadMetaData;
 import com.aetrion.flickr.uploader.Uploader;
 import com.aetrion.flickr.util.IOUtilities;
-
-import rs.deibogus.shared.Album;
-import rs.deibogus.shared.Foto;
-import rs.deibogus.shared.SessionData;
 
 
 /**
@@ -42,15 +40,15 @@ public class FlickrManager implements ISocialManagerImplementor {
 	private static String apiKey = "32eff8810bfb81ddea86b6d50e6e5fe8";
 	private static String secret = "36ae9ccecbf2b1b3";
 	private RequestContext requestContext;
-	
+
 	public FlickrManager(Auth auth) throws ParserConfigurationException {
 		this.auth = auth;
 		f = new Flickr(apiKey,secret,new REST());
 		requestContext = RequestContext.getRequestContext();
 		requestContext.setAuth(auth);
 	}
-	
-	
+
+
 	@Override
 	public Foto getPhoto(String id) {
 		// TODO Auto-generated method stub
@@ -58,45 +56,32 @@ public class FlickrManager implements ISocialManagerImplementor {
 	}
 
 	@Override
-	public Album getAlbum(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void removePhoto(Foto foto) {
-		// TODO Auto-generated method stub
 		try {
 			f.getPhotosInterface().delete(foto.getId());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FlickrException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void removeAlbum(String id) {
-		
-		
-	}
-	
-	@Override
 	public ArrayList<Foto> getAllPhotos(SessionData session){
-		// TODO Auto-generated method stub
 		ArrayList<Foto> result = new ArrayList<Foto>();
 
-		
 		Photosets albuns;
 		try {
+			PhotoList photos = f.getPhotosInterface().getNotInSet(10, 0);
+			for(int i=0; i<photos.size(); i++) {
+				Photo foto = (Photo) photos.get(i);
+				result.add(new Foto("flickr",foto.getId(),foto.getMediumUrl(),foto.getThumbnailUrl(), "-1", foto.getTitle(), foto.getOriginalWidth(),foto.getOriginalHeight()));
+			}
+
 			albuns = f.getPhotosetsInterface().getList(auth.getUser().getId());
-			System.out.println("nº albuns = " + albuns.getPhotosets().size());
-			
+
 			for (Object a : albuns.getPhotosets()){
 				Photoset album = (Photoset) a;
 				PhotoList lista = f.getPhotosetsInterface().getPhotos(album.getId(), 10, 0); //metadata das fotos. Para obter foto PhotosInterface.getImage(Photo, int)
@@ -107,84 +92,73 @@ public class FlickrManager implements ISocialManagerImplementor {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FlickrException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return result;
-		
+
 	}
 
 
 	@Override
 	public void uploadPhoto(Foto foto, File ficheiro) {
-		// TODO Auto-generated method stub
 		Uploader uploader = f.getUploader();
-        
-        //File imageFile = new File(testProperties.getImageFile());
-        InputStream uploadIS = null;
-        //String photoId = null;
-        
-        try {
-            uploadIS = new FileInputStream(ficheiro);
-           
-            UploadMetaData metaData = new UploadMetaData();
-            metaData.setPublicFlag(true);
-            
-            foto.setId(uploader.upload(uploadIS, metaData));
-            Photo photo = f.getPhotosInterface().getPhoto(foto.getId());
-            foto.setUrl(photo.getUrl());
-            foto.setHeight(photo.getOriginalHeight());
+
+		//File imageFile = new File(testProperties.getImageFile());
+		InputStream uploadIS = null;
+		//String photoId = null;
+
+		try {
+			uploadIS = new FileInputStream(ficheiro);
+
+			UploadMetaData metaData = new UploadMetaData();
+			metaData.setTitle(foto.getTitle());
+			metaData.setPublicFlag(true);
+
+			foto.setId(uploader.upload(uploadIS, metaData));
+			Photo photo = f.getPhotosInterface().getPhoto(foto.getId());
+			foto.setUrl(photo.getUrl());
+			foto.setHeight(photo.getOriginalHeight());
 			foto.setThumbnailUrl(photo.getThumbnailUrl());
 			foto.setWidth(photo.getOriginalWidth());
-        } catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FlickrException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-            IOUtilities.close(uploadIS);
-        }
-        
-        //add to album?? EXIGE QUE ID DO ALBUM JÁ VENHA
-        Photosets albuns;
+			IOUtilities.close(uploadIS);
+		}
+
+		//add to album?? EXIGE QUE ID DO ALBUM JÁ VENHA
+		/*Photosets albuns;
 		try {
 			albuns = f.getPhotosetsInterface().getList(auth.getUser().getId());
 			System.out.println("nº albuns = " + albuns.getPhotosets().size());
-			
+
 			for (Object a : albuns.getPhotosets()){
 				Photoset album = (Photoset) a;
 				if(album.getTitle().equals("SocialLifeOfMine")){
 					foto.setAlbumId(album.getId());
 					f.getPhotosetsInterface().addPhoto(foto.getAlbumId(), foto.getId());
 				}
-			
+
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FlickrException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-        //
-        
+		}*/
+
 	}
 
 }
