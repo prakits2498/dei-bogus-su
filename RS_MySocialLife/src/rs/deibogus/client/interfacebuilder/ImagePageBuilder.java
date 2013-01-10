@@ -11,6 +11,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -31,12 +32,6 @@ public class ImagePageBuilder extends PageBuilder {
 
 	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
-	private Interface builder;
-
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
-
 	private FlowPanel navBar;
 
 	private FlowPanel navBarInner;
@@ -52,11 +47,9 @@ public class ImagePageBuilder extends PageBuilder {
 	private HTML footer;
 
 	private ArrayList<HTML> photos;
-	//private ArrayList<Foto> photoCatalog;
 	private HTML deleteIcon;
 
 	public ImagePageBuilder() {
-		//this.photoCatalog = photos;
 	}
 
 	@Override
@@ -111,6 +104,31 @@ public class ImagePageBuilder extends PageBuilder {
 		logo = new Anchor();
 		logo.setStyleName("brand");
 		logo.setText("My Social Life");
+		logo.getElement().getStyle().setCursor(Cursor.POINTER);
+
+		logo.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if(Cookies.getCookie("logged") != null) {
+					greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
+						public void onFailure(Throwable caught) {
+							Window.alert("Nao tem fotos.");
+						}
+
+						public void onSuccess(ArrayList<Foto> result) {
+							ClientData.getInstance().setFotos(result);
+							destructMain();
+							destructFooter();
+							buildMain();
+							buildFooter();
+						}
+					});
+				}
+
+			}
+		});
+
 		navBarContainer.add(logo);
 	}
 
@@ -140,7 +158,7 @@ public class ImagePageBuilder extends PageBuilder {
 			deleteIcon.setTitle("Delete Image");
 			deleteIcon.getElement().getStyle().setCursor(Cursor.POINTER);
 			deleteIcon.addClickHandler(new DeleteHandler(catalogo.get(i)));
-			
+
 			HTML ph = page.createPhotoWithLightbox(catalogo.get(i).getUrl(), catalogo.get(i).getTitle(),catalogo.get(i).getTitle(), catalogo.get(i).getTitle(), 80, 80);
 			photos.add(ph);
 

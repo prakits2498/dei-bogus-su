@@ -1,10 +1,13 @@
 package rs.deibogus.client;
 
+import java.util.ArrayList;
+
 import rs.deibogus.client.interfacebuilder.ImagePageBuilder;
 import rs.deibogus.client.interfacebuilder.Interface;
 import rs.deibogus.client.interfacebuilder.LoginPageBuilder;
 import rs.deibogus.client.interfacebuilder.PageBuilder;
 import rs.deibogus.client.interfacebuilder.SocialNetworkLoginPageBuilder;
+import rs.deibogus.shared.Foto;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -13,6 +16,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -29,12 +33,16 @@ public class RS_MySocialLife implements EntryPoint {
 
 	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 	private final Interface page = new Interface();
-	
+
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 		initialLogin();
+		/*if(Cookies.getCookie("logged") == null)
+			initialLogin();
+		else
+			initialPage();*/
 	}
 
 	public void initialLogin() {
@@ -121,6 +129,7 @@ public class RS_MySocialLife implements EntryPoint {
 					}
 
 					public void onSuccess(String result) {
+						Cookies.setCookie("logged", "true");
 						page.destruct();
 						initialPage();
 					}
@@ -146,6 +155,17 @@ public class RS_MySocialLife implements EntryPoint {
 	}
 
 	public void initialPage() {
+		/*greetingService.getPhotos(new AsyncCallback<ArrayList<Foto>>() {
+			public void onFailure(Throwable caught) {
+				//Window.alert("Nao tem fotos.");
+			}
+
+			public void onSuccess(ArrayList<Foto> result) {
+				ClientData.getInstance().setFotos(result);
+			}
+		});*/
+		
+		
 		PageBuilder imagesPage = new ImagePageBuilder();
 		
 		PageBuilder socialNetworkLogins = new SocialNetworkLoginPageBuilder((ImagePageBuilder)imagesPage);
@@ -155,6 +175,8 @@ public class RS_MySocialLife implements EntryPoint {
 		
 		page.setPageBuilder(imagesPage);
 		page.construct();
+		
+		
 		
 	}
 

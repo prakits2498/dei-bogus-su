@@ -10,7 +10,6 @@ public class ClientData {
 	private ArrayList<Foto> fotos = new ArrayList<Foto>();
 
 	private ClientData() {
-		// Exists only to defeat instantiation.
 	}
 	public static ClientData getInstance() {
 		if(instance == null) {
@@ -24,7 +23,5 @@ public class ClientData {
 	public void setFotos(ArrayList<Foto> fotos) {
 		this.fotos = fotos;
 	}
-	
-	
 
 }

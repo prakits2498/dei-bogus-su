@@ -51,7 +51,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
 			request = this.getThreadLocalRequest();
 			session = request.getSession();
-			profile = (SessionData)session.getAttribute("session");
+			profile = (SessionData) session.getAttribute("session");
 			//aux[0] = (String)session.getAttribute("frob");
 			//aux[1] = "";
 		}
