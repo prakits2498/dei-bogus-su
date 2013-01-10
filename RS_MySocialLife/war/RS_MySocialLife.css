@@ -203,6 +203,20 @@ CONTENT
 	-webkit-border-bottom-left-radius: 5px;
 }
 
+.delete-icon {
+	width: 35px;
+	height: 37px;
+	display: block;
+	left: 0px;
+	padding-right: 2px;
+	z-index: -1;
+	
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+}
+
 .user-icon {
 	top:173px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
 	background: rgba(65,72,72,0.75) url(http://www.demo.amitjakhu.com/login-form/images/user-icon.png) no-repeat center;	
@@ -213,12 +227,16 @@ CONTENT
 	background: rgba(65,72,72,0.75) url(http://www.demo.amitjakhu.com/login-form/images/pass-icon.png) no-repeat center;
 }
 
+.delete-icon {
+	background: rgba(65,72,72,0.5) url(http://cdn1.iconfinder.com/data/icons/bwpx/icons/symbol_multiplication.gif) no-repeat center;
+}
+
 .content input:focus + div{
 	left: -46px;
 }
 
 /* Animation */
-.input, .user-icon, .pass-icon, .button, .register {
+.input, .user-icon, .pass-icon, .button, .register, .delete-icon {
 	transition: all 0.5s ease;
 	-moz-transition: all 0.5s ease;
 	-webkit-transition: all 0.5s ease;
