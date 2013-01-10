@@ -58,17 +58,17 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		picasaLogo = page.createImage("http://2.bp.blogspot.com/-m9CD-tmeo1M/ULNHIBy_KkI/AAAAAAAAAHw/fpdDmzbEMNA/s1600/picasa-logo.png", "60px", "60px");
 		picasaLogo.setStyleName("gallery");
 		picasaLogo.getElement().setId("picasaLogo");
-		picasaLogo.setAltText("Login to Picasa");
+		picasaLogo.setTitle("Login to Picasa");
 
 		flickrLogo = page.createImage("http://www.peterboroughlibdems.org.uk/wp-content/uploads/2011/05/Flickr-logo.png", "55px", "55px");
 		flickrLogo.setStyleName("gallery");
 		flickrLogo.getElement().setId("flickrLogo");
-		flickrLogo.setAltText("Login to Flickr");
+		flickrLogo.setTitle("Login to Flickr");
 		
 		uploadImage = page.createImage("http://cdn1.iconfinder.com/data/icons/simplicio/64x64/file_add.png", "50px", "50px");
 		uploadImage.setStyleName("gallery");
 		uploadImage.getElement().setId("uploadImage");
-		uploadImage.setAltText("Upload Image");
+		uploadImage.setTitle("Upload Image");
 	}
 	
 	private void buildPopupUpload() {
