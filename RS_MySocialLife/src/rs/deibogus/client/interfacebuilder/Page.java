@@ -2,9 +2,14 @@ package rs.deibogus.client.interfacebuilder;
 
 import java.util.ArrayList;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PasswordTextBox;
@@ -25,53 +30,53 @@ public class Page {
 
 	public Page() {
 	}
-	
+
 	public HTML createHtmlText(String text, String htmlTag, String alignment, boolean wordWrap, String panelID) {
 		HTML htmlText = new HTML("<"+htmlTag+" align=\""+alignment+"\"> "+text+" </"+htmlTag+">", wordWrap);
-		
+
 		if(!panelID.equals("")) {
 			if(panelID.equals("root"))
 				RootPanel.get().add(htmlText);
 			else
 				RootPanel.get(panelID).add(htmlText);
 		}
-		
+
 		return htmlText;
 	}
-	
+
 	public HTML createHtmlDiv(String id, String cssStyle, String panelID) {
 		final HTML htmlDiv = new HTML("<div id=\""+id+"\"> </div>", true);
-		
+
 		if(!cssStyle.equals(""))
 			htmlDiv.setStyleName(cssStyle);
-		
+
 		if(!panelID.equals("")) {
 			if(panelID.equals("root"))
 				RootPanel.get().add(htmlDiv);
 			else
 				RootPanel.get(panelID).add(htmlDiv);
 		}
-		
+
 		return htmlDiv;
 	}
-	
+
 	public FlowPanel createFlowPanel(String id, String cssStyle) {
 		FlowPanel panel = new FlowPanel();
 		panel.getElement().setId(id);
-		
+
 		if(!cssStyle.equals(""))
 			panel.setStyleName(cssStyle);
-		
+
 		return panel;
 	}
 
 	public TextBox createTextBox(String placeholder, boolean visible, String cssStyle, String panelID) {
 		final TextBox txt = new TextBox();
 		txt.getElement().setPropertyString("placeholder", placeholder);
-		
+
 		if(!cssStyle.equals(""))
 			txt.setStyleName(cssStyle);
-		
+
 		txt.setVisible(visible);
 
 		if(!panelID.equals("")) {
@@ -95,20 +100,20 @@ public class Page {
 	}
 
 	public PasswordTextBox createPasswordTextBox(String placeholder, boolean visible, String cssStyle, String panelID) {
-		
+
 		final PasswordTextBox password = new PasswordTextBox();
 		password.getElement().setPropertyString("placeholder", placeholder);
-		
+
 		if(!cssStyle.equals(""))
 			password.setStyleName(cssStyle);
-		
+
 		if(!panelID.equals("")) {
 			if(panelID.equals("root"))
 				RootPanel.get().add(password);
 			else
 				RootPanel.get(panelID).add(password);
 		}
-		
+
 		return password;
 	}
 
@@ -122,17 +127,17 @@ public class Page {
 	public Button createButton(String text, boolean visible, String cssStyle, String panelID) {
 		final Button button = new Button();
 		button.setText(text);
-		
+
 		if(!cssStyle.equals(""))
 			button.setStyleName(cssStyle);
-		
+
 		if(!panelID.equals("")) {
 			if(panelID.equals("root"))
 				RootPanel.get().add(button);
 			else
 				RootPanel.get(panelID).add(button);
 		}
-		
+
 		return button;
 	}
 
@@ -150,7 +155,7 @@ public class Page {
 
 		return image;
 	}
-	
+
 	public HTML createPhotoWithLightbox(String url, String altText, String description, String title, int widthPercentage, int heightPercentage) {
 		HTML photo = new HTML("<a rel=\"lightbox[portfolio] tooltip\" title=\""+description+"\" href=\""+url+"\"><img src=\""+url+"\" width=\""+widthPercentage+"%\" height=\""+heightPercentage+"%\" alt=\""+altText+"\"></a>"
 				+ "<h3>"+title+"<h3>" );
@@ -177,14 +182,14 @@ public class Page {
 
 		return popup;
 	}
-	
+
 	public PopupPanel createPopupAndContents(ArrayList<Widget> widgets, String contentPanelID) {
 		final PopupPanel popup = new PopupPanel(true);
-		
+
 		VerticalPanel PopUpPanelContents = new VerticalPanel();
 		PopUpPanelContents.getElement().setId(contentPanelID);
 		popup.add(PopUpPanelContents);
-		
+
 		for(Widget w : widgets) {
 			PopUpPanelContents.add(w);
 		}
@@ -196,7 +201,46 @@ public class Page {
 				popup.setPopupPosition(left, top);
 			}
 		});
-		
+
 		return popup;
+	}
+
+	public FormPanel createUploadForm(String uploadActionUrl) {
+		// Create a FormPanel and point it at a service.
+		final FormPanel form = new FormPanel();
+		form.setAction(uploadActionUrl);
+
+		// Because we're going to add a FileUpload widget, we'll need to set the
+		// form to use the POST method, and multipart MIME encoding.
+		form.setEncoding(FormPanel.ENCODING_MULTIPART);
+		form.setMethod(FormPanel.METHOD_POST);
+
+		// Create a panel to hold all of the form widgets.
+		VerticalPanel panel = new VerticalPanel();
+		form.setWidget(panel);
+
+		// Create a FileUpload widget.
+		FileUpload upload = new FileUpload();
+		upload.setName("uploadFormElement");
+		panel.add(upload);
+
+		// Add a 'submit' button.
+		panel.add(new Button("Submit", new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				form.submit();
+			}
+		}));
+
+		form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+				// When the form submission is successfully completed, this
+				// event is fired. Assuming the service returned a response of type
+				// text/html, we can get the result text here (see the FormPanel
+				// documentation for further explanation).
+				Window.alert(event.getResults());
+			}
+		});
+
+		return form;
 	}
 }
