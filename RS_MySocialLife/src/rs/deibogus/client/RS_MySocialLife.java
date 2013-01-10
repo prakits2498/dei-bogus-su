@@ -1,13 +1,12 @@
 package rs.deibogus.client;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 import rs.deibogus.client.interfacebuilder.ImagePageBuilder;
 import rs.deibogus.client.interfacebuilder.Interface;
 import rs.deibogus.client.interfacebuilder.LoginPageBuilder;
 import rs.deibogus.client.interfacebuilder.PageBuilder;
 import rs.deibogus.client.interfacebuilder.SocialNetworkLoginPageBuilder;
-import rs.deibogus.shared.Foto;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -129,7 +128,12 @@ public class RS_MySocialLife implements EntryPoint {
 					}
 
 					public void onSuccess(String result) {
-						Cookies.setCookie("logged", "true");
+						Date now = new Date();
+						long nowLong = now.getTime();
+						nowLong = nowLong + (1000 * 60 * 60 * 24 * 1);//1 day
+						now.setTime(nowLong);
+						
+						Cookies.setCookie("logged", "true", now);
 						page.destruct();
 						initialPage();
 					}
