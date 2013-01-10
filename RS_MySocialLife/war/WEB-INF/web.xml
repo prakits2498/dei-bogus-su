@@ -29,5 +29,15 @@
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>rs.deibogus.server.FileUploadServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>/rs_mysociallife/upload</url-pattern>
+  </servlet-mapping>
 
 </web-app>
