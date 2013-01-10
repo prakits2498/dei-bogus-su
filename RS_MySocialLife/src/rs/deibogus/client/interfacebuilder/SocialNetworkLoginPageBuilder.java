@@ -8,6 +8,7 @@ import rs.deibogus.client.GreetingServiceAsync;
 import rs.deibogus.shared.Foto;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -20,7 +21,6 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -59,16 +59,19 @@ public class SocialNetworkLoginPageBuilder extends PageBuilder {
 		picasaLogo.setStyleName("gallery");
 		picasaLogo.getElement().setId("picasaLogo");
 		picasaLogo.setTitle("Login to Picasa");
+		picasaLogo.getElement().getStyle().setCursor(Cursor.POINTER); 
 
 		flickrLogo = page.createImage("http://www.peterboroughlibdems.org.uk/wp-content/uploads/2011/05/Flickr-logo.png", "55px", "55px");
 		flickrLogo.setStyleName("gallery");
 		flickrLogo.getElement().setId("flickrLogo");
 		flickrLogo.setTitle("Login to Flickr");
+		flickrLogo.getElement().getStyle().setCursor(Cursor.POINTER); 
 		
 		uploadImage = page.createImage("http://cdn1.iconfinder.com/data/icons/simplicio/64x64/file_add.png", "50px", "50px");
 		uploadImage.setStyleName("gallery");
 		uploadImage.getElement().setId("uploadImage");
 		uploadImage.setTitle("Upload Image");
+		uploadImage.getElement().getStyle().setCursor(Cursor.POINTER); 
 	}
 	
 	private void buildPopupUpload() {
