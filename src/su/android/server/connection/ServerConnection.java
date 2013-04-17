@@ -31,7 +31,7 @@ public class ServerConnection
 	//private static final String URL = "http://ipois.dei.uc.pt:8080/su-server/ws?wsdl";
 	//private static final String URL = "http://localhost:8083/su-server/ws?wsdl";
 	//private static final String URL = "http://193.136.207.29:8080/su-server/ws?wsdl";
-	private static final String URL = "http://10.16.0.3:8080/su-server/ws?wsdl"; //BB
+	private static final String URL = "http://10.16.0.19:8080/su-server/ws?wsdl"; //BB
 	//private static final String URL = "http://10.16.0.196:8080/su-server/ws?wsdl"; //DURVAS
 
 
